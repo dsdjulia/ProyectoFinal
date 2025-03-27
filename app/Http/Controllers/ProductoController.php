@@ -33,7 +33,7 @@ class ProductoController extends Controller
             [
                 'status' => true,
                 'message' => "Total de precios de productos",
-                'total' => $total
+                'data' => $total
             ],
             200
         );
@@ -62,7 +62,7 @@ class ProductoController extends Controller
             [
                 'status' => true,
                 'message' => "Promedio de precios de productos",
-                'avg' => $avg
+                'data' => $avg
             ],
             200
         );
