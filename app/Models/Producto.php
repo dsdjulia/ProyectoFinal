@@ -14,7 +14,7 @@ class Producto extends Model
     protected $fillable = [
         'nombre',
         'descripcion',  
-        'precio_unitario'
+        'precio_unitario',
     ];
 
     public function inventarios(){
