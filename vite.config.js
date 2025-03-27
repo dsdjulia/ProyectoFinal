@@ -18,7 +18,7 @@ export default defineConfig({
         port: process.env.VITE_PORT || 5173, // Usa el puerto de la variable o 5173
         strictPort: false, // Permite cambiar de puerto si está ocupado
         cors: {
-            origin: process.env.VITE_CORS_ORIGIN || "http://localhost:8000", // Permite cambiar el origen de CORS
+            origin: process.env.VITE_CORS_ORIGIN || "http://localhost:8080", // Permite cambiar el origen de CORS
             credentials: true,
         },
     },
