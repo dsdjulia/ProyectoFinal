@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProductoController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -24,4 +25,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+Route::prefix('productos')->middleware('auth')->group(function () {
+    Route::get('/total-price', [ProductoController::class, 'index'])->name('productos.total_price');
+    Route::get('/avg-price', [ProductoController::class, 'avg_price'])->name('productos.avg_price');
+});
+
+require __DIR__ . '/auth.php';
