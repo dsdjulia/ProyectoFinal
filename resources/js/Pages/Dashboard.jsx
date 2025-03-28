@@ -15,11 +15,11 @@ export default function Dashboard(props) {
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Dashboard
+                    Lista de productos
                 </h2>
             }
         >
-            <Head title="Dashboard" />
+            <Head title="Principal" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -54,12 +54,12 @@ export default function Dashboard(props) {
                             <div className="flex gap-3 mt-4">
                                 <div className="flex mt-4 bg-slate-100 rounded p-3 w-1/5">
                                     <p>
-                                        <strong>Precio medio: </strong>{" "}
-                                        {precio_medio} €{" "}
+                                        <strong>Precio medio: </strong>
+                                        {precio_medio} €
                                     </p>
                                 </div>
 
-                                <div className="flex items-center justify-between mt-4 bg-slate-100 rounded p-3 w-1/5">
+                                <div className="flex mt-4 bg-slate-100 rounded p-3 w-1/5">
                                     <p>
                                         <strong>Precio total: </strong>
                                         {precio_total} €
