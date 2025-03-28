@@ -13,7 +13,7 @@ class ProductoController extends Controller
     {
         $data = Producto::with(['inventarios'])->get();
         $avg = Producto::avg('precio_unitario');
-        $total = Producto::sum('precio_unitario');
+        $total = Producto::sum('precio_unitario'); # Cambiar para que pille la cantidad de productos del inventario
 
         return Inertia::render('Dashboard', [
             'productos' => $data,
