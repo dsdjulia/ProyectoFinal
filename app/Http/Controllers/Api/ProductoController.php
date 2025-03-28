@@ -55,6 +55,7 @@ class ProductoController extends Controller
         ]);
 
         $producto = Producto::create($validated);
+
         $producto->save();
         return response()->json(
             [
