@@ -11,5 +11,5 @@ Route::get('/productos', [ProductoController::class, 'index'])->name('productos.
 Route::get('/productos/{id}', [ProductoController::class, 'show'])->name('productos.show'); 
 Route::post('/productos', [ProductoController::class, 'store'])->name('productos.store');
 Route::patch('/productos/{id}', [ProductoController::class, 'update'])->name('productos.update');
-Route::delete('/productos/{id}', [ProductoController::class, 'destroy'])->name('productos.destroy');
+Route::delete('/productos', [ProductoController::class, 'destroy'])->name('productos.destroy');
 

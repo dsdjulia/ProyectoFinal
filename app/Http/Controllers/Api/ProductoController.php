@@ -51,10 +51,11 @@ class ProductoController extends Controller
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'descripcion' => 'required|string',
-            'precio_unitario' => 'required|float',
+            'precio_unitario' => 'required',
         ]);
 
         $producto = Producto::create($validated);
+        $producto->save();
         return response()->json(
             [
                 'status' => true,
