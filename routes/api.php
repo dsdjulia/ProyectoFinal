@@ -8,8 +8,7 @@ use App\Http\Controllers\Api\ProductoController;
 
 
 // CRUD PRODUCTOS
-
-Route::get('/productos', [ProductoController::class, 'index'])->middleware('auth:sanctum')->name('productos.index');
+Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
 Route::get('/productos/{id}', [ProductoController::class, 'show'])->name('productos.show');
 Route::post('/productos', [ProductoController::class, 'store'])->name('productos.store');
 Route::patch('/productos/{id}', [ProductoController::class, 'update'])->name('productos.update');

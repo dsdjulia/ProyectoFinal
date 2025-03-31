@@ -8,9 +8,13 @@ use App\Http\Controllers\ProductoController;
 
 
 // CRUD PRODUCTOS CON VISTAS
-Route::get('/dashboard', [ProductoController::class, 'index'])->middleware('auth')->name('dashboard');
-Route::get('/producto/{id}', [ProductoController::class, 'show'])->middleware('auth')->name('dashboard.show');
-Route::delete('/producto/{id}', [ProductoController::class, 'destroy'])->middleware('auth')->name('dashboard.destroy');
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [ProductoController::class, 'index'])->middleware('auth')->name('dashboard.index');
+    Route::get('/producto/{id}', [ProductoController::class, 'show'])->middleware('auth')->name('dashboard.show');
+    Route::delete('/producto/{id}', [ProductoController::class, 'destroy'])->middleware('auth')->name('dashboard.destroy');
+    Route::post('/producto', [ProductoController::class, 'store'])->middleware('auth')->name('dashboard.store');
+    Route::patch('/producto/{id}', [ProductoController::class, 'update'])->middleware('auth')->name('dashboard.update');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
