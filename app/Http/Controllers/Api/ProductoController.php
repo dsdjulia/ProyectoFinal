@@ -73,6 +73,7 @@ class ProductoController extends Controller
             'nombre' => 'required|string|max:255',
             'descripcion' => 'required|string',
             'precio_unitario' => 'required|float',
+            'id' => 'required|integer',
         ]);
 
         $producto = Producto::find($request->id);
