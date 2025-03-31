@@ -33,13 +33,12 @@ class ProductoController extends Controller
     public function destroy(Request $request)
     {
         $producto = Producto::find($request->id);
-        $productos = Producto::all();
+
         if ($producto) {
             $producto->delete();
-            return Inertia::render('Dashboard', [
-                'productos' => $productos,
-            ]);
         }
+
+        $productos = Producto::all();
 
         return Inertia::render('Dashboard', [
             'productos' => $productos,
@@ -71,16 +70,14 @@ class ProductoController extends Controller
             'precio_unitario' => 'required',
         ]);
 
-        $productos = Producto::all();
         $producto = Producto::find($request->id);
-
         if ($producto) {
             $producto->update($validated);
-        } else {
-            return Inertia::render('Dashboard', [
-                'productos' => $productos,
-            ]);
         }
 
-            }
+        $productos = Producto::all();
+        return Inertia::render('Dashboard', [
+            'productos' => $productos
+        ]);
+    }
 }
