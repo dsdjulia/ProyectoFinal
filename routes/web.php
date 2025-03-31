@@ -3,8 +3,8 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\Web\ProfileController;
+use App\Http\Controllers\Web\ProductoController;
 
 
 // CRUD PRODUCTOS CON VISTAS
@@ -16,11 +16,20 @@ Route::middleware('auth')->group(function () {
     Route::patch('/producto/{id}', [ProductoController::class, 'update'])->middleware('auth')->name('dashboard.update');
 });
 
+// NAVEGACIÓN
+Route::middleware('auth')->group(function () {
+    Route::get('create', [ProductoController::class, 'create'])->name('create');
+});
+
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
 
 
 

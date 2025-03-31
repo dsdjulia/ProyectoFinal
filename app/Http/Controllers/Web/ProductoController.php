@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
+use Inertia\Inertia;
 use App\Models\Producto;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
+use App\Http\Controllers\Controller;
 
 class ProductoController extends Controller
 {
+    // CRUD PRODUCTOS CON VISTAS
     public function index()
     {
         $data = Producto::with(['inventarios'])->get();
@@ -80,4 +82,6 @@ class ProductoController extends Controller
             'productos' => $productos
         ]);
     }
+
+
 }
