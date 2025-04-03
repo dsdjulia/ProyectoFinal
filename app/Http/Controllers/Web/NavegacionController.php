@@ -17,4 +17,6 @@ class NavegacionController extends Controller
     {
         return Inertia::render('edit');
     }
+    
 }
+

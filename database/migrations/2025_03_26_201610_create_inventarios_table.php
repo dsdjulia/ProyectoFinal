@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('inventarios', function (Blueprint $table) {
             $table->id();
-            $table->integer('cantidad');
-            $table->unsignedBigInteger('id_user');
+
+            $table->unsignedBigInteger('id_almacen');
             $table->unsignedBigInteger('id_producto');
-            $table->timestamps();
+            $table->integer('cantidad');
 
-            $table->foreign('id_user')->references('id')->on('users');
             $table->foreign('id_producto')->references('id')->on('productos');
-
+            $table->foreign('id_almacen')->references('id')->on('almacenes');
+            
+            $table->timestamps();
         });
     }
 

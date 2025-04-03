@@ -56,12 +56,10 @@ class ProductoController extends Controller
         ]);
 
         $producto = Producto::create($validated);
-        $producto->save();
-
+        
         $productos = Producto::all();
-        return Inertia::render('Dashboard', [
-            'productos' => $productos
-        ]);
+        return redirect()->route('dashboard.index')->with('success', 'Producto agregado correctamente.');
+
     }
 
     public function update(Request $request)
