@@ -16,4 +16,4 @@ Route::delete('/productos', [ApiProductoController::class, 'destroy'])->name('pr
 Route::middleware('auth:sanctum')->get('/productos_user', [ApiProductoController::class, 'productos_user']);
 
 
-Route::post('/login', [ApiAuthController::class, 'login'])->name('login');
+Route::post('/login', [ApiAuthController::class, 'login'])->name('login.api')->middleware('auth:sanctum');
