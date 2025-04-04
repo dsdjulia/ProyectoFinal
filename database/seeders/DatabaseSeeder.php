@@ -42,14 +42,16 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Almacen::create([
-            'nombre' => 'Almacen de Paco',
+            'nombre' => 'Almacen de Giddon',
             'id_user' => 1
         ]);
 
         Inventario::create([
             'id_almacen' => 1,
             'id_producto' => 1,
-            'cantidad' => 2
+            'cantidad_actual' => 2,
+            'fecha_entrada' => '2023-10-01',
+            'fecha_salida' => null
         ]);
     }
 }

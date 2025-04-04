@@ -15,12 +15,14 @@ class Inventario extends Model
     protected $fillable = [
         'id_almacen',
         'id_producto',
-        'cantidad'
+        'cantidad_actual',
+        'fecha_entrada',
+        'fecha_salida',
     ];
 
 
     public function getTotal() {
-        return $this->cantidad * optional($this->producto)->precio_unitario;
+        return $this->cantidad_actual * optional($this->producto)->precio_unitario;
     }
 
     // Crear el modelo y migracion de almacen

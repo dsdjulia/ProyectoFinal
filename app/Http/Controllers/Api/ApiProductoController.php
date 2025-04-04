@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ApiProductoController extends Controller
 {
@@ -120,5 +121,66 @@ class ApiProductoController extends Controller
                 404
             );
         }
+    }
+
+    public function productos_user()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(
+                [
+                    'status' => false,
+                    'message' => 'Usuario no autenticado',
+                ],
+                401
+            );
+        }
+        if ($user->almacenes->isEmpty()) {
+            return response()->json(
+                [
+                    'status' => false,
+                    'message' => 'El usuario no tiene almacenes asignados',
+                ],
+                404
+            );
+        }
+
+        $productos = Producto::with(['inventarios' => function ($query) use ($user) {
+            $query->whereIn('id_almacen', $user->almacenes->pluck('id')->toArray());
+        }])
+            ->whereHas('inventarios', function ($query) use ($user) {
+                $query->whereIn('id_almacen', $user->almacenes->pluck('id')->toArray());
+            })
+            ->get();
+
+        $productos_con_inventarios = $productos->map(function ($producto) {
+            $inventarios = $producto->inventarios->map(function ($inventario) {
+                return [
+                    'id_almacen' => $inventario->id_almacen,
+                    'cantidad_actual' => $inventario->cantidad_actual,
+                    'fecha_entrada' => $inventario->fecha_entrada,
+                    'fecha_salida' => $inventario->fecha_salida,
+                ];
+            });
+
+            return [
+                'id' => $producto->id,
+                'nombre' => $producto->nombre,
+                'descripcion' => $producto->descripcion,
+                'precio_unitario' => $producto->precio_unitario,
+                'inventarios' => $inventarios, // Incluir inventarios
+            ];
+        });
+
+        return response()->json(
+            [
+                'status' => true,
+                'message' => 'Productos del usuario: ' . $user->name,
+                'count' => $productos_con_inventarios->count(),
+                'data' => $productos_con_inventarios
+            ],
+            200
+        );
     }
 }

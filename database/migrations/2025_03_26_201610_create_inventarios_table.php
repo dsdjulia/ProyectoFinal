@@ -16,7 +16,9 @@ return new class extends Migration
 
             $table->unsignedBigInteger('id_almacen');
             $table->unsignedBigInteger('id_producto');
-            $table->integer('cantidad');
+            $table->integer('cantidad_actual');
+            $table->date('fecha_entrada')->nullable();
+            $table->date('fecha_salida')->nullable();
 
             $table->foreign('id_producto')->references('id')->on('productos');
             $table->foreign('id_almacen')->references('id')->on('almacenes');

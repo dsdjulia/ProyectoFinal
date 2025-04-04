@@ -47,15 +47,23 @@ class User extends Authenticatable
         ];
     }
 
-    public function ventas(){
+    public function ventas()
+    {
         return $this->hasMany(Venta::class, 'id_user', 'id');
     }
-    
-    public function inventarios(){
-        return $this->hasMany(Inventario::class, 'id_user', 'id');
+
+    public function inventarios()
+    {
+        return $this->hasManyThrough(Inventario::class, Almacen::class, 'id_user', 'id_almacen', 'id', 'id');
     }
-    public function compras(){
+
+    public function compras()
+    {
         return $this->hasMany(Compra::class, 'id_user', 'id');
     }
 
+    public function almacenes()
+    {
+        return $this->hasMany(Almacen::class, 'id_user', 'id');
+    }
 }

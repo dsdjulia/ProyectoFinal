@@ -21,5 +21,8 @@ class Almacen extends Model
         return $this->hasMany(Inventario::class, 'id_almacen');
     }
 
+    public function user(){
+        return $this->belongsTo(User::class, 'id_user', 'id');
+    }
 
 }
