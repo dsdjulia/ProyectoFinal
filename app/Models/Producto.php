@@ -13,11 +13,18 @@ class Producto extends Model
 
     protected $fillable = [
         'nombre',
-        'descripcion',  
+        'descripcion',
         'precio_unitario',
     ];
 
-    public function inventarios(){
-        return $this->hasMany(Inventario::class, 'id_producto', 'id');
+    public function inventarios()
+    {
+        return $this->hasMany(Inventario::class, 'id_producto');
+    }
+
+    public function almacenes()
+    {
+        return $this->belongsToMany(Almacen::class, 'inventarios', 'id_producto', 'id_almacen')
+            ->withPivot('cantidad_actual');
     }
 }
