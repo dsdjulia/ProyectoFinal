@@ -28,8 +28,8 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+Route::get('/inventario', function () {
+    return Inertia::render('App');
 });
 
 require __DIR__ . '/auth.php';
