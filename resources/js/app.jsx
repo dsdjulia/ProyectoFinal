@@ -1,18 +1,25 @@
-import React from "react";
-import Navbar from "./Components/Navbar";
-import Sidebar from "./Components/Sidebar";
-import Main from "./Components/Main";
+import '../css/app.css';
+import './bootstrap';
 
-const App = () => {
-  return (
-    <div className="flex flex-col h-screen">
-      <Navbar />
-      <div className="flex flex-1">
-        <Sidebar />
-        <Main />
-      </div>
-    </div>
-  );
-};
+import { createInertiaApp } from '@inertiajs/react';
+import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import { createRoot } from 'react-dom/client';
 
-export default App;
+const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+
+createInertiaApp({
+    title: (title) => `${title} - ${appName}`,
+    resolve: (name) =>
+        resolvePageComponent(
+            `./Pages/${name}.jsx`,
+            import.meta.glob('./Pages/**/*.jsx'),
+        ),
+    setup({ el, App, props }) {
+        const root = createRoot(el);
+
+        root.render(<App {...props} />);
+    },
+    progress: {
+        color: '#4B5563',
+    },
+});

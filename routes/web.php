@@ -29,7 +29,6 @@ Route::get('/', function () {
 });
 
 Route::get('/inventario', function () {
-    return Inertia::render('App');
-});
-
+    return Inertia::render('Inventario'); // Cambia 'Inventario' si el archivo tiene otro nombre
+})->name('inventario');
 require __DIR__ . '/auth.php';
