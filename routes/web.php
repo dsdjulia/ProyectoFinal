@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\Web\NavegacionController;
+use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\ProductoController;
+use App\Http\Controllers\Web\NavegacionController;
 
 
 // CRUD PRODUCTOS CON VISTAS
@@ -23,7 +24,11 @@ Route::middleware('auth')->group(function () {
 });
 
 
+Route::get('/', function () {
+    return Inertia::render('Welcome');
+});
 
-
-
+Route::get('/inventario', function () {
+    return Inertia::render('Inventario'); // Cambia 'Inventario' si el archivo tiene otro nombre
+})->name('inventario');
 require __DIR__ . '/auth.php';
