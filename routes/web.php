@@ -24,13 +24,12 @@ Route::middleware('auth')->group(function () {
 });
 
 
-<<<<<<< HEAD
-=======
 Route::get('/', function () {
     return Inertia::render('Welcome');
 });
 
+Route::get('/inventario', function () {
+    return Inertia::render('App');
+});
 
-
->>>>>>> 972f65af84247a40fb279ca7c8ad38f6d1586cc8
 require __DIR__ . '/auth.php';
