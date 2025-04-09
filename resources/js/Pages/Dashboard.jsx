@@ -2,6 +2,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
 export default function Dashboard(props) {
+    
     const redondeo = (precio, decimales) => {
         const factor = Math.pow(10, decimales);
         return Math.round(precio * factor) / factor;
