@@ -55,8 +55,8 @@ export default function ProductTable() {
     const [searchTerm, setSearchTerm] = useState("");
 
     return (
-        <div className="bg-white shadow rounded-3xl overflow-hidden">
-            <div className="flex justify-between items-center mb-4 p-6">
+        <div className="bg-white shadow-slate-300 shadow-lg rounded-3xl overflow-hidden">
+            <div className="flex justify-between items-center mb-4 p-6 ">
                 <h2 className="text-xl font-semibold text-gray-700">
                     Purchase Order
                 </h2>
