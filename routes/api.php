@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiAuthController;
+use App\Http\Controllers\Api\ApiAlmacenController;
 use App\Http\Controllers\Api\ApiProductoController;
 
 // CRUD PRODUCTOS
@@ -12,8 +13,15 @@ Route::post('/productos', [ApiProductoController::class, 'store'])->name('produc
 Route::patch('/productos/{id}', [ApiProductoController::class, 'update'])->name('productos.update');
 Route::delete('/productos', [ApiProductoController::class, 'destroy'])->name('productos.destroy');
 
+
 // productos de los almacenes del usuario autenticado
 Route::middleware('auth:sanctum')->get('/productos_user', [ApiProductoController::class, 'productos_user']);
 
 
-Route::post('/login', [ApiAuthController::class, 'login'])->name('login');
+// CRUD ALMACENES   
+Route::middleware('auth:sanctum')->group(function(){
+    Route::get('/almacenes', [ApiAlmacenController::class, 'index'])->name('almacenes.index');
+});
+
+// TOKENS
+Route::post('/login', [ApiAuthController::class, 'login'])->name('login.api');

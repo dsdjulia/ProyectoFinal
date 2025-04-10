@@ -8,7 +8,7 @@ use App\Http\Controllers\Web\NavegacionController;
 
 
 // CRUD PRODUCTOS CON VISTAS
-Route::middleware('auth')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/dashboard', [ProductoController::class, 'index'])->name('dashboard.index');
     Route::get('/producto/{id}', [ProductoController::class, 'show'])->name('dashboard.show');
     Route::delete('/producto/{id}', [ProductoController::class, 'destroy'])->name('dashboard.destroy');

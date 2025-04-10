@@ -53,5 +53,13 @@ class DatabaseSeeder extends Seeder
             'fecha_entrada' => '2023-10-01',
             'fecha_salida' => null
         ]);
+
+        Inventario::create([
+            'id_almacen' => 1,
+            'id_producto' => 2,
+            'cantidad_actual' => 3,
+            'fecha_entrada' => '2023-09-01',
+            'fecha_salida' => null
+        ]); 
     }
 }

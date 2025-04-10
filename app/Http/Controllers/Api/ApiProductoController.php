@@ -136,6 +136,7 @@ class ApiProductoController extends Controller
                 401
             );
         }
+        
         if ($user->almacenes->isEmpty()) {
             return response()->json(
                 [

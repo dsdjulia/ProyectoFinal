@@ -25,4 +25,9 @@ class Almacen extends Model
         return $this->belongsTo(User::class, 'id_user', 'id');
     }
 
+    public function productos(){
+    return $this->belongsToMany(Producto::class, 'inventarios', 'id_almacen', 'id_producto')
+                ->withPivot('cantidad_actual');
+}
+
 }
