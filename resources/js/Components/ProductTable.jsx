@@ -15,32 +15,33 @@ export default function ProductTable() {
   const [searchTerm, setSearchTerm] = useState("");
 
   return (
-    <div className="bg-white mt-4 rounded shadow-sm">
-      <div className="p-4">
-        <div className="flex">
+    <div className="bg-transparent mt-4 rounded shadow-sm w-full">
+      <div className="p-4 flex justify-end">
+        <div className="relative flex items-center bg-slate-200 rounded-full text-white">
           <input
             type="text"
             placeholder="Buscar producto"
-            className="flex-1 border p-2 rounded-l"
+            className="flex-1 bg-slate-200 text-white pl-4 pr-10 py-2 rounded-full focus:outline-none focus:ring "
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className="bg-[#3498db] text-white px-3 py-2 rounded-r flex items-center justify-center">
+          <button className="absolute right-2 bg-transparent text-slate-400 flex align-center justify-center p-2 rounded-full ">
             <span className="material-icons w-5 h-5">search</span>
           </button>
         </div>
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-gray-100 text-left">
+        <table className="w-full border-separate border-spacing-y-4">
+          <thead className="bg-gray-100">
             <tr>
-              <th className="p-3">Codigo</th>
-              <th className="p-3">Producto</th>
-              <th className="p-3">Precio</th>
-              <th className="p-3">Existencias</th>
-              <th className="p-3">Edit</th>
-              <th className="p-3">Delete</th>
+              <th className="p-3 text-center"></th>
+              <th className="p-3 text-center">Codigo</th>
+              <th className="p-3 text-center">Producto</th>
+              <th className="p-3 text-center">Precio</th>
+              <th className="p-3 text-center">Existencias</th>
+              <th className="p-3 text-center">Editar</th>
+              <th className="p-3 text-center">Eliminar</th>
             </tr>
           </thead>
           <tbody>

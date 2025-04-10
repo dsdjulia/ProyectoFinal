@@ -2,18 +2,14 @@ import ProductRegistrationForm from "./ProductRegistrationForm"
 import ProductTable from "./ProductTable"
 import Header from "./Header"
 import Footer from "./Footer"
+import Sidebar from "./Sidebar"
 
 export default function Main() {
   return (
-    <div className="flex-1 flex flex-col">
-      <Header />
-
-      <div className="flex-1 bg-gray-100 p-4">
+      <div className="w-5/6  flex flex-col  ml-40 align-center justify-center  ">
         <ProductRegistrationForm />
         <ProductTable />
-      </div>
-
-      <Footer />
+         <Footer />
     </div>
   )
 }

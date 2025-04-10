@@ -1,74 +1,81 @@
-function SidebarItem({ icon, label, active = false }) {
+import { useState } from "react";
+
+function NavItem({ icon, label, isExpanded, isActive, onClick }) {
   return (
-    <div className={`flex items-center p-3 ${active ? "bg-gray-700 cursor-pointer" : "hover:bg-gray-700 cursor-pointer"}`}>
-      <div className="mr-3">{icon}</div>
-      <div>{label}</div>
-      {active && (
-        <div className="ml-auto">
-          <a className="bg-green-500 text-white text-xs px-2 py-1 rounded">
-            {label === "Productos"
-              ? "Products"
-              : label === "Clientes"
-              ? "Clients"
-              : label === "Usuarios"
-              ? "Users"
-              : label === "Nueva Factura"
-              ? "New"
-              : label === "Administrar Facturas"
-              ? "Admin"
-              : label === "Reporte Facturas"
-              ? "Report"
-              : label === "Configuracion"
-              ? "System"
-              : label === "Salir"
-              ? "Out"
-              : ""}
-          </a>
-        </div>
-      )}
+    <div
+      className={`flex items-center my-1 p-2 rounded-lg cursor-pointer w-full text-white font-extrabold hover:text-slate-600 hover:bg-slate-100
+        ${isActive ? "bg-violet-600 text-slate-600 " : ""}
+        ${isExpanded ? "justify-start" : "justify-center"}`}
+      onClick={onClick}
+    >
+      <i className="material-icons text-lg">{icon}</i>
+      {isExpanded && <span className="ml-2 text-xs font-medium">{label}</span>}
     </div>
   );
 }
 
-export default function Sidebar() {
+export function Sidebar() {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [activeItem, setActiveItem] = useState("home");
+
+  const navItems = [
+    { id: "home", icon: "home", label: "Inicio" },
+    { id: "allReports", icon: "description", label: "Todos los Reportes" },
+    { id: "breakdown", icon: "bar_chart", label: "Desglose" },
+    { id: "engagement", icon: "thumb_up", label: "Engagement" },
+    { id: "popularity", icon: "trending_up", label: "Popularidad" },
+    { id: "loyalty", icon: "favorite", label: "Lealtad" },
+    { id: "growth", icon: "show_chart", label: "Crecimiento" },
+    { id: "trends", icon: "insights", label: "Tendencias" },
+    { id: "listBuilding", icon: "list_alt", label: "List Building" },
+    { id: "personas", icon: "people", label: "Personas" },
+  ];
+
   return (
-    <div className="w-64 bg-gray-800 text-white">
-      <div className="p-4 text-center">MENU</div>
-      <div className="py-2">
-        <SidebarItem
-          icon={<span className="material-icons w-5 h-5">inventory_2</span>}
-          label="Productos"
-          active={true}
-        />
-        <SidebarItem
-          icon={<span className="material-icons w-5 h-5">group</span>}
-          label="Clientes"
-        />
-        <SidebarItem
-          icon={<span className="material-icons w-5 h-5">person</span>}
-          label="Usuarios"
-        />
-        <SidebarItem
-          icon={<span className="material-icons w-5 h-5">add_circle</span>}
-          label="Nueva Factura"
-        />
-        <SidebarItem
-          icon={<span className="material-icons w-5 h-5">manage_accounts</span>}
-          label="Administrar Facturas"
-        />
-        <SidebarItem
-          icon={<span className="material-icons w-5 h-5">bar_chart</span>}
-          label="Reporte Facturas"
-        />
-        <SidebarItem
-          icon={<span className="material-icons w-5 h-5">settings</span>}
-          label="Configuracion"
-        />
-        <SidebarItem
-          icon={<span className="material-icons w-5 h-5">logout</span>}
-          label="Salir"
-        />
+    <div className="fixed bg-violet-400">
+      <div
+        className={`flex flex-col bg-violet-400 transition-all duration-300 py-3  m-4 h-[98vh]
+          ${isExpanded ? "w-48 items-start" : "w-14 items-center"} `}
+      >
+        {/* Contenedor de ítems apilados */}
+        <div className="flex flex-col flex-1 w-full gap-1 justify-start ">
+          {navItems.map((item) => (
+            <NavItem
+              key={item.id}
+              icon={item.icon}
+              label={item.label}
+              isExpanded={isExpanded}
+              isActive={activeItem === item.id}
+              onClick={() => setActiveItem(item.id)}
+            />
+          ))}
+        </div>
+
+        {/* Ítem de Configuración separado */}
+        <div className="mb-2 w-full">
+          <NavItem
+            icon="settings"
+            label="Configuración"
+            isExpanded={isExpanded}
+            isActive={activeItem === "settings"}
+            onClick={() => setActiveItem("settings")}
+          />
+        </div>
+
+        {/* Botón de expansión */}
+        <div
+          className="absolute shadow-[0_5px_16px_0px_#3981F733] -right-10 top-6 h-6 w-6 flex items-center justify-center rounded-full bg-violet-400 cursor-pointer text-white hover:text-slate-100 hover:bg-violet-600"
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          {isExpanded ? (
+            <i className="material-icons text-xs">chevron_left</i>
+          ) : (
+            <i className="material-icons text-xs">chevron_right</i>
+          )}
+        </div>
       </div>
     </div>
   );
 }
+
+export default Sidebar;
