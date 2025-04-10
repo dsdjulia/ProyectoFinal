@@ -6,10 +6,10 @@ import Sidebar from "./Sidebar"
 
 export default function Main() {
   return (
-      <div className="w-5/6  flex flex-col  ml-40 align-center justify-center  ">
-        <ProductRegistrationForm />
+      <div className="w-full flex flex-col align-center justify-center p-12">
+
         <ProductTable />
-         <Footer />
+
     </div>
   )
 }

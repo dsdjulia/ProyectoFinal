@@ -3,8 +3,8 @@ import { useState } from "react";
 function NavItem({ icon, label, isExpanded, isActive, onClick }) {
   return (
     <div
-      className={`flex items-center my-1 p-2 rounded-lg cursor-pointer w-full text-white font-extrabold hover:text-slate-600 hover:bg-slate-100
-        ${isActive ? "bg-violet-600 text-slate-600 " : ""}
+      className={`flex items-center my-1 p-2 rounded-lg cursor-pointer w-full text-white font-bold hover:text-slate-600 hover:bg-slate-100
+        ${isActive ? "bg-slate-600 text-slate-600" : ""}
         ${isExpanded ? "justify-start" : "justify-center"}`}
       onClick={onClick}
     >
@@ -32,10 +32,10 @@ export function Sidebar() {
   ];
 
   return (
-    <div className="fixed bg-violet-400">
+    <div className="flex items-center justify-center bg-transparent h-screen mr-12">
       <div
-        className={`flex flex-col bg-violet-400 transition-all duration-300 py-3  m-4 h-[98vh]
-          ${isExpanded ? "w-48 items-start" : "w-14 items-center"} `}
+        className={`flex flex-col bg-slate-800 transition-all duration-300 pb-3 pt-6 px-6 h-full mr-2
+          ${isExpanded ? "w-60 items-start" : "w-24 items-center"} `}
       >
         {/* Contenedor de ítems apilados */}
         <div className="flex flex-col flex-1 w-full gap-1 justify-start ">
@@ -62,9 +62,10 @@ export function Sidebar() {
           />
         </div>
 
+        </div>
         {/* Botón de expansión */}
         <div
-          className="absolute shadow-[0_5px_16px_0px_#3981F733] -right-10 top-6 h-6 w-6 flex items-center justify-center rounded-full bg-violet-400 cursor-pointer text-white hover:text-slate-100 hover:bg-violet-600"
+          className=" shadow-[0_5px_16px_0px_#3981F733] h-6 w-6 flex items-center justify-center rounded-full bg-slate-700 cursor-pointer text-white hover:text-slate-100 hover:bg-slate-500"
           onClick={() => setIsExpanded(!isExpanded)}
         >
           {isExpanded ? (
@@ -72,7 +73,6 @@ export function Sidebar() {
           ) : (
             <i className="material-icons text-xs">chevron_right</i>
           )}
-        </div>
       </div>
     </div>
   );

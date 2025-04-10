@@ -5,8 +5,8 @@ import Main from '@/Components/Main';
 function App() {
   return (
     <>
-          <Sidebar/>
-      <div className="flex w-full bg-slate-100 pt-10">
+      <div className="flex w-full bg-slate-100 ">
+        <Sidebar/>
           <Main />
       </div>
     </>
