@@ -3,6 +3,7 @@ import ProductTable from "./ProductTable";
 import Header from "./Header";
 import Footer from "./Footer";
 import Sidebar from "./Sidebar";
+import DoughnutChart from "./DoughnutChart";
 
 export default function Main({
     totalValue = 1000000,
@@ -12,8 +13,8 @@ export default function Main({
     outOfStock = 5,
 }) {
     return (
-        <div className="w-full flex flex-col align-middle justify-start p-12 pb-34">
-            <div className="flex justify-start  mb-12 w-full" >
+        <div className="w-full flex flex-col align-middle justify-start p-12 pt-0npm r pb-34">
+            <div className="flex justify-start  mb-12 w-full">
                 {/* Total Asset Value Section */}
                 <div className="flex items-center border-r justify-start align-middle w-1/3">
                     <div className="flex items-center">
@@ -23,18 +24,26 @@ export default function Main({
                             </span>
                         </div>
                         <div className="flex flex-col pl-4 justify-center">
-                        <p className="mt-2 text-gray-500 text-sm">
-                            TOTAL ASSET VALUE
-                        </p>
-                        <p className="text-xl font-bold text-gray-800">
-                            ${totalValue.toLocaleString()}
-                        </p>
+                            <p className="mt-2 text-gray-500 text-sm">
+                                TOTAL ASSET VALUE
+                            </p>
+                            <p className="text-xl font-bold text-gray-800">
+                                ${totalValue.toLocaleString()}
+                            </p>
                         </div>
                     </div>
                 </div>
 
                 {/* Products Section */}
-                <div className="flex flex-col pl-6 justify-center w-1/3">
+                    <div className="flex">
+                    <div className="pl-12">
+                        <DoughnutChart
+                            inStock={inStock}
+                            lowStock={lowStock}
+                            outOfStock={outOfStock}
+                        />
+                    </div>
+                <div className="flex flex-col pl-6 justify-center relative">
                     <p className="text-lg font-semibold text-gray-800">
                         {totalProducts} product{totalProducts !== 1 ? "s" : ""}
                     </p>
@@ -66,6 +75,7 @@ export default function Main({
                                 </span>
                             </p>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>
