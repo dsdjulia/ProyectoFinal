@@ -58,10 +58,10 @@ export default function ProductTable() {
         <div className="bg-white shadow-slate-300 shadow-md rounded-lg overflow-hidden">
             <div className="flex justify-between items-center mb-4 p-6">
                 <h2 className="text-xl font-semibold text-gray-700">
-                    Purchase Order
+                Inventario General
                 </h2>
                 <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-                    New
+                    Nuevo
                 </button>
             </div>
 
@@ -69,7 +69,7 @@ export default function ProductTable() {
                 <div className="relative">
                     <input
                         type="text"
-                        placeholder="Search"
+                        placeholder="Buscar"
                         className="border border-gray-300 rounded-lg py-2 px-4 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}

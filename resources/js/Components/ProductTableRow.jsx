@@ -3,7 +3,7 @@ import Chip from "@/Components/Chip";
 export default function ProductTableRow({ product }) {
     return (
         <button
-            className="grid grid-cols-8 items-center bg-white rounded-sm border border-slate-200 shadow-sm p-4 gap-4 hover:shadow-md transition-all"
+            className="grid grid-cols-8 items-center bg-white rounded-sm border border-slate-200 p-4 gap-4 hover:px-2 transition-all"
             onClick={() => console.log(`Selected: ${product.producto}`)}
         >
             {/* Imagen */}
