@@ -1,39 +1,67 @@
-import Chip from '@/Components/Chip'
+import Chip from "@/Components/Chip";
 
 export default function ProductTableRow({ product }) {
     return (
-      <tr className="bg-white rounded-md border-b border-slate-200 text-sm">
-        {/* Imagen del producto */}
-        <td className="p-3 flex  justify-center align-middle">
-          <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center">
-            <img
-              src={product.imagen}
-              alt={product.producto}
-              className="object-cover w-full h-full bg-red-200"
-            />
-          </div>
-        </td>
-        {/* Código del producto */}
-        <td className="p-3 pl-6 text-[#333] text-start font-extrabold ">{product.codigo}</td>
-        {/* Nombre del producto */}
-        <td className="p-3  text-[#333] text-start font-extrabold pr-24">{product.producto}</td>
-        {/* Precio */}
-        <td className="p-3 text-[#333] text-center ">{product.precio}</td>
-        {/* Existencias */}
-        <td className="p-3 text-[#333] text-center">{product.existencias}</td>
-        {/* Fecha */}
-        <td className="p-3 text-[#333] text-center">{product.fecha}</td>
-        {/* Estado */}
-        <td className="p-3 text-[#333] text-center"><Chip status={product.status}/></td>
-        {/* Botones */}
-        <td className="p-3 text-center flex justify-around items-center align-center">
-        <button className="flex items-center align-middle justify-center text-slate-400 text-center hover:text-slate-500">
-          <span className="material-icons">edit</span>
+        <button
+            className="grid grid-cols-8 items-center bg-white rounded-sm border border-slate-200 shadow-sm p-4 gap-4 hover:shadow-md transition-all"
+            onClick={() => console.log(`Selected: ${product.producto}`)}
+        >
+            {/* Imagen */}
+            <div className="flex justify-center">
+                <div className="w-10 h-10 rounded-full overflow-hidden">
+                    <img
+                        src={product.imagen}
+                        alt={product.producto}
+                        className="object-cover w-full h-full"
+                    />
+                </div>
+            </div>
+
+            {/* Código */}
+            <div className="text-gray-700 font-semibold text-left">
+                {product.codigo}
+            </div>
+
+            {/* Nombre del producto */}
+            <div className="text-gray-800 font-bold text-left truncate">
+                {product.producto}
+            </div>
+
+            {/* Precio */}
+            <div className="text-gray-700 text-center">{product.precio}</div>
+
+            {/* Existencias */}
+            <div className="text-gray-700 text-center">{product.existencias}</div>
+
+            {/* Fecha */}
+            <div className="text-gray-700 text-center">{product.fecha}</div>
+
+            {/* Estado */}
+            <div className="flex justify-center">
+                <Chip status={product.status} />
+            </div>
+
+            {/* Acciones */}
+            <div className="flex justify-center gap-8 items-center">
+                <button
+                    className="flex items-center justify-center w-8 h-8 rounded-full text-slate-500 hover:text-slate-700"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        console.log(`Editing: ${product.producto}`);
+                    }}
+                >
+                    <span className="material-icons">edit</span>
+                </button>
+                <button
+                    className="flex items-center justify-center text-red-400 w-8 h-8 rounded-full hover:text-red-500"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        console.log(`Deleting: ${product.producto}`);
+                    }}
+                >
+                    <span className="material-icons ">delete</span>
+                </button>
+            </div>
         </button>
-        <button className="flex items-center align-middle justify-center text-slate-300 text-center hover:text-red-400">
-          <span className="material-icons flex items-center text-center justify-center">delete</span>
-        </button>
-        </td>
-      </tr>
     );
-  }
+}
