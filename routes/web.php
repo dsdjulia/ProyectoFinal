@@ -2,6 +2,7 @@
 
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Web\AlmacenController;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\ProductoController;
 use App\Http\Controllers\Web\NavegacionController;
@@ -28,7 +29,11 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 });
 
+
 Route::get('/inventario', function () {
     return Inertia::render('Inventario'); // Cambia 'Inventario' si el archivo tiene otro nombre
 })->name('inventario');
+
+// Route::get('/inventario', [AlmacenController::class ,'index'])->name('inventario');
+
 require __DIR__ . '/auth.php';
