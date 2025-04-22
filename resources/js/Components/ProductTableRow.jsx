@@ -3,7 +3,7 @@ import Chip from "@/Components/Chip";
 export default function ProductTableRow({ product }) {
     return (
         <button
-            className="grid grid-cols-8 items-center bg-white rounded-sm border border-slate-200 p-4 gap-4 hover:px-2 transition-all"
+            className="grid grid-cols-9 items-center bg-white rounded-sm border border-slate-200 p-4 gap-4 hover:px-2 transition-all"
             onClick={() => console.log(`Selected: ${product.producto}`)}
         >
             {/* Imagen */}
@@ -18,12 +18,12 @@ export default function ProductTableRow({ product }) {
             </div>
 
             {/* Código */}
-            <div className="text-gray-700 font-semibold text-left">
+            <div className="text-gray-700 font-semibold text-left pl-2">
                 {product.codigo}
             </div>
 
             {/* Nombre del producto con tooltip */}
-            <div className="relative group flex items-center">
+            <div className="relative group flex items-center col-span-2">
                 <span className="text-gray-800 font-bold truncate w-full text-left">
                     {product.producto}
                 </span>
