@@ -3,7 +3,7 @@ import Chip from "@/Components/Chip";
 export default function ProductTableRow({ product }) {
     return (
         <button
-            className="grid grid-cols-8 items-center bg-white rounded-sm border border-slate-200 shadow-sm p-4 gap-4 hover:shadow-md transition-all"
+            className="grid grid-cols-8 items-center bg-white rounded-sm border border-slate-200 p-4 gap-4 hover:px-2 transition-all"
             onClick={() => console.log(`Selected: ${product.producto}`)}
         >
             {/* Imagen */}
@@ -22,16 +22,24 @@ export default function ProductTableRow({ product }) {
                 {product.codigo}
             </div>
 
-            {/* Nombre del producto */}
-            <div className="text-gray-800 font-bold text-left truncate">
-                {product.producto}
+            {/* Nombre del producto con tooltip */}
+            <div className="relative group flex items-center">
+                <span className="text-gray-800 font-bold truncate w-full text-left">
+                    {product.producto}
+                </span>
+                {/* Tooltip */}
+                <div className="absolute top-6 left-6 max-w-xs bg-gray-700 text-white text-xs rounded-md py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 overflow-hidden text-ellipsis whitespace-nowrap">
+                    {product.producto}
+                </div>
             </div>
 
             {/* Precio */}
             <div className="text-gray-700 text-center">{product.precio}</div>
 
             {/* Existencias */}
-            <div className="text-gray-700 text-center">{product.existencias}</div>
+            <div className="text-gray-700 text-center">
+                {product.existencias}
+            </div>
 
             {/* Fecha */}
             <div className="text-gray-700 text-center">{product.fecha}</div>
