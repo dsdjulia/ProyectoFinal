@@ -11,7 +11,7 @@ export default function ProductTable() {
             producto: "ARROZ BLANQUITA",
             precio: "$ 1,000",
             existencias: "1188",
-            fecha:"12-02-2025" ,
+            fecha: "12-02-2025",
             status: "cancelado",
         },
         {
@@ -20,7 +20,7 @@ export default function ProductTable() {
             producto: "UNIDAD CHOCOLATE LUKER",
             precio: "$ 1,500",
             existencias: "4996",
-            fecha:"14-04-2025" ,
+            fecha: "14-04-2025",
             status: "recibido",
         },
         {
@@ -29,7 +29,7 @@ export default function ProductTable() {
             producto: "MAIZENA",
             precio: "$ 2,300",
             existencias: "228",
-            fecha:"08-02-2025" ,
+            fecha: "08-02-2025",
             status: "recibido",
         },
         {
@@ -38,7 +38,7 @@ export default function ProductTable() {
             producto: "AZUCAR MORENA",
             precio: "$ 2,500",
             existencias: "198",
-            fecha:"20-12-2024" ,
+            fecha: "20-12-2024",
             status: "pendiente",
         },
         {
@@ -47,7 +47,7 @@ export default function ProductTable() {
             producto: "MAIZ AMARILLO",
             precio: "$ 2,000",
             existencias: "199",
-            fecha:"31-01-2025" ,
+            fecha: "31-01-2025",
             status: "recibido",
         },
     ]);
@@ -56,7 +56,7 @@ export default function ProductTable() {
 
     return (
         <div className="bg-white shadow-slate-300 shadow-md rounded-lg overflow-hidden">
-            <div className="flex justify-between items-center mb-4 p-6 ">
+            <div className="flex justify-between items-center mb-4 p-6">
                 <h2 className="text-xl font-semibold text-gray-700">
                     Purchase Order
                 </h2>
@@ -75,50 +75,31 @@ export default function ProductTable() {
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
-                <div>
-                    <div className="flex items-center space-x-4">
-                        <button className="flex items-center justify-center w-10 h-10 bg-gray-200 rounded-full hover:bg-gray-300">
-                            <span className="material-icons">filter_alt</span>
-                        </button>
-                        <button className="flex items-center justify-center w-10 h-10 bg-gray-200 rounded-full hover:bg-gray-300">
-                            <span className="material-icons">sort</span>
-                        </button>
-                        <button className="flex items-center justify-center w-10 h-10 bg-gray-200 rounded-full hover:bg-gray-300">
-                            <span className="material-icons">settings</span>
-                        </button>
-                    </div>
-                </div>
             </div>
 
-            <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse mt-4">
-                    <thead>
-                        <tr className="bg-slate-100">
-                            <th className="p-4 border-b text-center"></th>
-                            <th className="p-4 border-b text-stqart">ID Producto</th>
-                            <th className="p-4 border-b text-start pr-24">Artículo</th>
-                            <th className="p-4 border-b text-center">Precio</th>
-                            <th className="p-4 border-b text-center">Cantidad</th>
-                            <th className="p-4 border-b text-center">Fecha Recepción</th>
-                            <th className="p-4 border-b text-center">Estado</th>
-                            <th className="p-4 border-b text-center">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {products
-                            .filter((product) =>
-                                product.producto
-                                    .toLowerCase()
-                                    .includes(searchTerm.toLowerCase())
-                            )
-                            .map((product, index) => (
-                                <ProductTableRow
-                                    key={index}
-                                    product={product}
-                                />
-                            ))}
-                    </tbody>
-                </table>
+            {/* Encabezados */}
+            <div className="grid grid-cols-8 items-center bg-slate-100 font-semibold text-gray-700 py-2 px-8 gap-2 mb-6 mt-10">
+                <div className="text-center">Imagen</div>
+                <div className="text-left">ID Producto</div>
+                <div className="text-left">Artículo</div>
+                <div className="text-center">Precio</div>
+                <div className="text-center">Cantidad</div>
+                <div className="text-center">Fecha Recepción</div>
+                <div className="text-center">Estado</div>
+                <div className="text-center">Acciones</div>
+            </div>
+
+            {/* Filas */}
+            <div className="grid grid-cols-1 px-4 pb-4">
+                {products
+                    .filter((product) =>
+                        product.producto
+                            .toLowerCase()
+                            .includes(searchTerm.toLowerCase())
+                    )
+                    .map((product, index) => (
+                        <ProductTableRow key={index} product={product} />
+                    ))}
             </div>
         </div>
     );
