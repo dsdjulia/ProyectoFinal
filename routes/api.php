@@ -17,10 +17,15 @@ Route::delete('/productos', [ApiProductoController::class, 'destroy'])->name('pr
 // productos de los almacenes del usuario autenticado
 Route::middleware('auth:sanctum')->get('/productos_user', [ApiProductoController::class, 'productos_user']);
 
+Route::middleware('auth:sanctum')->get('/almacenes', [ApiAlmacenController::class, 'index']);
+
 
 // CRUD ALMACENES   
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('/almacenes', [ApiAlmacenController::class, 'index'])->name('almacenes.index');
+});
+Route::middleware('auth:sanctum')->group(function(){
+    Route::get('/almacenes/{id}', [ApiAlmacenController::class, 'show'])->name('almacenes.index');
 });
 
 // TOKENS

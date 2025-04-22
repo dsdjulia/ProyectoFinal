@@ -26,9 +26,15 @@ class ApiAlmacenController extends Controller
             ]);
         }
 
+        $totalProductos = $almacenes->sum(function ($almacen) {
+            return $almacen->productos->count();
+        });
+
         return response()->json([
             'status' => true,
             'message' => 'Almacenes encontrados',
+            'count' => $almacenes->count(),
+            'total_productos' => $totalProductos,
             'data' => $almacenes,
         ]);
     }
@@ -36,7 +42,12 @@ class ApiAlmacenController extends Controller
     public function show(Request $request)
     {
 
-        $almacen = Almacen::with(['productos'])->find($request->id);
+        $user = Auth::user();
+
+        $almacen = Almacen::with('productos')
+            ->where('id', $request->id)
+            ->where('id_user', $user->id)
+            ->first();
 
         if (!$almacen) {
             return response()->json([
@@ -48,6 +59,7 @@ class ApiAlmacenController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Almacen encontrado',
+            'productos_totales' => $almacen->productos->count(),
             'data' => $almacen,
         ]);
     }
