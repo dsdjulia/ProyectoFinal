@@ -23,4 +23,8 @@ class Venta extends Model
     public function user(){
         return $this->belongsTo(User::class, 'id_user', 'id');
     }
+
+    public function comprador(){
+        return $this->belongsTo(Comprador::class, 'id_comprador', 'id');
+    }
 }

@@ -27,4 +27,9 @@ class Producto extends Model
         return $this->belongsToMany(Almacen::class, 'inventarios', 'id_producto', 'id_almacen')
             ->withPivot('cantidad_actual');
     }
+
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class, 'id_categoria', 'id');
+    }
 }

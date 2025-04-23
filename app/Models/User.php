@@ -66,4 +66,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Almacen::class, 'id_user', 'id');
     }
+    public function gastos()
+    {
+        return $this->hasMany(Gasto::class, 'id_user', 'id');
+    }
 }

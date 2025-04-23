@@ -13,7 +13,7 @@ class Compra extends Model
 
     protected $fillable = [
         'fecha_compra',
-        'id_user'
+        'id_user',
     ];
 
     public function detalleCompras(){

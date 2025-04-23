@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ventas', function (Blueprint $table) {
+        Schema::create('compradores', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('fecha_venta');
-            $table->unsignedBigInteger('id_user');
-            $table->unsignedBigInteger('id_comprador');
+            $table->string('nombre');
+            $table->string('identificacion');
+            $table->integer('telefono');
+            $table->string('email');
+            $table->string('direccion');
+            $table->boolean('tipo_comprador');
             $table->timestamps();
-
-            $table->foreign('id_user')->references('id')->on('users');
-            $table->foreign('id_comprador')->references('id')->on('compradores');
-
         });
     }
 
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ventas');
+        Schema::dropIfExists('compradores');
     }
 };
