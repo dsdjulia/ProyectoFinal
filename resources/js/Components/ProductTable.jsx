@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import ProductTableRow from "./ProductTableRow";
+import CarruselAlmacenes from "./CarruselAlmacenes";
 
 export default function ProductTable() {
     const [activeTab, setActiveTab] = useState("ordenes");
@@ -15,6 +16,7 @@ export default function ProductTable() {
             existencias: "1188",
             fecha: "12-02-2025",
             status: "cancelado",
+            almacen: "Almacén Central",
         },
         {
             imagen: "https://cdn-icons-png.flaticon.com/512/1043/1043940.png",
@@ -24,6 +26,7 @@ export default function ProductTable() {
             existencias: "4996",
             fecha: "14-04-2025",
             status: "recibido",
+            almacen: "Sucursal Norte",
         },
         {
             imagen: "https://cdn-icons-png.flaticon.com/512/1043/1043940.png",
@@ -33,6 +36,7 @@ export default function ProductTable() {
             existencias: "228",
             fecha: "08-02-2025",
             status: "recibido",
+            almacen: "Depósito Cali",
         },
         {
             imagen: "https://cdn-icons-png.flaticon.com/512/316/316325.png",
@@ -42,6 +46,7 @@ export default function ProductTable() {
             existencias: "198",
             fecha: "20-12-2024",
             status: "pendiente",
+            almacen: "Almacén Central",
         },
         {
             imagen: "https://cdn-icons-png.flaticon.com/512/1043/1043940.png",
@@ -51,57 +56,102 @@ export default function ProductTable() {
             existencias: "199",
             fecha: "31-01-2025",
             status: "recibido",
+            almacen: "Sucursal Norte",
         },
     ]);
 
     const [searchTerm, setSearchTerm] = useState("");
 
     return (
-            <div>
-            <div className="flex space-x-2 px-4 pt-4 bg-slate-100  ">
+        <div>
+            <div className="flex space-x-2 px-4 pt-4 bg-slate-100">
                 <button
                     onClick={() => setActiveTab("ordenes")}
-                    className={`px-6 py-2 rounded-t-lg font-semibold transition-all duration-100
-
-            ${
-                activeTab === "ordenes"
-                    ? "bg-white text-slate-700 shadow-none"
-                    : "bg-slate-200 shadow-inner text-slate-600"
-            }
-        `}
+                    className={`px-6 py-2 rounded-t-lg font-semibold transition-all duration-100 ${
+                        activeTab === "ordenes"
+                            ? "bg-white text-slate-700 shadow-none"
+                            : "bg-slate-200 shadow-inner text-slate-600"
+                    }`}
                 >
                     Órdenes de Compra
                 </button>
                 <button
                     onClick={() => setActiveTab("stock")}
-                    className={`px-6 py-2 rounded-t-lg font-semibold transition-all duration-300
-            ${
-                activeTab === "stock"
-                    ? "bg-white text-slate-700 shadow-none"
-                    : "bg-slate-200 shadow-inner text-slate-600"
-            }
-        `}
+                    className={`px-6 py-2 rounded-t-lg font-semibold transition-all duration-300 ${
+                        activeTab === "stock"
+                            ? "bg-white text-slate-700 shadow-none"
+                            : "bg-slate-200 shadow-inner text-slate-600"
+                    }`}
                 >
                     Inventario
                 </button>
             </div>
-        <div className="bg-white rounded-lg overflow-hidden shadow-lg">
-            {/* Tabs tipo marcapáginas */}
-
-            {/* Contenido según tab */}
-            {activeTab === "ordenes" && (
-                <div className=" shadow-slate-300 shadow-md ">
-                    <div className="flex justify-between items-center mb-4 p-6 ">
-                        <h2 className="text-xl font-semibold text-gray-700">
-                            Órdenes de Compra
-                        </h2>
-                        <button className="bg-slate-500 text-white px-4 py-2 rounded-md font-extrabold hover:bg-slate-600">
-                            Nuevo
-                        </button>
+            <div className="bg-white rounded-lg overflow-hidden shadow-lg">
+                {activeTab === "ordenes" && (
+                    <div className="shadow-slate-300 shadow-md">
+                        <div className="flex justify-between items-center mb-4 p-6">
+                            <h2 className="text-xl font-semibold text-gray-700">
+                                Órdenes de Compra
+                            </h2>
+                            <button className="bg-slate-500 text-white px-4 py-2 rounded-md font-extrabold hover:bg-slate-600">
+                                Nuevo
+                            </button>
+                        </div>
+                        <div className="flex justify-between items-center mb-4 px-6">
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    placeholder="Buscar"
+                                    className="border border-gray-300 rounded-lg py-2 px-4 w-64 focus:outline-none focus:ring-2 focus:ring-slate-500"
+                                    value={searchTerm}
+                                    onChange={(e) =>
+                                        setSearchTerm(e.target.value)
+                                    }
+                                />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-9 items-center bg-slate-100 font-semibold text-gray-700 py-2 px-8 gap-2 mb-6 mt-10">
+                            <div className="text-center">Imagen</div>
+                            <div className="text-start">ID Producto</div>
+                            <div className="text-start pl-4 col-span-2">
+                                Artículo
+                            </div>
+                            <div className="text-center">Precio</div>
+                            <div className="text-center">Cantidad</div>
+                            <div className="text-center">Fecha Recepción</div>
+                            <div className="text-center">Estado</div>
+                            <div className="text-center">Acciones</div>
+                        </div>
+                        <div className="grid grid-cols-1 px-4 pb-4">
+                            {products
+                                .filter((product) =>
+                                    product.producto
+                                        .toLowerCase()
+                                        .includes(searchTerm.toLowerCase())
+                                )
+                                .map((product, index) => (
+                                    <ProductTableRow
+                                        key={index}
+                                        product={product}
+                                        context="orders"
+                                    />
+                                ))}
+                        </div>
                     </div>
+                )}
+                {activeTab === "stock" && (
+                    <div className="p-6 relative flex flex-col gap-6">
+                        <h2 className="text-xl font-semibold text-gray-700 mb-4 ">
+                            Inventario
+                        </h2>
+                        <button
+                            className="absolute top-6 right-6 bg-slate-500 text-white px-4 py-2 rounded-md font-semibold hover:bg-slate-600"
+                            /* onClick={addProduct} */
+                        >
+                            Añadir Producto
+                        </button>
 
-                    <div className="flex justify-between items-center mb-4 px-6">
-                        <div className="relative">
+                        <div className="flex flex-col justify-start  items-left gap-2 mb-4">
                             <input
                                 type="text"
                                 placeholder="Buscar"
@@ -109,53 +159,55 @@ export default function ProductTable() {
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
+                        <div className="">
+                            <button
+                            className="mr-2 bg-slate-300 text-slate-600 px-4 py-2 rounded-md font-semibold hover:bg-slate-400 hover:text-white"
+                            /* onClick={Buscar} */
+                            >
+                            Buscar
+                        </button>
+                        <button
+                                className="hover:underline text-sm text-red-400 "
+                                /* onClick={clearFilters} */
+                                >
+                                Limpiar Filtros
+                            </button>
+                                </div>
+                            </div>
+                        <div className="text-right text-sm text-gray-500 mb-2">
+                            <CarruselAlmacenes />
+
+                        </div>
+                        <div className="grid grid-cols-9 items-center bg-slate-100 font-semibold text-gray-700 py-2 px-8 gap-2 mt-8 mb-4">
+                            <div className="text-center">Imagen</div>
+                            <div className="text-start">ID Producto</div>
+                            <div className="text-start pl-4 col-span-2">
+                                Artículo
+                            </div>
+                            <div className="text-center">Precio</div>
+                            <div className="text-center">Cantidad</div>
+                            <div className="text-center">Almacén</div>
+                            <div className="text-center">Fecha Recepción</div>
+                            <div className="text-center">Acciones</div>
+                        </div>
+                        <div className="grid grid-cols-1 px-4 pb-4">
+                            {products
+                                .filter((product) =>
+                                    product.producto
+                                        .toLowerCase()
+                                        .includes(searchTerm.toLowerCase())
+                                )
+                                .map((product, index) => (
+                                    <ProductTableRow
+                                        key={index}
+                                        product={product}
+                                        context="stock"
+                                    />
+                                ))}
                         </div>
                     </div>
-
-                    {/* Encabezados */}
-                    <div className="grid grid-cols-9 items-center bg-slate-100 font-semibold text-gray-700 py-2 px-8 gap-2 mb-6 mt-10">
-                        <div className="text-center">Imagen</div>
-                        <div className="text-start">ID Producto</div>
-                        <div className="text-start pl-4 col-span-2">
-                            Artículo
-                        </div>
-                        <div className="text-center">Precio</div>
-                        <div className="text-center">Cantidad</div>
-                        <div className="text-center">Fecha Recepción</div>
-                        <div className="text-center">Estado</div>
-                        <div className="text-center">Acciones</div>
-                    </div>
-
-                    {/* Filas */}
-                    <div className="grid grid-cols-1 px-4 pb-4">
-                        {products
-                            .filter((product) =>
-                                product.producto
-                                    .toLowerCase()
-                                    .includes(searchTerm.toLowerCase())
-                            )
-                            .map((product, index) => (
-                                <ProductTableRow
-                                    key={index}
-                                    product={product}
-                                />
-                            ))}
-                    </div>
-                </div>
-            )}
-
-            {activeTab === "stock" && (
-                <div className="p-6">
-                    <h2 className="text-xl font-semibold text-gray-700 mb-4">
-                        Inventario
-                    </h2>
-                    {/* Aquí podrías colocar otra tabla o una vista distinta para stock */}
-                    <div className="text-gray-600">
-                        Aquí irá la tabla de inventario general.
-                    </div>
-                </div>
-            )}
-        </div>
+                )}
+            </div>
         </div>
     );
 }

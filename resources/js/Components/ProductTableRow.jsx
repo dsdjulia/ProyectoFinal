@@ -3,7 +3,7 @@ import Chip from "@/Components/Chip";
 import EditProductModal from "@/Components/EditProductModal";
 import DeleteProductModal from "@/Components/DeleteProductModal";
 
-export default function ProductTableRow({ product }) {
+export default function ProductTableRow({ product, context }) {
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
@@ -52,20 +52,24 @@ export default function ProductTableRow({ product }) {
                     {product.existencias}
                 </div>
 
+                {/* Campo dinámico basado en el contexto */}
+                <div className="text-gray-700 text-center">
+                    {context === "orders" ? (
+                        <Chip status={product.status || "Pendiente"} />
+                    ) : (
+                        <span>{product.almacen || "Sin asignar"}</span>
+                    )}
+                </div>
+
                 {/* Fecha */}
                 <div className="text-gray-700 text-center">{product.fecha}</div>
-
-                {/* Estado */}
-                <div className="flex justify-center">
-                    <Chip status={product.status} />
-                </div>
 
                 {/* Acciones */}
                 <div className="flex justify-center gap-8 items-center">
                     <div
                         className="flex items-center justify-center w-8 h-8 rounded-full text-slate-500 hover:text-slate-700 cursor-pointer"
                         onClick={(e) => {
-                            e.stopPropagation(); /* Esto es para evitar errores con botones anidados dentro de otros botones */
+                            e.stopPropagation(); /* Evitar errores con botones anidados */
                             setEditModalOpen(true);
                         }}
                     >
