@@ -1,15 +1,25 @@
 import { useState } from "react";
+import {Link, router } from "@inertiajs/react";
+
 
 export default function DeleteProductModal({ product, onClose }) {
     const [reduceAmount, setReduceAmount] = useState("");
 
     const handleDeleteAll = () => {
-        console.log(`Deleting all of: ${product.producto}`);
+        console.log(`Eliminando el producto: ${product.producto}`);
+        
+        //! De momento no tiene el id
+        // router.delete(`muestra/${product.id}`, {
+        //     onSuccess: () => {
+        //     },
+        //     onError: (error) => showModificableAlert('Error al eliminar la muestra', `Error: ${error}`, 'error'),
+        // });
+        
         onClose();
     };
 
     const handleDeletePartial = () => {
-        console.log(`Reducing ${reduceAmount} from: ${product.producto}`);
+        console.log(`Reduciendo ${reduceAmount} de: ${product.producto}`);
         onClose();
     };
 
@@ -26,10 +36,10 @@ export default function DeleteProductModal({ product, onClose }) {
                         <input
                             type="text"
                             value={reduceAmount}
-                            onChange={(e) => setReduceAmount(e.target.value)}
+                            onChange={(e) =>  (e.target.value)}
                             className="w-1/2 border border-slate-600 rounded-lg p-2 mt-1 mr-4 bg-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-100"
                         />
-                         <button
+                        <button
                         className="px-4 py-2 bg-slate-500 text-white rounded-md hover:bg-slate-600"
                         onClick={handleDeletePartial}
                     >
