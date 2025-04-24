@@ -9,11 +9,11 @@ class Gasto extends Model
     protected $table = 'gastos';
 
     protected $fillable = [
+        'id_user',
         'concepto',
         'precio',
         'fecha',
-        'gasto_recurrente',
-        'id_user',
+        'gasto_recurrente'
     ];
 
     public function user()

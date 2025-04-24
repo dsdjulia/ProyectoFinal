@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ventas', function (Blueprint $table) {
+        Schema::create('categorias', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_user');
-            $table->unsignedBigInteger('id_comprador');
-            $table->dateTime('fecha_venta');
+            $table->string('nombre');
+            $table->boolean('perecedero');
+            $table->date('fecha_vencimiento')->nullable();
             $table->timestamps();
-
-            $table->foreign('id_user')->references('id')->on('users');
-            $table->foreign('id_comprador')->references('id')->on('compradores');
         });
     }
 
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ventas');
+        Schema::dropIfExists('categorias');
     }
 };

@@ -13,8 +13,8 @@ class Inventario extends Model
     protected $table = "inventarios";
 
     protected $fillable = [
-        'id_almacen',
         'id_producto',
+        'id_user',
         'cantidad_actual',
         'fecha_entrada',
         'fecha_salida',
@@ -27,11 +27,15 @@ class Inventario extends Model
 
     // Crear el modelo y migracion de almacen
 
-    public function almacen(){
-        return $this->belongsTo(Almacen::class, 'id_almacen');
+    public function almacenes(){
+        return $this->hasMany(Almacen::class, 'id_inventario', 'id');
     }
 
     public function producto(){
         return $this->belongsTo(Producto::class,'id_producto');
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class, 'id_user');
     }
 }

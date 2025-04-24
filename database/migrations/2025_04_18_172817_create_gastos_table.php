@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('gastos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('id_user');
             $table->string('concepto');
             $table->string('precio');
             $table->string('fecha');
-            $table->string('gasto_recurrente');
-            $table->string('id_user');
+            $table->boolean('gasto_recurrente');
             $table->timestamps();
 
             $table->foreign('id_user')->references('id')->on('users');

@@ -12,10 +12,10 @@ class DetalleVenta extends Model
     protected $table = "detalle_ventas";
 
     protected $fillable = [
-        'cantidad',
-        'precio_unitario',
         'id_producto',
-        'id_venta'
+        'id_venta',
+        'cantidad',
+        'precio_unitario'
     ];
 
     public function producto(){

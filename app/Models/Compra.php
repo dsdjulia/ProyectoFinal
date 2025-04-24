@@ -12,8 +12,9 @@ class Compra extends Model
     protected $table = "compras";
 
     protected $fillable = [
-        'fecha_compra',
         'id_user',
+        'id_proveedor',
+        'fecha_compra',
     ];
 
     public function detalleCompras(){
@@ -22,5 +23,9 @@ class Compra extends Model
 
     public function user(){
         return $this->belongsTo(User::class, 'id_user', 'id');
+    }
+
+    public function proveedor(){
+        return $this->belongsTo(Proveedor::class, 'id_proveedor', 'id');
     }
 }

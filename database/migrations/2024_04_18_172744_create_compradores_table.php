@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('compradores', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->string('identificacion');
-            $table->integer('telefono');
             $table->string('email');
+            $table->string('identificacion');
+            $table->string('telefono'); 
             $table->string('direccion');
-            $table->boolean('tipo_comprador');
+            $table->string('tipo_comprador');
             $table->timestamps();
         });
     }

@@ -62,10 +62,6 @@ class User extends Authenticatable
         return $this->hasMany(Compra::class, 'id_user', 'id');
     }
 
-    public function almacenes()
-    {
-        return $this->hasMany(Almacen::class, 'id_user', 'id');
-    }
     public function gastos()
     {
         return $this->hasMany(Gasto::class, 'id_user', 'id');

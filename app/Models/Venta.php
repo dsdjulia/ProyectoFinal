@@ -12,8 +12,9 @@ class Venta extends Model
     protected $table = "ventas";
 
     protected $fillable = [
+        'id_user',
+        'id_comprador',
         'fecha_venta',
-        'id_user'
     ];
 
     public function detalleVentas(){

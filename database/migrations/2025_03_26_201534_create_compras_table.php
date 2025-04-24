@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('compras', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('fecha_compra');
             $table->unsignedBigInteger('id_user');
+            $table->unsignedBigInteger('id_proveedor');
+            $table->dateTime('fecha_compra');
             $table->timestamps();
 
             $table->foreign('id_user')->references('id')->on('users');
-
+            $table->foreign('id_proveedor')->references('id')->on('proveedores');
         });
     }
 
