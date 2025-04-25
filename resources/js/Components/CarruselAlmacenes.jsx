@@ -2,99 +2,217 @@
 
 import { useState } from "react";
 
-const almacenes = [
-    {
-        nombre: "Almacén Central",
-        productos: 1320,
-        valor: "$3,250,000",
-        direccion: "Av. Principal 123, Bogotá",
-    },
-    {
-        nombre: "Sucursal Norte",
-        productos: 678,
-        valor: "$1,470,000",
-        direccion: "Cra. 45 #12-34, Medellín",
-    },
-    {
-        nombre: "Depósito Cali",
-        productos: 905,
-        valor: "$2,110,000",
-        direccion: "Calle 20 #7-30, Cali",
-    },
-    {
-        nombre: "Depósito Cali",
-        productos: 905,
-        valor: "$2,110,000",
-        direccion: "Calle 20 #7-30, Cali",
-    },
-    {
-        nombre: "Almacén Central",
-        productos: 1320,
-        valor: "$3,250,000",
-        direccion: "Av. Principal 123, Bogotá",
-    },
-    {
-        nombre: "Sucursal Norte",
-        productos: 678,
-        valor: "$1,470,000",
-        direccion: "Cra. 45 #12-34, Medellín",
-    },
-    {
-        nombre: "Depósito Cali",
-        productos: 905,
-        valor: "$2,110,000",
-        direccion: "Calle 20 #7-30, Cali",
-    },
-    {
-        nombre: "Depósito Cali",
-        productos: 905,
-        valor: "$2,110,000",
-        direccion: "Calle 20 #7-30, Cali",
-    },
-];
+function AddAlmacenModal({ isOpen, onClose, onAdd }) {
+    const [form, setForm] = useState({
+        nombre: "",
+        productos: "",
+        valor: "",
+        direccion: "",
+    });
 
-export default function CarruselAlmacenes() {
-    const [selected, setSelected] = useState([]);
+    const handleChange = (e) =>
+        setForm({ ...form, [e.target.name]: e.target.value });
 
-    const toggleSelect = (index) => {
-        if (selected.includes(index)) {
-            setSelected(selected.filter((i) => i !== index));
-        } else {
-            setSelected([...selected, index]);
+    const handleSubmit = () => {
+        if (form.nombre && form.productos && form.valor && form.direccion) {
+            onAdd({ ...form, productos: parseInt(form.productos, 10) });
+            setForm({ nombre: "", productos: "", valor: "", direccion: "" });
+            onClose();
         }
     };
 
+    if (!isOpen) return null;
+
     return (
-        <div className="overflow-x-auto w-full py-4">
-            <div className="flex space-x-4 px-1">
-                {almacenes.map((almacen, index) => (
-                    <div
-                        key={index}
-                        onClick={() => toggleSelect(index)}
-                        className={`min-w-[250px] rounded-xl p-4 shadow-md flex-shrink-0 cursor-pointer
-                            ${selected.includes(index)
-                                ? "bg-slate-300 shadow-inner "
-                                : "bg-slate-100 shadow-md"
-                            }`}
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg w-96 space-y-4 shadow-xl">
+                <h2 className="text-lg font-bold text-slate-700">Añadir Almacén</h2>
+                <input
+                    name="nombre"
+                    placeholder="Nombre"
+                    value={form.nombre}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded"
+                />
+                <input
+                    name="productos"
+                    type="number"
+                    placeholder="Cantidad de productos"
+                    value={form.productos}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded"
+                />
+                <input
+                    name="valor"
+                    placeholder="Valor"
+                    value={form.valor}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded"
+                />
+                <input
+                    name="direccion"
+                    placeholder="Dirección"
+                    value={form.direccion}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded"
+                />
+                <div className="flex justify-end space-x-2">
+                    <button onClick={onClose} className="text-red-500">Cancelar</button>
+                    <button
+                        onClick={handleSubmit}
+                        className="bg-slate-600 text-white px-4 py-2 rounded"
                     >
-                        <div className="flex items-center space-x-2 mb-2">
-                            <span className="material-icons text-slate-600 text-xl">
-                                warehouse
-                            </span>
-                            <span className="font-bold text-slate-800">
-                                {almacen.nombre}
-                            </span>
-                        </div>
-                        <div className="text-xs font-bold text-slate-600">
-                            <div>{almacen.productos} productos</div>
-                            <div className="text-green-600">{almacen.valor}</div>
-                            <div className="text-xs text-slate-500 mt-1">
-                                {almacen.direccion}
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function DeleteAlmacenModal({ isOpen, onClose, almacenes, onDelete }) {
+    const [selected, setSelected] = useState(null);
+
+    const handleDelete = () => {
+        if (selected !== null) {
+            onDelete(selected);
+            onClose();
+        }
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg w-96 shadow-xl">
+                <h2 className="text-lg font-bold text-slate-700 mb-4">Eliminar Almacén</h2>
+                <select
+                    className="w-full p-2 border rounded mb-4"
+                    value={selected ?? ""}
+                    onChange={(e) => setSelected(Number(e.target.value))}
+                >
+                    <option value="" disabled>Selecciona un almacén</option>
+                    {almacenes.map((a, idx) => (
+                        <option key={idx} value={idx}>{a.nombre} - {a.direccion}</option>
+                    ))}
+                </select>
+                <div className="flex justify-end space-x-2">
+                    <button onClick={onClose} className="text-slate-600">Cancelar</button>
+                    <button
+                        onClick={handleDelete}
+                        className="bg-red-500 text-white px-4 py-2 rounded"
+                    >
+                        Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default function CarruselAlmacenes() {
+    const [almacenes, setAlmacenes] = useState([
+        {
+            nombre: "Almacén Central",
+            productos: 1320,
+            valor: "$3,250,000",
+            direccion: "Av. Principal 123, Bogotá",
+        },
+        {
+            nombre: "Sucursal Norte",
+            productos: 678,
+            valor: "$1,470,000",
+            direccion: "Cra. 45 #12-34, Medellín",
+        },
+        {
+            nombre: "Depósito Cali",
+            productos: 905,
+            valor: "$2,110,000",
+            direccion: "Calle 20 #7-30, Cali",
+        },
+    ]);
+
+    const [selected, setSelected] = useState([]);
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+    const toggleSelect = (index) => {
+        setSelected((prev) =>
+            prev.includes(index)
+                ? prev.filter((i) => i !== index)
+                : [...prev, index]
+        );
+    };
+
+    const handleAddAlmacen = (newAlmacen) => {
+        setAlmacenes([...almacenes, newAlmacen]);
+    };
+
+    const handleDeleteAlmacen = (index) => {
+        setAlmacenes(almacenes.filter((_, i) => i !== index));
+    };
+
+    return (
+        <div className="w-full">
+            <div className="flex justify-between items-center mb-2 px-2">
+                <button
+                    onClick={() => setShowAddModal(true)}
+                    className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 text-sm"
+                >
+                    Añadir Almacén
+                </button>
+                <button
+                    onClick={() => setShowDeleteModal(true)}
+                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm"
+                >
+                    Eliminar Almacén
+                </button>
+            </div>
+
+            <div className="overflow-x-auto w-full py-2">
+                <div className="flex space-x-4 px-1">
+                    {almacenes.map((almacen, index) => (
+                        <div
+                            key={index}
+                            onClick={() => toggleSelect(index)}
+                            className={`min-w-[250px] rounded-xl p-4 shadow-md flex-shrink-0 cursor-pointer
+                                ${selected.includes(index)
+                                    ? "bg-slate-300 shadow-inner"
+                                    : "bg-slate-100 shadow-md"
+                                }`}
+                        >
+                            <div className="flex items-center space-x-2 mb-2">
+                                <span className="material-icons text-slate-600 text-xl">
+                                    warehouse
+                                </span>
+                                <span className="font-bold text-slate-800">
+                                    {almacen.nombre}
+                                </span>
+                            </div>
+                            <div className="text-xs font-bold text-slate-600">
+                                <div>{almacen.productos} productos</div>
+                                <div className="text-green-600">{almacen.valor}</div>
+                                <div className="text-xs text-slate-500 mt-1">
+                                    {almacen.direccion}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
+
+            <AddAlmacenModal
+                isOpen={showAddModal}
+                onClose={() => setShowAddModal(false)}
+                onAdd={handleAddAlmacen}
+            />
+
+            <DeleteAlmacenModal
+                isOpen={showDeleteModal}
+                onClose={() => setShowDeleteModal(false)}
+                almacenes={almacenes}
+                onDelete={handleDeleteAlmacen}
+            />
         </div>
     );
 }

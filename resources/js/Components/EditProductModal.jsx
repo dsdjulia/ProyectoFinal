@@ -1,12 +1,13 @@
 import { useState } from "react";
 
-export default function EditProductModal({ product, onClose }) {
+export default function EditProductModal({ product, onClose, context, almacenes }) {
     const [formData, setFormData] = useState({
         producto: product.producto,
         precio: product.precio,
         existencias: product.existencias,
         fecha: product.fecha,
-        status: product.status,
+        status: context === "orders" ? product.status : undefined,
+        almacen: context === "stock" ? product.almacen : undefined,
     });
 
     const handleChange = (e) => {
@@ -64,19 +65,39 @@ export default function EditProductModal({ product, onClose }) {
                             className="w-full border border-slate-600 rounded-lg p-2 mt-1 bg-slate-800 focus:ring-2 focus:ring-slate-500 focus:outline-none text-slate-100"
                         />
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium text-slate-300">Estado</label>
-                        <select
-                            name="status"
-                            value={formData.status}
-                            onChange={handleChange}
-                            className="w-full border border-slate-600 rounded-lg p-2 mt-1 bg-slate-800 focus:ring-2 focus:ring-slate-500 focus:outline-none text-slate-100"
-                        >
-                            <option value="cancelado">Cancelado</option>
-                            <option value="pendiente">Pendiente</option>
-                            <option value="recibido">Recibido</option>
-                        </select>
-                    </div>
+                    {context === "orders" && (
+                        <div>
+                            <label className="block text-sm font-medium text-slate-300">Estado</label>
+                            <select
+                                name="status"
+                                value={formData.status}
+                                onChange={handleChange}
+                                className="w-full border border-slate-600 rounded-lg p-2 mt-1 bg-slate-800 focus:ring-2 focus:ring-slate-500 focus:outline-none text-slate-100"
+                            >
+                                <option value="cancelado">Cancelado</option>
+                                <option value="pendiente">Pendiente</option>
+                                <option value="recibido">Recibido</option>
+                            </select>
+                        </div>
+                    )}
+                    {context === "stock" && (
+                        <div>
+                            <label className="block text-sm font-medium text-slate-300">Almacén</label>
+                            <select
+                                name="almacen"
+                                value={formData.almacen}
+                                onChange={handleChange}
+                                className="w-full border border-slate-600 rounded-lg p-2 mt-1 bg-slate-800 focus:ring-2 focus:ring-slate-500 focus:outline-none text-slate-100"
+                            >
+                                <option value="">Seleccionar</option>
+                                {almacenes.map((almacen, index) => (
+                                    <option key={index} value={almacen}>
+                                        {almacen}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
                 </form>
                 <div className="mt-6 flex justify-end space-x-3">
                     <button

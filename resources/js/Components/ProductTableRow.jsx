@@ -1,14 +1,23 @@
+"use client";
+
 import { useState } from "react";
 import Chip from "@/Components/Chip";
 import EditProductModal from "@/Components/EditProductModal";
 import DeleteProductModal from "@/Components/DeleteProductModal";
 
-export default function ProductTableRow({ product, context }) {
+export default function ProductTableRow({ product, context, almacenes = [], onUpdate }) {
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
     const handleRowClick = () => {
         console.log(`Selected: ${product.producto}`);
+    };
+
+    const handleEditSave = (updatedData) => {
+        if (onUpdate) {
+            onUpdate({ ...product, ...updatedData });
+        }
+        setEditModalOpen(false);
     };
 
     return (
@@ -38,7 +47,6 @@ export default function ProductTableRow({ product, context }) {
                     <span className="text-gray-800 font-bold truncate w-full text-left">
                         {product.producto}
                     </span>
-                    {/* Tooltip */}
                     <div className="absolute top-6 left-6 max-w-xs bg-gray-700 text-white text-xs rounded-md py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 overflow-hidden text-ellipsis whitespace-nowrap">
                         {product.producto}
                     </div>
@@ -48,11 +56,9 @@ export default function ProductTableRow({ product, context }) {
                 <div className="text-gray-700 text-center">{product.precio}</div>
 
                 {/* Existencias */}
-                <div className="text-gray-700 text-center">
-                    {product.existencias}
-                </div>
+                <div className="text-gray-700 text-center">{product.existencias}</div>
 
-                {/* Campo dinámico basado en el contexto */}
+                {/* Campo dinámico */}
                 <div className="text-gray-700 text-center">
                     {context === "orders" ? (
                         <Chip status={product.status || "Pendiente"} />
@@ -69,7 +75,7 @@ export default function ProductTableRow({ product, context }) {
                     <div
                         className="flex items-center justify-center w-8 h-8 rounded-full text-slate-500 hover:text-slate-700 cursor-pointer"
                         onClick={(e) => {
-                            e.stopPropagation(); /* Evitar errores con botones anidados */
+                            e.stopPropagation();
                             setEditModalOpen(true);
                         }}
                     >
@@ -91,9 +97,13 @@ export default function ProductTableRow({ product, context }) {
             {isEditModalOpen && (
                 <EditProductModal
                     product={product}
+                    context={context}
+                    almacenes={almacenes}
                     onClose={() => setEditModalOpen(false)}
+                    onSave={handleEditSave}
                 />
             )}
+
             {isDeleteModalOpen && (
                 <DeleteProductModal
                     product={product}

@@ -3,10 +3,10 @@
 import { useState } from "react";
 import ProductTableRow from "./ProductTableRow";
 import CarruselAlmacenes from "./CarruselAlmacenes";
+import AddModal from "./AddModal";
 
 export default function ProductTable() {
     const [activeTab, setActiveTab] = useState("ordenes");
-
     const [products, setProducts] = useState([
         {
             imagen: "https://png.pngtree.com/png-clipart/20240703/original/pngtree-children-clothing-flat-round-circle-vector-icon-png-image_15477247.png",
@@ -59,8 +59,14 @@ export default function ProductTable() {
             almacen: "Sucursal Norte",
         },
     ]);
-
     const [searchTerm, setSearchTerm] = useState("");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const almacenes = ["Almacén Central", "Sucursal Norte", "Depósito Cali"];
+
+    const handleAddProduct = (newProduct) => {
+        setProducts([...products, newProduct]);
+    };
 
     return (
         <div>
@@ -86,6 +92,7 @@ export default function ProductTable() {
                     Inventario
                 </button>
             </div>
+
             <div className="bg-white rounded-lg overflow-hidden shadow-lg">
                 {activeTab === "ordenes" && (
                     <div className="shadow-slate-300 shadow-md">
@@ -93,7 +100,10 @@ export default function ProductTable() {
                             <h2 className="text-xl font-semibold text-gray-700">
                                 Órdenes de Compra
                             </h2>
-                            <button className="bg-slate-500 text-white px-4 py-2 rounded-md font-extrabold hover:bg-slate-600">
+                            <button
+                                onClick={() => setIsModalOpen(true)}
+                                className="bg-slate-500 text-white px-4 py-2 rounded-md font-extrabold hover:bg-slate-600"
+                            >
                                 Nuevo
                             </button>
                         </div>
@@ -104,18 +114,14 @@ export default function ProductTable() {
                                     placeholder="Buscar"
                                     className="border border-gray-300 rounded-lg py-2 px-4 w-64 focus:outline-none focus:ring-2 focus:ring-slate-500"
                                     value={searchTerm}
-                                    onChange={(e) =>
-                                        setSearchTerm(e.target.value)
-                                    }
+                                    onChange={(e) => setSearchTerm(e.target.value)}
                                 />
                             </div>
                         </div>
                         <div className="grid grid-cols-9 items-center bg-slate-100 font-semibold text-gray-700 py-2 px-8 gap-2 mb-6 mt-10">
                             <div className="text-center">Imagen</div>
                             <div className="text-start">ID Producto</div>
-                            <div className="text-start pl-4 col-span-2">
-                                Artículo
-                            </div>
+                            <div className="text-start pl-4 col-span-2">Artículo</div>
                             <div className="text-center">Precio</div>
                             <div className="text-center">Cantidad</div>
                             <div className="text-center">Fecha Recepción</div>
@@ -134,24 +140,26 @@ export default function ProductTable() {
                                         key={index}
                                         product={product}
                                         context="orders"
+                                        almacenes={almacenes}
                                     />
                                 ))}
                         </div>
                     </div>
                 )}
+
                 {activeTab === "stock" && (
                     <div className="p-6 relative flex flex-col gap-6">
-                        <h2 className="text-xl font-semibold text-gray-700 mb-4 ">
+                        <h2 className="text-xl font-semibold text-gray-700 mb-4">
                             Inventario
                         </h2>
                         <button
+                            onClick={() => setIsModalOpen(true)}
                             className="absolute top-6 right-6 bg-slate-500 text-white px-4 py-2 rounded-md font-semibold hover:bg-slate-600"
-                            /* onClick={addProduct} */
                         >
                             Añadir Producto
                         </button>
 
-                        <div className="flex flex-col justify-start  items-left gap-2 mb-4">
+                        <div className="flex flex-col justify-start items-left gap-2 mb-4">
                             <input
                                 type="text"
                                 placeholder="Buscar"
@@ -159,37 +167,31 @@ export default function ProductTable() {
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
-                        <div className="">
-                            <button
-                            className="mr-2 bg-slate-300 text-slate-600 px-4 py-2 rounded-md font-semibold hover:bg-slate-400 hover:text-white"
-                            /* onClick={Buscar} */
-                            >
-                            Buscar
-                        </button>
-                        <button
-                                className="hover:underline text-sm text-red-400 "
-                                /* onClick={clearFilters} */
-                                >
-                                Limpiar Filtros
-                            </button>
-                                </div>
+                            <div>
+                                <button className="mr-2 bg-slate-300 text-slate-600 px-4 py-2 rounded-md font-semibold hover:bg-slate-400 hover:text-white">
+                                    Buscar
+                                </button>
+                                <button className="hover:underline text-sm text-red-400">
+                                    Limpiar Filtros
+                                </button>
                             </div>
+                        </div>
+
                         <div className="text-right text-sm text-gray-500 mb-2">
                             <CarruselAlmacenes />
-
                         </div>
+
                         <div className="grid grid-cols-9 items-center bg-slate-100 font-semibold text-gray-700 py-2 px-8 gap-2 mt-8 mb-4">
                             <div className="text-center">Imagen</div>
                             <div className="text-start">ID Producto</div>
-                            <div className="text-start pl-4 col-span-2">
-                                Artículo
-                            </div>
+                            <div className="text-start pl-4 col-span-2">Artículo</div>
                             <div className="text-center">Precio</div>
                             <div className="text-center">Cantidad</div>
                             <div className="text-center">Almacén</div>
                             <div className="text-center">Fecha Recepción</div>
                             <div className="text-center">Acciones</div>
                         </div>
+
                         <div className="grid grid-cols-1 px-4 pb-4">
                             {products
                                 .filter((product) =>
@@ -202,12 +204,21 @@ export default function ProductTable() {
                                         key={index}
                                         product={product}
                                         context="stock"
+                                        almacenes={almacenes}
                                     />
                                 ))}
                         </div>
                     </div>
                 )}
             </div>
+
+            <AddModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onAdd={handleAddProduct}
+                context={activeTab === "ordenes" ? "orders" : "stock"}
+                almacenes={almacenes}
+            />
         </div>
     );
 }
