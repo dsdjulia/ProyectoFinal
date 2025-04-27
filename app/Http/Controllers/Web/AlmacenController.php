@@ -10,126 +10,77 @@ use Illuminate\Support\Facades\Auth;
 
 class AlmacenController extends Controller
 {
-    //
-
-    public function index(){
+    public function index()
+    {
         $user = Auth::user();
-        $almacenes = Almacen::with('productos')
-            ->where('id_user', $user->id)
-            ->get();
-
-        if ($almacenes->isEmpty()) {
-            return Inertia::render('Inventario',[
-                'status' => false,
-                'message' => 'No hay almacenes disponibles',
-                'count' => $almacenes->count(),
-                'data' => $almacenes,
-            ]);
-        }
-
-        $totalProductos = $almacenes->sum(function ($almacen) {
-            return $almacen->productos->count();
-        });
-
-        return Inertia::render('Inventario',[
-            'status' => true,
-            'message' => 'Almacenes encontrados',
-            'count' => $almacenes->count(),
-            'total_productos' => $totalProductos,
-            'data' => $almacenes,
-        ]);
+        return $this->renderInventario($user);
     }
 
-    public function store(Request $request){
-
+    public function store(Request $request)
+    {
         $user = Auth::user();
 
         $data = $request->validate([
-            'id_user' => $user->id,
-            'nombre' => 'required | string | min:4 | max:255',
-            'direccion' => 'required | string | min: 4 | max:255'
+            'nombre' => 'required|string|min:4|max:255',
+            'direccion' => 'required|string|min:4|max:255',
         ]);
 
-        $almacen = Almacen::create($data);
-        $almacen->save();
+        $data['id_user'] = $user->id;
 
-        $almacenes = Almacen::with('productos')
-            ->where('id_user', $user->id)
-            ->get();
-        
+        Almacen::create($data);
 
-        $totalProductos = $almacenes->sum(function ($almacen) {
-            return $almacen->productos->count();
-        });
-
-        return Inertia::render('Inventario',[
-            'status' => true,
-            'message' => 'Almacenes encontrados',
-            'count' => $almacenes->count(),
-            'total_productos' => $totalProductos,
-            'data' => $almacenes,
-        ]);
-
+        return $this->renderInventario($user);
     }
 
-    public function delete(Request $request){
-
+    public function delete(Request $request)
+    {
         $user = Auth::user();
 
-        $almacen = Almacen::where('id_user',$user->id)
-            ->where('id', $request->id);
+        $almacen = Almacen::where('id_user', $user->id)
+            ->where('id', $request->id)
+            ->firstOrFail();
 
         $almacen->delete();
 
-        $almacenes = Almacen::with('productos')
-            ->where('id_user', $user->id)
-            ->get();
-        
-
-        $totalProductos = $almacenes->sum(function ($almacen) {
-            return $almacen->productos->count();
-        });
-
-        return Inertia::render('Inventario',[
-            'status' => true,
-            'message' => 'Almacenes encontrados',
-            'count' => $almacenes->count(),
-            'total_productos' => $totalProductos,
-            'data' => $almacenes,
-        ]);
+        return $this->renderInventario($user);
     }
 
-    public function update(Request $request){
+    public function update(Request $request)
+    {
         $user = Auth::user();
 
-        $data = $request -> validate([
-            'id' => 'required',
-            'nombre' => 'required | string | min:4 | max:255',
-            'direccion' => 'required | string | min: 4 | max:255'
+        $data = $request->validate([
+            'id' => 'required|exists:almacenes,id',
+            'nombre' => 'required|string|min:4|max:255',
+            'direccion' => 'required|string|min:4|max:255',
         ]);
 
-        $almacen = Almacen::where('id_user',$user->id)
-            ->where('id', $request->id);
-        
-        $almacen->update($data);
+        $almacen = Almacen::where('id_user', $user->id)
+            ->where('id', $data['id'])
+            ->firstOrFail();
 
+        $almacen->update([
+            'nombre' => $data['nombre'],
+            'direccion' => $data['direccion'],
+        ]);
+
+        return $this->renderInventario($user);
+    }
+
+    private function renderInventario($user)
+    {
         $almacenes = Almacen::with('productos')
             ->where('id_user', $user->id)
             ->get();
-        
 
-        $totalProductos = $almacenes->sum(function ($almacen) {
-            return $almacen->productos->count();
-        });
+        $totalProductos = $almacenes->sum(fn($almacen) => $almacen->productos->count());
 
-        return Inertia::render('Inventario',[
+        return Inertia::render('Inventario', [
             'status' => true,
             'message' => 'Almacenes encontrados',
             'count' => $almacenes->count(),
             'total_productos' => $totalProductos,
             'data' => $almacenes,
         ]);
-
-
     }
 }
