@@ -22,44 +22,5 @@ class DatabaseSeeder extends Seeder
             'email' => 'user@gmail.com',
             'password' => bcrypt('password'),
         ]);
-
-        Producto::create([
-            'nombre' => 'Ordenador portátil',
-            'descripcion' => "Ordenador portátil de 15 pulgadas",
-            'precio_unitario' => 750,
-        ]);
-
-        Producto::create([
-            'nombre' => 'Ratón razer',
-            'descripcion' => "Ratón inalámbrico",
-            'precio_unitario' => 40.99,
-        ]);
-
-        Producto::create([
-            'nombre' => 'Teclado logitech',
-            'descripcion' => "Teclado mecánico",
-            'precio_unitario' => 50.99,
-        ]);
-
-        Almacen::create([
-            'nombre' => 'Almacen de Giddon',
-            'id_user' => 1
-        ]);
-
-        Inventario::create([
-            'id_almacen' => 1,
-            'id_producto' => 1,
-            'cantidad_actual' => 2,
-            'fecha_entrada' => '2023-10-01',
-            'fecha_salida' => null
-        ]);
-
-        Inventario::create([
-            'id_almacen' => 1,
-            'id_producto' => 2,
-            'cantidad_actual' => 3,
-            'fecha_entrada' => '2023-09-01',
-            'fecha_salida' => null
-        ]); 
     }
 }

@@ -13,16 +13,20 @@ return new class extends Migration
     {
         Schema::create('inventarios', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_user');
+
             $table->unsignedBigInteger('id_producto');
+            $table->unsignedBigInteger('id_almacen');
+
             $table->integer('cantidad_actual');
-            $table->decimal('precio_unitario');
+            $table->decimal('precio_unitario', 10, 2);
+
             $table->date('fecha_entrada')->nullable();
             $table->date('fecha_salida')->nullable();
             $table->timestamps();
             
-            $table->foreign('id_user')->references('id')->on('users');
+            
             $table->foreign('id_producto')->references('id')->on('productos');
+            $table->foreign('id_almacen')->references('id')->on('almacenes');
         });
     }
 
