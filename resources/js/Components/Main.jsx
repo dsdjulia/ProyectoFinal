@@ -4,6 +4,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Sidebar from "./Sidebar";
 import DoughnutChart from "./DoughnutChart";
+import ProductOverview from "./ProductOverview";
 
 export default function Main({
     totalValue = 1000000,
@@ -79,6 +80,8 @@ export default function Main({
                     </div>
                 </div>
             </div>
+            <hr />
+            <ProductOverview/>
             <ProductTable />
         </div>
     );
