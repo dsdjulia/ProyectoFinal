@@ -52,9 +52,9 @@ class User extends Authenticatable
         return $this->hasMany(Venta::class, 'id_user', 'id');
     }
 
-    public function inventarios()
+    public function almacenes()
     {
-        return $this->hasManyThrough(Inventario::class, Almacen::class, 'id_user', 'id_almacen', 'id', 'id');
+        return $this->hasMany(Almacen::class, 'id_user', 'id');
     }
 
     public function compras()

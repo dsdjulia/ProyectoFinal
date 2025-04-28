@@ -14,28 +14,27 @@ class Inventario extends Model
 
     protected $fillable = [
         'id_producto',
-        'id_user',
+        'id_almacen',
+        'precio_unitario',
         'cantidad_actual',
         'fecha_entrada',
         'fecha_salida',
     ];
 
 
-    public function getTotal() {
-        return $this->cantidad_actual * optional($this->producto)->precio_unitario;
+    public function getSubtotalAttribute()
+    {
+        return $this->cantidad_actual * $this->precio_unitario;
     }
 
     // Crear el modelo y migracion de almacen
 
-    public function almacenes(){
-        return $this->hasMany(Almacen::class, 'id_inventario', 'id');
+    public function almacen()
+    {
+        return $this->belongsTo(Almacen::class, 'id_almacen');
     }
 
     public function producto(){
         return $this->belongsTo(Producto::class,'id_producto');
-    }
-
-    public function user(){
-        return $this->belongsTo(User::class, 'id_user');
     }
 }

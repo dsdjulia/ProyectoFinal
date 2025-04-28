@@ -13,19 +13,16 @@ class Almacen extends Model
     protected $table = "almacenes";
 
     protected $fillable = [
-        'id_inventario',
+        'id_user',
         'nombre',
         'direccion',
     ];
 
-    public function inventario()
-    {
-        return $this->belongsTo(Inventario::class, 'id_inventario', 'id');
-    }
-
     public function productos()
     {
         return $this->belongsToMany(Producto::class, 'inventarios', 'id_almacen', 'id_producto')
-            ->withPivot('cantidad_actual');
+            ->withPivot('cantidad_actual','precio_unitario', 'fecha_entrada', 'fecha_salida');
     }
+
+    
 }
