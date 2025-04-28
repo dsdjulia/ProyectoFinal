@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Bar, Doughnut, Line } from "react-chartjs-2";
 import {
@@ -73,36 +75,75 @@ const ProductOverview = ({ producto }) => {
         <p className="text-lg text-gray-600">{producto}</p>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="p-4 bg-white rounded-md shadow">
-            <h2 className="text-lg font-bold mb-2">Ingresos Mensuales</h2>
-            <Bar data={revenueData} options={{ responsive: true, plugins: { legend: { display: false }}}} />
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Gráficos */}
+        <div className="flex flex-col gap-6 w-full lg:w-3/5">
+          <div className="flex flex-col md:flex-row gap-4">
+            {/* Ingresos */}
+            <div className="p-4 bg-white rounded-md shadow  w-full md:w-1/2">
+              <h2 className="text-base font-bold mb-2">Ingresos Mensuales</h2>
+              <div className="h-48">
+                <Bar
+                  data={revenueData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    layout: { padding: 10 }
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Donut */}
+            <div className="p-4 bg-white rounded-md shadow min-h-[200px] w-full md:w-1/2">
+              <h2 className="text-base font-bold mb-2">Distribución de Ventas</h2>
+              <div className="h-48">
+                <Doughnut
+                  data={salesDistributionData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: "left" } },
+                    layout: { padding: 10 }
+                  }}
+                />
+              </div>
+            </div>
           </div>
 
-          <div className="p-4 bg-white rounded-md shadow">
-            <h2 className="text-lg font-bold mb-2">Distribución de Ventas</h2>
-            <Doughnut data={salesDistributionData} />
-          </div>
-
-          <div className="p-4 bg-white rounded-md shadow">
-            <h2 className="text-lg font-bold mb-2">Tendencia del Stock</h2>
-            <Line data={stockTrendData} options={{ responsive: true }} />
+          {/* Línea */}
+          <div className="p-4 bg-white rounded-md shadow min-h-[200px]">
+            <h2 className="text-base font-bold mb-2">Tendencia del Stock</h2>
+            <div className="h-32">
+              <Line
+                data={stockTrendData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  layout: { padding: 10 }
+                }}
+              />
+            </div>
           </div>
         </div>
 
-        <div className="lg:col-span-1 space-y-4">
+        {/* Estadísticas */}
+        <div className="flex flex-col justify-start gap-8 w-full lg:w-2/5">
           <div>
             <h2 className="text-lg font-bold">Beneficio Neto Estimado</h2>
             <p className="text-3xl font-semibold text-green-500">${netProfitEstimate}</p>
           </div>
+
           <div>
             <h2 className="text-lg font-bold">Stock Disponible</h2>
             <p className="text-3xl font-semibold text-yellow-500">{stock} unidades</p>
             <p className="text-sm text-gray-500 mt-1">
-              Nivel recomendado de reabastecimiento: <span className="font-medium">{recommendedReorder} unidades</span>
+              Nivel recomendado de reabastecimiento:{" "}
+              <span className="font-medium">{recommendedReorder} unidades</span>
             </p>
           </div>
+
           <div>
             <h2 className="text-lg font-bold">Estimación de Ventas Este Mes</h2>
             <p className="text-3xl font-semibold text-blue-500">{estimatedSold} unidades</p>
