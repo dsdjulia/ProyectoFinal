@@ -4,9 +4,12 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Almacen;
+use App\Models\DetalleCompra;
+use App\Models\DetalleVenta;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Producto;
 use App\Models\Inventario;
+use App\Models\Venta;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,11 +19,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
         User::factory()->create([
             'name' => 'user',
             'email' => 'user@gmail.com',
             'password' => bcrypt('password'),
+        ]);
+
+        $this->call([
+            CategoriaSeeder::class,
+            CompradorSeeder::class,
+            ProductoSeeder::class,
+            ProveedorSeeder::class,
+            AlmacenSeeder::class,
+            GastoSeeder::class,
+            CompraSeeder::class,
+            VentaSeeder::class,
+            DetalleCompraSeeder::class,
+            DetalleVentaSeeder::class,
         ]);
     }
 }
