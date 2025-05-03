@@ -12,25 +12,32 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductoController extends Controller
 {
-    // CRUD PRODUCTOS CON VISTAS
     public function index()
     {
-
+        //
     }
 
     public function show(Request $request)
     {
-
+        //
     }
 
     public function destroy(Request $request)
     {
+        $request->validate([
+            'codigo' => 'required|exists:productos,id',
+        ]);
 
+        $producto = Producto::findOrFail($request->codigo);
+
+        $almacen = $producto->almacenes()->firstOrFail(); 
+        $producto->delete();
+
+        return app(AlmacenController::class)->renderInventario($almacen->user);
     }
 
     public function store(Request $request)
     {
-
         $user = Auth::user();
 
         $data = $request->validate([
@@ -41,13 +48,16 @@ class ProductoController extends Controller
             'id_almacen' => 'required|exists:almacenes,id',
             'cantidad_actual' => 'required|integer|min:1',
             'precio_unitario' => 'required|numeric|min:0',
+            'imagen' => 'required|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
-        $almacen = Almacen::where('id_user', $user->id)
-            ->where('id',$data['id_almacen'])
-            ->first();
-
-        $producto = Producto::create($data);
+        $producto = Producto::create([
+            'id_categoria' => $data['id_categoria'],
+            'codigo' => $data['codigo'],
+            'nombre'=> $data['nombre'],
+            'descripcion'=> $data['descripcion'],
+            'imagen'=> $data['imagen']
+        ]);
 
         Inventario::create([
             'id_producto' => $producto->id,
@@ -55,10 +65,10 @@ class ProductoController extends Controller
             'cantidad_actual' => $data['cantidad_actual'],
             'precio_unitario' => $data['precio_unitario'],
             'fecha_entrada' => now(),
+            'fecha_salida' => null
         ]);
 
-        
-
+        return app(AlmacenController::class)->renderInventario($user);
     }
 
     public function update(Request $request)
@@ -74,11 +84,8 @@ class ProductoController extends Controller
             $producto->update($validated);
         }
 
-        $productos = Producto::all();
-        return Inertia::render('Dashboard', [
-            'productos' => $productos
-        ]);
+        $almacen = $producto->almacenes()->firstOrFail();
+
+        return app(AlmacenController::class)->renderInventario($almacen->user);
     }
-
-
 }

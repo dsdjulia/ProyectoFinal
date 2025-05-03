@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use Inertia\Inertia;
 use App\Models\Almacen;
+use App\Models\Inventario;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +41,9 @@ class AlmacenController extends Controller
             ->where('id', $request->id)
             ->firstOrFail();
 
+        $inventario = Inventario::where('id_almacen', $almacen->id);
+        
+        $inventario->delete();
         $almacen->delete();
 
         return $this->renderInventario($user);
@@ -67,20 +71,107 @@ class AlmacenController extends Controller
         return $this->renderInventario($user);
     }
 
-    private function renderInventario($user)
+    public function show(Request $request){
+        $user = Auth::user();
+
+        $almacenesIds = $request->input('almacenes');
+
+        $almacenes = Almacen::with(['productos' => function ($query) {
+            $query->withPivot('cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
+        }])
+        ->whereIn('id', $almacenesIds) 
+        ->get();
+
+        return $this->renderInventario($user,$almacenes);
+
+    }
+
+
+    public function calcularStockStats($almacenes)
     {
-        $almacenes = Almacen::with('productos')
-            ->where('id_user', $user->id)
-            ->get();
+        $stats = [
+            'disponible' => 0,
+            'lowStock' => 0,
+            'agotado' => 0,
+        ];
 
-        $totalProductos = $almacenes->sum(fn($almacen) => $almacen->productos->count());
+        foreach ($almacenes as $almacen) {
+            foreach ($almacen['productos'] as $producto) {
+                $cantidad = $producto['cantidad_actual'];
 
-        return Inertia::render('Inventario', [
+                if ($cantidad === 0) {
+                    $stats['agotado']++;
+                } elseif ($cantidad < 10) {
+                    $stats['lowStock']++;
+                } else {
+                    $stats['disponible']++;
+                }
+            }
+        }
+
+        return $stats;
+    }
+
+
+    public function renderInventario($user, $almacenesIds = null)
+    {
+    $almacenesQuery = Almacen::with(['productos' => function ($query) {
+        $query->withPivot('cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
+    }])
+    ->where('id_user', $user->id);
+
+    if ($almacenesIds && is_array($almacenesIds)) {
+        $almacenesQuery->whereIn('id', $almacenesIds);
+    }
+
+    $almacenes = $almacenesQuery->get()->map(function ($almacen) {
+        $productos = $almacen->productos;
+
+        $precioTotal = $productos->sum(fn($producto) =>
+            $producto->pivot->cantidad_actual * $producto->pivot->precio_unitario
+        );
+
+        $cantidadTotal = $productos->sum(fn($producto) =>
+            $producto->pivot->cantidad_actual
+        );
+
+        return [
+            'id' => $almacen->id,
+            'nombre' => $almacen->nombre,
+            'direccion' => $almacen->direccion,
+            'productos_count' => $productos->count(),
+            'cantidad_total' => $cantidadTotal,
+            'precio_total' => $precioTotal,
+            'productos' => $productos->map(function ($producto) {
+                return [
+                    'id' => $producto->id,
+                    'codigo' => $producto->codigo,
+                    'nombre' => $producto->nombre,
+                    'precio_unitario' => $producto->pivot->precio_unitario,
+                    'cantidad_actual' => $producto->pivot->cantidad_actual,
+                    'fecha_entrada' => $producto->pivot->fecha_entrada,
+                    'fecha_salida' => $producto->pivot->fecha_salida,
+                    'imagen' => $producto->imagen,
+                ];
+            })->toArray(),
+        ];
+    });
+
+    $stats = $this->calcularStockStats($almacenes);
+
+    return Inertia::render('Inventario', [
             'status' => true,
             'message' => 'Almacenes encontrados',
             'count' => $almacenes->count(),
-            'total_productos' => $totalProductos,
+            'total_productos' => $almacenes->sum('productos_count'),
+            'total_unidades' => $almacenes->sum('cantidad_total'),
+            'total_precio' => $almacenes->sum('precio_total'),
+            'disponible' => $stats['disponible'],
+            'lowStock' => $stats['lowStock'],
+            'agotado' => $stats['agotado'],
             'data' => $almacenes,
         ]);
     }
+
+
 }
