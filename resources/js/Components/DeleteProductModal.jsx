@@ -22,6 +22,7 @@ export default function DeleteProductModal({ product, onClose }) {
         console.log(`Reduciendo ${reduceAmount} de: ${product.producto}`);
         Inertia.delete(`muestra/${product.id}/${reduceAmount}`, {
             onSuccess: () => {
+                showModificableAlert('Producto eliminado', `${product.producto} eliminado del inventario.`, 'success')
             },
             onError: (error) => showModificableAlert('Error al reducir la cantidad', `Error: ${error}`, 'error'),
         });

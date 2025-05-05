@@ -1,3 +1,4 @@
+import { showModificableAlert } from "@/utils/alerts";
 import { useState } from "react";
 
 export default function EditProductModal({ product, onClose, context, almacenes }) {
@@ -15,8 +16,15 @@ export default function EditProductModal({ product, onClose, context, almacenes 
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
+    //! Checkear id
     const handleSubmit = () => {
-        console.log("Updated Product:", formData);
+        console.log("Producto actualizado:", formData);
+        Inertia.patch(`api/productos/${product.id}`, formData, {
+            onSuccess: () => {
+                showModificableAlert('Producto actualizado', `${product.producto} actualizado.`, 'success')
+            },
+            onError: (error) => showModificableAlert('Error al reducir la cantidad', `Error: ${error}`, 'error'),
+        });
         onClose();
     };
 

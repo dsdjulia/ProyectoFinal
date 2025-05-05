@@ -31,6 +31,7 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes })
             onSuccess: () => {
                 onAdd(formData);
                 console.log('success');
+                showModificableAlert('Producto añadido', `${formData.producto} agregado al inventario.`, 'success')
                 onClose(); 
             },
             onError: (errors) => {
