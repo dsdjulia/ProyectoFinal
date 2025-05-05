@@ -1,25 +1,30 @@
 import { useState } from "react";
 import {Link, router } from "@inertiajs/react";
+import { Inertia } from "@inertiajs/inertia";
 
 
 export default function DeleteProductModal({ product, onClose }) {
-    const [reduceAmount, setReduceAmount] = useState("");
+    const [reduceAmount, setReduceAmount] = useState(0);
 
     const handleDeleteAll = () => {
         console.log(`Eliminando el producto: ${product.producto}`);
         
         //! De momento no tiene el id
-        // router.delete(`muestra/${product.id}`, {
-        //     onSuccess: () => {
-        //     },
-        //     onError: (error) => showModificableAlert('Error al eliminar la muestra', `Error: ${error}`, 'error'),
-        // });
-        
+        Inertia.delete(`muestra/${product.id}`, {
+            onSuccess: () => {
+            },
+            onError: (error) => showModificableAlert('Error al eliminar el producto', `Error: ${error}`, 'error'),
+        });
         onClose();
     };
 
     const handleDeletePartial = () => {
         console.log(`Reduciendo ${reduceAmount} de: ${product.producto}`);
+        Inertia.delete(`muestra/${product.id}/${reduceAmount}`, {
+            onSuccess: () => {
+            },
+            onError: (error) => showModificableAlert('Error al reducir la cantidad', `Error: ${error}`, 'error'),
+        });
         onClose();
     };
 
@@ -36,7 +41,7 @@ export default function DeleteProductModal({ product, onClose }) {
                         <input
                             type="text"
                             value={reduceAmount}
-                            onChange={(e) =>  (e.target.value)}
+                            onChange={(e) => setReduceAmount(e.target.value)}
                             className="w-1/2 border border-slate-600 rounded-lg p-2 mt-1 mr-4 bg-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-100"
                         />
                         <button
