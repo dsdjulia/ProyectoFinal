@@ -23,7 +23,7 @@ export default function EditProductModal({ product, onClose, context, almacenes 
             onSuccess: () => {
                 showModificableAlert('Producto actualizado', `${product.producto} actualizado.`, 'success')
             },
-            onError: (error) => showModificableAlert('Error al reducir la cantidad', `Error: ${error}`, 'error'),
+            onError: (error) => showModificableAlert('Error al actualizar el producto', `Error: ${error}`, 'error'),
         });
         onClose();
     };
