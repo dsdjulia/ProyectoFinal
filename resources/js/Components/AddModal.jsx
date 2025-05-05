@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
+import { Inertia } from '@inertiajs/inertia';
+import { showModificableAlert } from "@/utils/alerts";
 
 export default function AddModal({ isOpen, onClose, onAdd, context, almacenes }) {
     const [formData, setFormData] = useState({
@@ -21,19 +23,19 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes })
         });
     };
 
+    //! Tengo que ajustar la ruta
     const handleSubmit = (e) => {
         e.preventDefault();
-        onAdd(formData);
-        onClose();
-        setFormData({
-            imagen: "",
-            codigo: "",
-            producto: "",
-            precio: "",
-            existencias: "",
-            fecha: "",
-            status: context === "orders" ? "" : undefined,
-            almacen: context === "stock" ? "" : undefined,
+    
+        Inertia.post('api/productos', formData, {
+            onSuccess: () => {
+                onAdd(formData);
+                console.log('success');
+                onClose(); 
+            },
+            onError: (errors) => {
+                showModificableAlert('Error al añadir el producto', `Error: ${errors}`, 'error')
+            }
         });
     };
 
