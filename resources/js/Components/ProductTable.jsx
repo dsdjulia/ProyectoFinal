@@ -6,10 +6,10 @@ import CarruselAlmacenes from "./CarruselAlmacenes";
 import AddModal from "./AddModal";
 import { usePage } from "@inertiajs/inertia-react";
 
-export default function ProductTable() {
+export default function ProductTable(props) {
 
-
-
+    console.log(props);
+    
     const [activeTab, setActiveTab] = useState("ordenes");
     const [products, setProducts] = useState([
         {

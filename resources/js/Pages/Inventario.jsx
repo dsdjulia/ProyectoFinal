@@ -7,7 +7,7 @@ import { usePage } from "@inertiajs/react";
 export default function Index() {
 
     // const { props } = usePage();
-    const props = usePage().props;
+    const {props} = usePage();
     console.log(props);
 
     return (
@@ -18,7 +18,7 @@ export default function Index() {
                     <Sidebar />
                 </div>
                 <div className="flex-1 overflow-y-auto">
-                    <Main />
+                    <Main props={props} />
                 </div>
             </div>
         </div>

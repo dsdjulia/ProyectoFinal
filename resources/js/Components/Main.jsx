@@ -12,7 +12,9 @@ export default function Main({
     disponible = 30,
     lowStock = 15,
     agotado = 5,
-}) {
+    props
+}) 
+{
     return (
         <div className="w-full flex flex-col align-middle justify-start p-12 pt-0npm r pb-34 h-[200vh]">
             <div className="flex justify-start  mb-12 w-full">
@@ -82,7 +84,7 @@ export default function Main({
             </div>
             <hr />
             <ProductOverview/>
-            <ProductTable />
+            <ProductTable props={props}/>
         </div>
     );
 }
