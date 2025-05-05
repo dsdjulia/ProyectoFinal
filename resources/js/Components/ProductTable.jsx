@@ -4,8 +4,12 @@ import { useState } from "react";
 import ProductTableRow from "./ProductTableRow";
 import CarruselAlmacenes from "./CarruselAlmacenes";
 import AddModal from "./AddModal";
+import { usePage } from "@inertiajs/inertia-react";
 
 export default function ProductTable() {
+
+
+
     const [activeTab, setActiveTab] = useState("ordenes");
     const [products, setProducts] = useState([
         {

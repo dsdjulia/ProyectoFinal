@@ -1,8 +1,12 @@
 import Sidebar from "@/Components/Sidebar";
 import Main from "@/Components/Main";
 import Header from "@/Components/Header";
+import { usePage } from "@inertiajs/inertia-react";
+
 
 function App() {
+    const datos = usePage().props;
+    console.log(datos);
     return (
         <>
              <div className="flex flex-col w-full">
