@@ -1,15 +1,14 @@
-"use client";
-
 import { useState } from "react";
 import ProductTableRow from "./ProductTableRow";
 import CarruselAlmacenes from "./CarruselAlmacenes";
 import AddModal from "./AddModal";
+import DeleteProductModal from "./DeleteProductModal";
 import { usePage } from "@inertiajs/inertia-react";
 
 export default function ProductTable(props) {
 
     console.log(props);
-    
+
     const [activeTab, setActiveTab] = useState("ordenes");
     const [products, setProducts] = useState([
         {
@@ -17,7 +16,7 @@ export default function ProductTable(props) {
             codigo: "2123",
             producto: "ARROZ BLANQUITA",
             precio: "$ 1,000",
-            existencias: "1188",
+            existencias: 1188,
             fecha: "12-02-2025",
             status: "cancelado",
             almacen: "Almacén Central",
@@ -27,7 +26,7 @@ export default function ProductTable(props) {
             codigo: "1122",
             producto: "UNIDAD CHOCOLATE LUKER",
             precio: "$ 1,500",
-            existencias: "4996",
+            existencias: 4996,
             fecha: "14-04-2025",
             status: "recibido",
             almacen: "Sucursal Norte",
@@ -37,7 +36,7 @@ export default function ProductTable(props) {
             codigo: "2987",
             producto: "MAIZENA",
             precio: "$ 2,300",
-            existencias: "228",
+            existencias: 228,
             fecha: "08-02-2025",
             status: "recibido",
             almacen: "Depósito Cali",
@@ -47,7 +46,7 @@ export default function ProductTable(props) {
             codigo: "2431",
             producto: "AZUCAR MORENA",
             precio: "$ 2,500",
-            existencias: "198",
+            existencias: 198,
             fecha: "20-12-2024",
             status: "pendiente",
             almacen: "Almacén Central",
@@ -57,7 +56,7 @@ export default function ProductTable(props) {
             codigo: "1210",
             producto: "MAIZ AMARILLO",
             precio: "$ 2,000",
-            existencias: "199",
+            existencias: 199,
             fecha: "31-01-2025",
             status: "recibido",
             almacen: "Sucursal Norte",
@@ -65,11 +64,18 @@ export default function ProductTable(props) {
     ]);
     const [searchTerm, setSearchTerm] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
     const almacenes = ["Almacén Central", "Sucursal Norte", "Depósito Cali"];
 
     const handleAddProduct = (newProduct) => {
         setProducts([...products, newProduct]);
+    };
+
+    const handleDeleteProduct = (product) => {
+        setSelectedProduct(product);
+        setIsDeleteModalOpen(true);
     };
 
     return (
@@ -145,6 +151,7 @@ export default function ProductTable(props) {
                                         product={product}
                                         context="orders"
                                         almacenes={almacenes}
+                                        onDelete={() => handleDeleteProduct(product)}
                                     />
                                 ))}
                         </div>
@@ -209,6 +216,7 @@ export default function ProductTable(props) {
                                         product={product}
                                         context="stock"
                                         almacenes={almacenes}
+                                        onDelete={() => handleDeleteProduct(product)}
                                     />
                                 ))}
                         </div>
@@ -223,6 +231,14 @@ export default function ProductTable(props) {
                 context={activeTab === "ordenes" ? "orders" : "stock"}
                 almacenes={almacenes}
             />
+
+            {isDeleteModalOpen && selectedProduct && (
+                <DeleteProductModal
+                    product={selectedProduct}
+                    totalAmount={selectedProduct.existencias}
+                    onClose={() => setIsDeleteModalOpen(false)}
+                />
+            )}
         </div>
     );
 }
