@@ -37,13 +37,16 @@ class AlmacenController extends Controller
     {
         $user = Auth::user();
 
+        $validated = $request->validate([
+            'id' => 'required|integer|exists:almacenes,id',
+        ]);
+
         $almacen = Almacen::where('id_user', $user->id)
-            ->where('id', $request->id)
+            ->where('id', $validated['id'])
             ->firstOrFail();
 
-        $inventario = Inventario::where('id_almacen', $almacen->id);
-        
-        $inventario->delete();
+        Inventario::where('id_almacen', $almacen->id)->delete();
+
         $almacen->delete();
 
         return $this->renderInventario($user);
@@ -76,13 +79,7 @@ class AlmacenController extends Controller
 
         $almacenesIds = $request->input('almacenes');
 
-        $almacenes = Almacen::with(['productos' => function ($query) {
-            $query->withPivot('cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
-        }])
-        ->whereIn('id', $almacenesIds) 
-        ->get();
-
-        return $this->renderInventario($user,$almacenes);
+        return $this->renderInventario($user,$almacenesIds);
 
     }
 
@@ -115,6 +112,7 @@ class AlmacenController extends Controller
 
     public function renderInventario($user, $almacenesIds = null)
     {
+        
     $almacenesQuery = Almacen::with(['productos' => function ($query) {
         $query->withPivot('cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
     }])
@@ -124,6 +122,7 @@ class AlmacenController extends Controller
         $almacenesQuery->whereIn('id', $almacenesIds);
     }
 
+    // DATOS PARA LOS GRAFICOS
     $almacenes = $almacenesQuery->get()->map(function ($almacen) {
         $productos = $almacen->productos;
 
@@ -172,6 +171,4 @@ class AlmacenController extends Controller
             'data' => $almacenes,
         ]);
     }
-
-
 }

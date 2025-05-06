@@ -32,7 +32,9 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
         $request->session()->regenerate();
-        return redirect()->intended(route('dashboard.index', absolute: false,));
+
+        return redirect()->route('inventario.index', false); // REDIRECT DEL LOGIN SE CAMBIA A DASHBOARD CUANDO ESTE
+
     }
 
     /**

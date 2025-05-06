@@ -8,28 +8,31 @@ use App\Http\Controllers\Web\ProductoController;
 use App\Http\Controllers\Web\NavegacionController;
 
 
-// CRUD PRODUCTOS CON VISTAS
-
-
 
 // EDIT PROFILE
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
+// LOGIN
 Route::get('/', function () {
-    return Inertia::render('Welcome');
+    return Inertia::render('Auth/Login');
 });
 
+// CRUD DE ALMACENES
+Route::get('/inventario', [AlmacenController::class ,'index'])->name('inventario.index');
+Route::delete('/inventario', [AlmacenController::class ,'delete'])->name('inventario.delete');
+Route::post('/inventario', [AlmacenController::class ,'store'])->name('inventario.store');
 
-// Route::get('/inventario', function () {
-//     return Inertia::render('Inventario'); // Cambia 'Inventario' si el archivo tiene otro nombre
-// })->name('inventario');
 
-Route::get('/inventario', [AlmacenController::class ,'index'])->name('inventario');
+// CRUD DE PRODUCTOS AÑADIR Y BORRAR
+Route::delete('/inventario/producto', [ProductoController::class ,'delete'])->name('producto.delete');
+Route::post('/inventario/producto', [ProductoController::class ,'store'])->name('producto.store');
+
+
+
+
 
 require __DIR__ . '/auth.php';
