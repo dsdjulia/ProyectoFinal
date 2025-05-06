@@ -110,28 +110,8 @@ function DeleteAlmacenModal({ isOpen, onClose, almacenes, onDelete }) {
     );
 }
 
-export default function CarruselAlmacenes() {
-    const [almacenes, setAlmacenes] = useState([
-        {
-            nombre: "Almacén Central",
-            productos: 1320,
-            valor: "$3,250,000",
-            direccion: "Av. Principal 123, Bogotá",
-        },
-        {
-            nombre: "Sucursal Norte",
-            productos: 678,
-            valor: "$1,470,000",
-            direccion: "Cra. 45 #12-34, Medellín",
-        },
-        {
-            nombre: "Depósito Cali",
-            productos: 905,
-            valor: "$2,110,000",
-            direccion: "Calle 20 #7-30, Cali",
-        },
-    ]);
-
+export default function CarruselAlmacenes({arrayAlmacenes}) {
+    const [almacenes, setAlmacenes] = useState(arrayAlmacenes);
     const [selected, setSelected] = useState([]);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -190,8 +170,8 @@ export default function CarruselAlmacenes() {
                                 </span>
                             </div>
                             <div className="text-xs font-bold text-slate-600">
-                                <div>{almacen.productos} productos</div>
-                                <div className="text-green-600">{almacen.valor}</div>
+                                <div>{almacen.productos_count} productos</div>
+                                <div className="text-green-600">{almacen.precio_total.toFixed(2)}€</div>
                                 <div className="text-xs text-slate-500 mt-1">
                                     {almacen.direccion}
                                 </div>

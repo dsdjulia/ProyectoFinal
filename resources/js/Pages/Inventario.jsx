@@ -6,7 +6,6 @@ import { usePage } from "@inertiajs/react";
 
 export default function Index() {
 
-    // const { props } = usePage();
     const {props} = usePage();
     console.log(props);
 
