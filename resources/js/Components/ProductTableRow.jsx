@@ -31,7 +31,7 @@ export default function ProductTableRow({ product, context, almacenes = [], onUp
                     <div className="w-10 h-10 rounded-full overflow-hidden">
                         <img
                             src={product.imagen}
-                            alt={product.producto}
+                            alt={product.nombre}
                             className="object-cover w-full h-full"
                         />
                     </div>
@@ -45,18 +45,18 @@ export default function ProductTableRow({ product, context, almacenes = [], onUp
                 {/* Nombre del producto con tooltip */}
                 <div className="relative group flex items-center col-span-2">
                     <span className="text-gray-800 font-bold truncate w-full text-left">
-                        {product.producto}
+                        {product.nombre}
                     </span>
                     <div className="absolute top-6 left-6 max-w-xs bg-gray-700 text-white text-xs rounded-md py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 overflow-hidden text-ellipsis whitespace-nowrap">
-                        {product.producto}
+                        {product.nombre}
                     </div>
                 </div>
 
                 {/* Precio */}
-                <div className="text-gray-700 text-center">{product.precio}</div>
+                <div className="text-gray-700 text-center">{product.precio_unitario}</div>
 
                 {/* Existencias */}
-                <div className="text-gray-700 text-center">{product.existencias}</div>
+                <div className="text-gray-700 text-center">{product.cantidad_actual}</div>
 
                 {/* Campo dinámico */}
                 <div className="text-gray-700 text-center">
@@ -68,7 +68,7 @@ export default function ProductTableRow({ product, context, almacenes = [], onUp
                 </div>
 
                 {/* Fecha */}
-                <div className="text-gray-700 text-center">{product.fecha}</div>
+                <div className="text-gray-700 text-center">{product.fecha_entrada}</div>
 
                 {/* Acciones */}
                 <div className="flex justify-center gap-8 items-center">

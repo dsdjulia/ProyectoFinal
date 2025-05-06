@@ -5,6 +5,7 @@ import AddModal from "./AddModal";
 import DeleteProductModal from "./DeleteProductModal";
 import { usePage } from "@inertiajs/inertia-react";
 
+<<<<<<< HEAD
 export default function ProductTable(props) {
 
     console.log(props);
@@ -62,12 +63,76 @@ export default function ProductTable(props) {
             almacen: "Sucursal Norte",
         },
     ]);
+=======
+export default function ProductTable({props}) {
+    console.log(props.data[0].productos);
+    
+    const [activeTab, setActiveTab] = useState("ordenes");
+    const [products, setProducts] = useState(props.data[0].productos);
+
+
+
+    // const [products, setProducts] = useState([
+    //     {
+    //         imagen: "https://png.pngtree.com/png-clipart/20240703/original/pngtree-children-clothing-flat-round-circle-vector-icon-png-image_15477247.png",
+    //         codigo: "2123",
+    //         producto: "ARROZ BLANQUITA",
+    //         precio: "$ 1,000",
+    //         existencias: "1188",
+    //         fecha: "12-02-2025",
+    //         status: "cancelado",
+    //         almacen: "Almacén Central",
+    //     },
+    //     {
+    //         imagen: "https://cdn-icons-png.flaticon.com/512/1043/1043940.png",
+    //         codigo: "1122",
+    //         producto: "UNIDAD CHOCOLATE LUKER",
+    //         precio: "$ 1,500",
+    //         existencias: "4996",
+    //         fecha: "14-04-2025",
+    //         status: "recibido",
+    //         almacen: "Sucursal Norte",
+    //     },
+    //     {
+    //         imagen: "https://cdn-icons-png.flaticon.com/512/1043/1043940.png",
+    //         codigo: "2987",
+    //         producto: "MAIZENA",
+    //         precio: "$ 2,300",
+    //         existencias: "228",
+    //         fecha: "08-02-2025",
+    //         status: "recibido",
+    //         almacen: "Depósito Cali",
+    //     },
+    //     {
+    //         imagen: "https://cdn-icons-png.flaticon.com/512/316/316325.png",
+    //         codigo: "2431",
+    //         producto: "AZUCAR MORENA",
+    //         precio: "$ 2,500",
+    //         existencias: "198",
+    //         fecha: "20-12-2024",
+    //         status: "pendiente",
+    //         almacen: "Almacén Central",
+    //     },
+    //     {
+    //         imagen: "https://cdn-icons-png.flaticon.com/512/1043/1043940.png",
+    //         codigo: "1210",
+    //         producto: "MAIZ AMARILLO",
+    //         precio: "$ 2,000",
+    //         existencias: "199",
+    //         fecha: "31-01-2025",
+    //         status: "recibido",
+    //         almacen: "Sucursal Norte",
+    //     },
+    // ]);
+
+
+>>>>>>> 64654464103087f0b7c727418438d53cb4c5c371
     const [searchTerm, setSearchTerm] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
 
-    const almacenes = ["Almacén Central", "Sucursal Norte", "Depósito Cali"];
+    const almacenes = props.data;
 
     const handleAddProduct = (newProduct) => {
         setProducts([...products, newProduct]);
@@ -141,7 +206,7 @@ export default function ProductTable(props) {
                         <div className="grid grid-cols-1 px-4 pb-4">
                             {products
                                 .filter((product) =>
-                                    product.producto
+                                    product.nombre
                                         .toLowerCase()
                                         .includes(searchTerm.toLowerCase())
                                 )
@@ -189,7 +254,7 @@ export default function ProductTable(props) {
                         </div>
 
                         <div className="text-right text-sm text-gray-500 mb-2">
-                            <CarruselAlmacenes />
+                            <CarruselAlmacenes arrayAlmacenes={almacenes}/>
                         </div>
 
                         <div className="grid grid-cols-9 items-center bg-slate-100 font-semibold text-gray-700 py-2 px-8 gap-2 mt-8 mb-4">
@@ -206,7 +271,7 @@ export default function ProductTable(props) {
                         <div className="grid grid-cols-1 px-4 pb-4">
                             {products
                                 .filter((product) =>
-                                    product.producto
+                                    product.nombre
                                         .toLowerCase()
                                         .includes(searchTerm.toLowerCase())
                                 )
