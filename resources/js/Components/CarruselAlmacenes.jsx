@@ -1,25 +1,41 @@
 "use client";
 
 import { useState } from "react";
+import { Inertia } from '@inertiajs/inertia';
+
 
 function AddAlmacenModal({ isOpen, onClose, onAdd }) {
     const [form, setForm] = useState({
         nombre: "",
-        productos: "",
-        valor: "",
+        productos_count: 0,
+        precio_total: 0,
         direccion: "",
     });
 
     const handleChange = (e) =>
         setForm({ ...form, [e.target.name]: e.target.value });
 
-    const handleSubmit = () => {
-        if (form.nombre && form.productos && form.valor && form.direccion) {
-            onAdd({ ...form, productos: parseInt(form.productos, 10) });
-            setForm({ nombre: "", productos: "", valor: "", direccion: "" });
-            onClose();
+    const handleSubmit = (e) => {
+        e.preventDefault();
+    
+        if (form.nombre && form.direccion) {
+            console.log('Entra a enviar');
+            Inertia.post('api/almacenes', form, {
+                onSuccess: () => {
+                    onAdd(form);
+                    console.log('success');
+                    showModificableAlert('Almacén añadido', `${form.nombre} agregado al inventario.`, 'success');
+                    onClose(); 
+                },
+                onError: (errors) => {
+                    showModificableAlert('Error al añadir el almacén', `Error: ${errors}`, 'error');
+                }
+            });
+            
         }
     };
+    
+    
 
     if (!isOpen) return null;
 
@@ -30,29 +46,12 @@ function AddAlmacenModal({ isOpen, onClose, onAdd }) {
                 <input
                     name="nombre"
                     placeholder="Nombre"
-                    value={form.nombre}
-                    onChange={handleChange}
-                    className="w-full p-2 border rounded"
-                />
-                <input
-                    name="productos"
-                    type="number"
-                    placeholder="Cantidad de productos"
-                    value={form.productos}
-                    onChange={handleChange}
-                    className="w-full p-2 border rounded"
-                />
-                <input
-                    name="valor"
-                    placeholder="Valor"
-                    value={form.valor}
                     onChange={handleChange}
                     className="w-full p-2 border rounded"
                 />
                 <input
                     name="direccion"
                     placeholder="Dirección"
-                    value={form.direccion}
                     onChange={handleChange}
                     className="w-full p-2 border rounded"
                 />
@@ -131,6 +130,8 @@ export default function CarruselAlmacenes({arrayAlmacenes}) {
     const handleDeleteAlmacen = (index) => {
         setAlmacenes(almacenes.filter((_, i) => i !== index));
     };
+
+    console.log(almacenes);
 
     return (
         <div className="w-full">

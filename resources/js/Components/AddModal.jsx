@@ -14,7 +14,7 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes })
         status: context === "orders" ? "" : undefined,
         almacen: context === "stock" ? "" : undefined,
     });
-
+    
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -22,6 +22,51 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes })
             [name]: value,
         });
     };
+    
+    // const [imagen, setImagen] = useState(null); // Para mostrarla
+    // const [imagenUpload, setImagenUpload] = useState(null); // Para subirla
+
+
+    // // Previsualizacion de la imágen seleccionada
+    // const handlePhoto = (photo) => {
+    //     const imagenSeleccionada = photo.target.files[0];
+    //     setImagen({ url: URL.createObjectURL(imagenSeleccionada), nombre: imagenSeleccionada.name });
+    //     setImagenUpload(imagenSeleccionada);
+    // };
+    
+    // const handleUpload = async () => {
+    //     if (imagenUpload) { // Verificamos que haya una imagen seleccionada
+    //         const formData = new FormData();
+    //         formData.append("file", imagenUpload);
+    //         formData.append("upload_preset", "default"); // Preset de Cloudinary
+    
+    //         try {
+    //             const response = await fetch("https://api.cloudinary.com/v1_1/dcdvxqsxn/image/upload", {
+    //                 method: "POST",
+    //                 body: formData,
+    //             });
+    
+    //             const data = await response.json();
+    
+    //             if (response.ok) {
+    //                 console.log("Imagen subida con éxito:", data);
+    //                 // Guardar la imagen en el formulario
+    //                 setForm((prevForm) => ({
+    //                     ...prevForm,
+    //                     imagenes: data,
+    //                 }));
+    //             } else {
+    //                 console.error("Error al subir imagen:", data.error.message);
+    //             }
+    //         } catch (error) {
+    //             console.error("Error al conectar con Cloudinary:", error);
+    //         }
+    //     }
+    
+    //     handleSubmit(); // Una vez subida la imagen, enviamos el form
+    // };
+    
+
 
     //! Tengo que ajustar la ruta
     const handleSubmit = (e) => {

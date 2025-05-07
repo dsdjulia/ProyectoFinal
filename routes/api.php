@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiAuthController;
 use App\Http\Controllers\Api\ApiAlmacenController;
 use App\Http\Controllers\Api\ApiProductoController;
+use App\Http\Controllers\Web\AlmacenController;
 
 // CRUD PRODUCTOS
 Route::get('/productos', [ApiProductoController::class, 'index'])->name('productos.index');
@@ -26,6 +27,9 @@ Route::middleware('auth:sanctum')->group(function(){
 });
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('/almacenes/{id}', [ApiAlmacenController::class, 'show'])->name('almacenes.index');
+});
+Route::middleware('auth:sanctum')->group(function(){
+    Route::post('/almacenes', [AlmacenController::class, 'store'])->name('almacenes.store');
 });
 
 // TOKENS

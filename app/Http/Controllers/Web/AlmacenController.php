@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Models\Almacen;
 use App\Models\Inventario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,18 +21,42 @@ class AlmacenController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-
+    
         $data = $request->validate([
-            'nombre' => 'required|string|min:4|max:255',
-            'direccion' => 'required|string|min:4|max:255',
+            'nombre' => 'required|string|max:255',
+            'direccion' => 'required|string|max:255'
         ]);
+    
+        // Validación personalizada (si tienes una función específica)
+        $validacion = $this->validatorAlmacen($data);
+        if ($validacion->fails()) {
+            return back()->withErrors($validacion)->withInput();
+        }
 
-        $data['id_user'] = $user->id;
-
-        Almacen::create($data);
-
+        dd($user);
+    
+        // Crear el registro
+        Almacen::create([
+            'id_user' => $user->id,
+            'nombre' => $data['nombre'],
+            'direccion' => $data['direccion'],
+        ]);
+    
+        // Redirigir a la página de inventario con un mensaje de éxito
         return $this->renderInventario($user);
+
     }
+    
+
+    public function validatorAlmacen($datos){
+        $validator = Validator::make($datos, [
+            'nombre' => 'required|string|min:4|max:255',
+            'direccion' => 'required|string|min:4|max:255'
+        ]);
+        
+        return $validator;
+    }
+
 
     public function delete(Request $request)
     {
