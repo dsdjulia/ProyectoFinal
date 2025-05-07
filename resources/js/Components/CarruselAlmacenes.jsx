@@ -20,7 +20,7 @@ function AddAlmacenModal({ isOpen, onClose, onAdd }) {
     
         if (form.nombre && form.direccion) {
             console.log('Entra a enviar');
-            Inertia.post('api/almacenes', form, {
+            Inertia.post('inventario', form, {
                 onSuccess: () => {
                     onAdd(form);
                     console.log('success');

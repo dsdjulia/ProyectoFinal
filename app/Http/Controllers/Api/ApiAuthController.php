@@ -26,8 +26,6 @@ class ApiAuthController extends Controller
         if ($user && Hash::check($request->password, $user->password)) {
             // Crear un token para el usuario
             $token = $user->createToken('MiAppToken')->plainTextToken;
-            //! ESTE ES EL TOKEN PERO NO LLEGA
-            dd($token);
             // Retornar el token como respuesta
             return response()->json(['token' => $token], 200);
         }

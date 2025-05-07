@@ -32,9 +32,6 @@ class AlmacenController extends Controller
         if ($validacion->fails()) {
             return back()->withErrors($validacion)->withInput();
         }
-
-        dd($user);
-    
         // Crear el registro
         Almacen::create([
             'id_user' => $user->id,
