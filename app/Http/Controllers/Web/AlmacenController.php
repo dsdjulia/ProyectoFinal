@@ -124,7 +124,7 @@ class AlmacenController extends Controller
     {
         
     $almacenesQuery = Almacen::with(['productos' => function ($query) {
-        $query->withPivot('cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
+        $query->withPivot('id_almacen','cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
     }])
     ->where('id_user', $user->id);
 

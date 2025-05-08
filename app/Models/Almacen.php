@@ -21,6 +21,6 @@ class Almacen extends Model
     public function productos()
     {
         return $this->belongsToMany(Producto::class, 'inventarios', 'id_almacen', 'id_producto')
-            ->withPivot('cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
+            ->withPivot('id_almacen','cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
     }
 }
