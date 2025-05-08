@@ -123,11 +123,11 @@ export default function CarruselAlmacenes({arrayAlmacenes}) {
     };
 
     const handleAddAlmacen = (newAlmacen) => {
-        setAlmacenes([...almacenes, newAlmacen]);
+        
     };
 
     const handleDeleteAlmacen = (index) => {
-        setAlmacenes(almacenes.filter((_, i) => i !== index));
+        
     };
 
     console.log(almacenes);
