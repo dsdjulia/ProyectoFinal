@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { router } from '@inertiajs/react';  // Actualiza esta importación
+import { showModificableAlert } from "@/utils/alerts";
+
 
 
 function AddAlmacenModal({ isOpen, onClose, onAdd }) {
