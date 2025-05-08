@@ -168,6 +168,10 @@ class AlmacenController extends Controller
 
     $stats = $this->calcularStockStats($almacenes);
 
+    $allProductos = collect($almacenes)
+        ->pluck('productos')    // => Colección de arrays de productos (uno por almacén)
+        ->flatten(1);           // => Junta todos esos arrays en uno solo
+
     return Inertia::render('Inventario', props: [
             'status' => true,
             'message' => 'Almacenes encontrados',
@@ -179,6 +183,7 @@ class AlmacenController extends Controller
             'lowStock' => $stats['lowStock'],
             'agotado' => $stats['agotado'],
             'data' => $almacenes,
+            'all_productos' => $allProductos
         ]);
     }
 }
