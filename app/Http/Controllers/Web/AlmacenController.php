@@ -42,13 +42,15 @@ class AlmacenController extends Controller
     public function delete(Request $request)
     {
         $user = Auth::user();
-
+        
         $validated = $request->validate([
-            'id' => 'required|integer|exists:almacenes,id',
+            'id' => 'required|string|exists:almacenes,id',
         ]);
 
+        $id = intval($validated['id']);
+        
         $almacen = Almacen::where('id_user', $user->id)
-            ->where('id', $validated['id'])
+            ->where('id', $id)
             ->firstOrFail();
 
         Inventario::where('id_almacen', $almacen->id)->delete();
