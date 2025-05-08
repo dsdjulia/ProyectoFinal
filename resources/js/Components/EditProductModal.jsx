@@ -1,11 +1,13 @@
 import { showModificableAlert } from "@/utils/alerts";
 import { useState } from "react";
+import { Inertia } from "@inertiajs/inertia";
 
 export default function EditProductModal({ product, onClose, context, almacenes }) {
     const [formData, setFormData] = useState({
         producto: product.producto,
         precio: product.precio,
         existencias: product.existencias,
+        imagen: product.imagen,
         fecha: product.fecha,
         status: context === "orders" ? product.status : undefined,
         almacen: context === "stock" ? product.almacen : undefined,
@@ -13,19 +15,27 @@ export default function EditProductModal({ product, onClose, context, almacenes 
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+
+        if (name === "almacen") {
+            const selectedAlmacen = almacenes.find(a => a.nombre === value);
+            setFormData(prev => ({
+                ...prev,
+                almacen: selectedAlmacen ? selectedAlmacen.nombre : "",
+            }));
+        } else {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
     };
 
-    //! Checkear id
     const handleSubmit = () => {
-        console.log("Producto actualizado:", formData);
         Inertia.patch(`api/productos/${product.id}`, formData, {
             onSuccess: () => {
-                showModificableAlert('Producto actualizado', `${product.producto} actualizado.`, 'success')
+                showModificableAlert('Producto actualizado', `${product.producto} actualizado.`, 'success');
+                onClose();
             },
-            onError: (error) => showModificableAlert('Error al actualizar el producto', `Error: ${error}`, 'error'),
+            onError: (error) =>
+                showModificableAlert('Error al actualizar el producto', `Error: ${error}`, 'error'),
         });
-        onClose();
     };
 
     return (
@@ -73,6 +83,16 @@ export default function EditProductModal({ product, onClose, context, almacenes 
                             className="w-full border border-slate-600 rounded-lg p-2 mt-1 bg-slate-800 focus:ring-2 focus:ring-slate-500 focus:outline-none text-slate-100"
                         />
                     </div>
+                    <div>
+                        <label className="block text-sm font-medium text-slate-300">Imagen</label>
+                        <input
+                            type="text"
+                            name="imagen"
+                            value={formData.imagen}
+                            onChange={handleChange}
+                            className="w-full border border-slate-600 rounded-lg p-2 mt-1 bg-slate-800 focus:ring-2 focus:ring-slate-500 focus:outline-none text-slate-100"
+                        />
+                    </div>
                     {context === "orders" && (
                         <div>
                             <label className="block text-sm font-medium text-slate-300">Estado</label>
@@ -99,8 +119,8 @@ export default function EditProductModal({ product, onClose, context, almacenes 
                             >
                                 <option value="">Seleccionar</option>
                                 {almacenes.map((almacen, index) => (
-                                    <option key={index} value={almacen}>
-                                        {almacen}
+                                    <option key={index} value={almacen.nombre}>
+                                        {almacen.nombre}
                                     </option>
                                 ))}
                             </select>
