@@ -55,7 +55,8 @@ class AlmacenController extends Controller
 
         $almacen->delete();
 
-        return $this->renderInventario($user);
+        return redirect()->route('inventario.index');
+
     }
 
     public function update(Request $request)
@@ -77,7 +78,8 @@ class AlmacenController extends Controller
             'direccion' => $data['direccion'],
         ]);
 
-        return $this->renderInventario($user);
+        return redirect()->route('inventario.index');
+
     }
 
     public function show(Request $request){
