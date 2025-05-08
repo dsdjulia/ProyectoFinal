@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_producto');
             $table->integer('cantidad');
             $table->decimal('precio_unitario');
+            $table->boolean('estado')->default(true);
             $table->timestamps();
 
             $table->foreign('id_compra')->references('id')->on('compras');
