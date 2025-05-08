@@ -76,7 +76,22 @@ function DeleteAlmacenModal({ isOpen, onClose, almacenes, onDelete }) {
     const handleDelete = () => {
         if (selected !== null) {
             onDelete(selected);
+            console.log(selected);
             onClose();
+            router.delete(`inventario`, {
+                data: {
+                    id: selected
+                },
+                onSuccess: () => {
+                    console.log('success');
+                    showModificableAlert('Almacén eliminado', `Almacén eliminado del inventario.`, 'success');
+                },
+                onError: (errors) => {
+                    console.log(errors);
+                    showModificableAlert('Error al eliminar el almacén', `${JSON.stringify(errors)}`, 'error');
+                }
+            });
+            
         }
     };
 
@@ -92,8 +107,8 @@ function DeleteAlmacenModal({ isOpen, onClose, almacenes, onDelete }) {
                     onChange={(e) => setSelected(Number(e.target.value))}
                 >
                     <option value="" disabled>Selecciona un almacén</option>
-                    {almacenes.map((a, idx) => (
-                        <option key={idx} value={idx}>{a.nombre} - {a.direccion}</option>
+                    {almacenes.map((a, id) => (
+                        <option key={a.id} value={a.id}>{a.nombre} - {a.direccion}</option>
                     ))}
                 </select>
                 <div className="flex justify-end space-x-2">

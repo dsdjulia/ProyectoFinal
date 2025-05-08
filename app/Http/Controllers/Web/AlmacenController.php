@@ -42,9 +42,9 @@ class AlmacenController extends Controller
     public function delete(Request $request)
     {
         $user = Auth::user();
-        
+
         $validated = $request->validate([
-            'id' => 'required|string',
+            'id' => 'required|integer',
         ]);
 
         $id = intval($validated['id']);
