@@ -44,7 +44,7 @@ class AlmacenController extends Controller
         $user = Auth::user();
         
         $validated = $request->validate([
-            'id' => 'required|string|exists:almacenes,id',
+            'id' => 'required|string',
         ]);
 
         $id = intval($validated['id']);
