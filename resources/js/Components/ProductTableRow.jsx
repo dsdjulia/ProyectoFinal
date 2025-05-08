@@ -61,7 +61,7 @@ export default function ProductTableRow({ product, context, almacenes = [], onUp
                 {/* Campo dinámico */}
                 <div className="text-gray-700 text-center">
                     {context === "orders" ? (
-                        <Chip status={product.status || "Pendiente"} />
+                        <Chip status={product.status || "pendiente"} />
                     ) : (
                         <span>{product.almacen || "Sin asignar"}</span>
                     )}

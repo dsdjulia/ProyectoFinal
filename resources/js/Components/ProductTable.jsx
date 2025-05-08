@@ -81,7 +81,7 @@ export default function ProductTable({props}) {
     const handleDeleteProduct = (product) => {
         setSelectedProduct(product);
         setIsDeleteModalOpen(true);
-        
+
     };
 
     return (
@@ -140,8 +140,8 @@ export default function ProductTable({props}) {
                             <div className="text-start pl-4 col-span-2">Artículo</div>
                             <div className="text-center">Precio</div>
                             <div className="text-center">Cantidad</div>
-                            <div className="text-center">Fecha Recepción</div>
                             <div className="text-center">Estado</div>
+                            <div className="text-center">Fecha Recepción</div>
                             <div className="text-center">Acciones</div>
                         </div>
                         <div className="grid grid-cols-1 px-4 pb-4">
