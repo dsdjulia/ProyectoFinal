@@ -7,7 +7,7 @@ import { usePage } from "@inertiajs/inertia-react";
 
 export default function ProductTable({props}) {
     console.log(props.data[0].productos);
-    
+
     const [activeTab, setActiveTab] = useState("ordenes");
     const [products, setProducts] = useState(props.data[0].productos);
 
@@ -81,6 +81,7 @@ export default function ProductTable({props}) {
     const handleDeleteProduct = (product) => {
         setSelectedProduct(product);
         setIsDeleteModalOpen(true);
+        
     };
 
     return (

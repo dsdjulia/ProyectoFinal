@@ -53,7 +53,7 @@ export default function ProductTableRow({ product, context, almacenes = [], onUp
                 </div>
 
                 {/* Precio */}
-                <div className="text-gray-700 text-center">{product.precio_unitario}</div>
+                <div className="text-gray-700 text-center">{product.precio_unitario} €</div>
 
                 {/* Existencias */}
                 <div className="text-gray-700 text-center">{product.cantidad_actual}</div>
