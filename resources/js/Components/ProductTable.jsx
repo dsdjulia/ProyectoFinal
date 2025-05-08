@@ -9,7 +9,7 @@ export default function ProductTable({props}) {
     console.log(props.data[0].productos);
 
     const [activeTab, setActiveTab] = useState("ordenes");
-    const [products, setProducts] = useState(props.data[0].productos);
+    const [products, setProducts] = useState(props.all_productos);
     const [searchTerm, setSearchTerm] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);

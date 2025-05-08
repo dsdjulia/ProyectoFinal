@@ -63,7 +63,7 @@ export default function ProductTableRow({ product, context, almacenes = [], onUp
                     {context === "orders" ? (
                         <Chip status={product.status || "pendiente"} />
                     ) : (
-                        <span>{product.almacen || "Sin asignar"}</span>
+                        <span>{product.almacen_nombre || "Sin asignar"}</span>
                     )}
                 </div>
 
