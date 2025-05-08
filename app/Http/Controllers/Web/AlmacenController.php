@@ -121,37 +121,30 @@ class AlmacenController extends Controller
 
 
     public function renderInventario($user, $almacenesIds = null)
-    {
-        
-    $almacenesQuery = Almacen::with(['productos' => function ($query) {
-        $query->withPivot('id_almacen','cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
-    }])
-    ->where('id_user', $user->id);
+        {
+        $almacenesQuery = Almacen::with(['productos' => function ($query) {
+            $query->withPivot('id_almacen','cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
+        }])
+        ->where('id_user', $user->id);
 
-    if ($almacenesIds && is_array($almacenesIds)) {
-        $almacenesQuery->whereIn('id', $almacenesIds);
-    }
+        if ($almacenesIds && is_array($almacenesIds)) {
+            $almacenesQuery->whereIn('id', $almacenesIds);
+        }
 
-    // DATOS PARA LOS GRAFICOS
-    $almacenes = $almacenesQuery->get()->map(function ($almacen) {
-        $productos = $almacen->productos;
+        $allProductos = [];
 
-        $precioTotal = $productos->sum(fn($producto) =>
-            $producto->pivot->cantidad_actual * $producto->pivot->precio_unitario
-        );
+        $almacenes = $almacenesQuery->get()->map(function ($almacen) use (&$allProductos) {
+            $productos = $almacen->productos;
 
-        $cantidadTotal = $productos->sum(fn($producto) =>
-            $producto->pivot->cantidad_actual
-        );
+            $precioTotal = $productos->sum(fn($producto) =>
+                $producto->pivot->cantidad_actual * $producto->pivot->precio_unitario
+            );
 
-        return [
-            'id' => $almacen->id,
-            'nombre' => $almacen->nombre,
-            'direccion' => $almacen->direccion,
-            'productos_count' => $productos->count(),
-            'cantidad_total' => $cantidadTotal,
-            'precio_total' => $precioTotal,
-            'productos' => $productos->map(function ($producto) {
+            $cantidadTotal = $productos->sum(fn($producto) =>
+                $producto->pivot->cantidad_actual
+            );
+
+            $productosData = $productos->map(function ($producto) use ($almacen) {
                 return [
                     'id' => $producto->id,
                     'codigo' => $producto->codigo,
@@ -161,18 +154,28 @@ class AlmacenController extends Controller
                     'fecha_entrada' => $producto->pivot->fecha_entrada,
                     'fecha_salida' => $producto->pivot->fecha_salida,
                     'imagen' => $producto->imagen,
+                    'almacen_id' => $almacen->id,
+                    'almacen_nombre' => $almacen->nombre,
                 ];
-            })->toArray(),
-        ];
-    });
+            })->toArray();
 
-    $stats = $this->calcularStockStats($almacenes);
+            // Acumular productos en la lista global
+            $allProductos = array_merge($allProductos, $productosData);
 
-    $allProductos = collect($almacenes)
-        ->pluck('productos')    // => Colección de arrays de productos (uno por almacén)
-        ->flatten(1);           // => Junta todos esos arrays en uno solo
+            return [
+                'id' => $almacen->id,
+                'nombre' => $almacen->nombre,
+                'direccion' => $almacen->direccion,
+                'productos_count' => $productos->count(),
+                'cantidad_total' => $cantidadTotal,
+                'precio_total' => $precioTotal,
+                'productos' => $productosData,
+            ];
+        });
 
-    return Inertia::render('Inventario', props: [
+        $stats = $this->calcularStockStats($almacenes);
+
+        return Inertia::render('Inventario', props: [
             'status' => true,
             'message' => 'Almacenes encontrados',
             'count' => $almacenes->count(),
@@ -183,7 +186,7 @@ class AlmacenController extends Controller
             'lowStock' => $stats['lowStock'],
             'agotado' => $stats['agotado'],
             'data' => $almacenes,
-            'all_productos' => $allProductos
+            'all_productos' => $allProductos,
         ]);
     }
 }
