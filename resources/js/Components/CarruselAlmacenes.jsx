@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/react';  // Actualiza esta importación
 
 
 function AddAlmacenModal({ isOpen, onClose, onAdd }) {
@@ -20,16 +20,15 @@ function AddAlmacenModal({ isOpen, onClose, onAdd }) {
     
         if (form.nombre && form.direccion) {
             console.log('Entra a enviar');
-            Inertia.post('inventario', form, {
+            onClose();
+            router.post('inventario', form, {  // Usa router.post en lugar de Inertia.post
                 onSuccess: () => {
-                    onAdd(form);
                     console.log('success');
                     showModificableAlert('Almacén añadido', `${form.nombre} agregado al inventario.`, 'success');
-                    onClose(); 
                 },
                 onError: (errors) => {
                     showModificableAlert('Error al añadir el almacén', `Error: ${errors}`, 'error');
-                }
+            }
             });
             
         }
@@ -110,7 +109,7 @@ function DeleteAlmacenModal({ isOpen, onClose, almacenes, onDelete }) {
 }
 
 export default function CarruselAlmacenes({arrayAlmacenes}) {
-    const [almacenes, setAlmacenes] = useState(arrayAlmacenes);
+    const almacenes = arrayAlmacenes;
     const [selected, setSelected] = useState([]);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);

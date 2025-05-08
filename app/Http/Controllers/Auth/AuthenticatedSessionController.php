@@ -33,7 +33,7 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
 
-        return redirect()->route('inventario.index', false); // REDIRECT DEL LOGIN SE CAMBIA A DASHBOARD CUANDO ESTE
+        return redirect()->route('inventario.index'); // REDIRECT DEL LOGIN SE CAMBIA A DASHBOARD CUANDO ESTE
 
     }
 

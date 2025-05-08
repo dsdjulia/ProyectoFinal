@@ -26,7 +26,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/almacenes', [ApiAlmacenController::class, 'index'])->name('almacenes.index');
 });
 Route::middleware('auth:sanctum')->group(function(){
-    Route::get('/almacenes/{id}', [ApiAlmacenController::class, 'show'])->name('almacenes.index');
+    Route::get('/almacenes/{id}', [ApiAlmacenController::class, 'show'])->name('almacenes.show');
 });
 Route::middleware('auth:sanctum')->group(function(){
     Route::post('/almacenes', [AlmacenController::class, 'store'])->name('almacenes.store');
