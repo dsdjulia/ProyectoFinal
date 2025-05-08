@@ -44,18 +44,21 @@ class AlmacenController extends Controller
         $user = Auth::user();
 
         $validated = $request->validate([
-            'id' => 'required|integer|exists:almacenes,id',
+            'id' => 'required|integer',
         ]);
 
+        $id = intval($validated['id']);
+        
         $almacen = Almacen::where('id_user', $user->id)
-            ->where('id', $validated['id'])
+            ->where('id', $id)
             ->firstOrFail();
 
         Inventario::where('id_almacen', $almacen->id)->delete();
 
         $almacen->delete();
 
-        return $this->renderInventario($user);
+        return redirect()->route('inventario.index');
+
     }
 
     public function update(Request $request)
@@ -77,7 +80,8 @@ class AlmacenController extends Controller
             'direccion' => $data['direccion'],
         ]);
 
-        return $this->renderInventario($user);
+        return redirect()->route('inventario.index');
+
     }
 
     public function show(Request $request){
