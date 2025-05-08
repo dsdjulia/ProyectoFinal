@@ -76,7 +76,6 @@ function DeleteAlmacenModal({ isOpen, onClose, almacenes, onDelete }) {
     const handleDelete = () => {
         if (selected !== null) {
             onDelete(selected);
-            console.log(selected);
             onClose();
             router.delete(`inventario`, {
                 data: {
@@ -107,7 +106,7 @@ function DeleteAlmacenModal({ isOpen, onClose, almacenes, onDelete }) {
                     onChange={(e) => setSelected(Number(e.target.value))}
                 >
                     <option value="" disabled>Selecciona un almacén</option>
-                    {almacenes.map((a, id) => (
+                    {almacenes.map((a) => (
                         <option key={a.id} value={a.id}>{a.nombre} - {a.direccion}</option>
                     ))}
                 </select>
