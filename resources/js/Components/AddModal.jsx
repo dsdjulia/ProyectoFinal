@@ -6,14 +6,19 @@ import { router } from "@inertiajs/react";
 
 export default function AddModal({ isOpen, onClose, onAdd, context, almacenes }) {
     const [formData, setFormData] = useState({
-        imagen: "",
+        //datos producto
+        id_categoria: "",
         codigo: "",
-        producto: "",
-        precio: "",
-        existencias: "",
-        fecha: "",
-        status: context === "orders" ? "" : undefined,
-        almacen: context === "stock" ? "" : undefined,
+        nombre: "",
+        descripcion:"",
+        imagen: "",
+
+        // datos inventario
+        id_almacen: context === "stock" ? "" : undefined,
+        precio_unitario: "",
+        cantidad_actual: "",
+
+        // status: context === "orders" ? "" : undefined,
     });
 
     const handleInputChange = (e) => {
@@ -54,6 +59,7 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes })
             <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
                 <Dialog.Title className="text-lg font-semibold text-gray-800 mb-4">Añadir Nuevo Registro</Dialog.Title>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                    
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Imagen (URL)</label>
                         <input
@@ -64,6 +70,7 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes })
                             className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
                         />
                     </div>
+
                     <div>
                         <label className="block text-sm font-medium text-gray-700">ID Producto</label>
                         <input
@@ -74,46 +81,52 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes })
                             className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
                         />
                     </div>
+
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Artículo</label>
+                        <label className="block text-sm font-medium text-gray-700">Nombre del producto</label>
                         <input
                             type="text"
-                            name="producto"
-                            value={formData.producto}
+                            name="nombre"
+                            value={formData.nombre}
                             onChange={handleInputChange}
                             className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
                         />
                     </div>
+
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Precio</label>
+                        <label className="block text-sm font-medium text-gray-700">Descripcion</label>
+                        <textarea
+                            type="text"
+                            name="descripcion"
+                            value={formData.descripcion}
+                            onChange={handleInputChange}
+                            className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Precio unitario</label>
                         <input
                             type="text"
-                            name="precio"
-                            value={formData.precio}
+                            name="precio_unitario"
+                            value={formData.precio_unitario}
                             onChange={handleInputChange}
                             className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
                         />
                     </div>
+
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Cantidad</label>
+                        <label className="block text-sm font-medium text-gray-700">Existencias</label>
                         <input
                             type="text"
-                            name="existencias"
-                            value={formData.existencias}
+                            name="cantidad_actual"
+                            value={formData.cantidad_actual}
                             onChange={handleInputChange}
                             className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
                         />
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Fecha Recepción</label>
-                        <input
-                            type="date"
-                            name="fecha"
-                            value={formData.fecha}
-                            onChange={handleInputChange}
-                            className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
-                        />
-                    </div>
+
+
                     {context === "orders" && (
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Estado</label>
@@ -131,23 +144,25 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes })
                         </div>
                     )}
                     {context === "stock" && (
+
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Almacén</label>
                             <select
-                                name="almacen"
-                                value={formData.almacen}
+                                name="id_almacen"
+                                value={formData.id_almacen}
                                 onChange={handleInputChange}
                                 className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
                             >
                                 <option value="">Seleccionar</option>
-                                {almacenes.map((almacen, index) => (
-                                    <option key={index} value={almacen.nombre}>
+                                {almacenes.map((almacen) => (
+                                    <option key={almacen.id} value={almacen.nombre}>
                                         {almacen.nombre}
                                     </option>
                                 ))}
                             </select>
                         </div>
                     )}
+
                     <div className="flex justify-end gap-2">
                         <button
                             type="button"
@@ -163,6 +178,7 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes })
                             Añadir
                         </button>
                     </div>
+
                 </form>
             </div>
         </Dialog>
