@@ -102,19 +102,22 @@ class AlmacenController extends Controller
             'agotado' => 0,
         ];
 
-        foreach ($almacenes as $almacen) {
-            foreach ($almacen['productos'] as $producto) {
-                $cantidad = $producto['cantidad_actual'];
-
-                if ($cantidad === 0) {
-                    $stats['agotado']++;
-                } elseif ($cantidad < 10) {
-                    $stats['lowStock']++;
-                } else {
-                    $stats['disponible']++;
+        if($almacenes){
+            foreach ($almacenes as $almacen) {
+                foreach ($almacen['productos'] as $producto) {
+                    $cantidad = $producto['cantidad_actual'];
+    
+                    if ($cantidad === 0) {
+                        $stats['agotado']++;
+                    } elseif ($cantidad < 10) {
+                        $stats['lowStock']++;
+                    } else {
+                        $stats['disponible']++;
+                    }
                 }
             }
         }
+
 
         return $stats;
     }

@@ -23,7 +23,7 @@ function AddAlmacenModal({ isOpen, onClose, onAdd }) {
         if (form.nombre && form.direccion) {
             console.log('Entra a enviar');
             onClose();
-            router.post('inventario', form, {  // Usa router.post en lugar de Inertia.post
+            router.post(route('inventario.store'), form, {  // Usa router.post en lugar de Inertia.post
                 onSuccess: () => {
                     console.log('success');
                     showModificableAlert('Almacén añadido', `${form.nombre} agregado al inventario.`, 'success');
@@ -31,8 +31,7 @@ function AddAlmacenModal({ isOpen, onClose, onAdd }) {
                 onError: (errors) => {
                     showModificableAlert('Error al añadir el almacén', `Error: ${errors}`, 'error');
             }
-            });
-            
+            });  
         }
     };
     
@@ -77,7 +76,7 @@ function DeleteAlmacenModal({ isOpen, onClose, almacenes, onDelete }) {
         if (selected !== null) {
             onDelete(selected);
             onClose();
-            router.delete(`inventario`, {
+            router.delete(route('inventario.delete'), {
                 data: {
                     id: selected
                 },

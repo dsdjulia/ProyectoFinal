@@ -12,7 +12,7 @@ export default function DeleteProductModal({ product, totalAmount, onClose }) {
         console.log(`Eliminando el producto: ${product.nombre}`);
         onClose();
 
-        router.delete(`inventario/producto`, {
+        router.delete(route('producto.delete'), {
             data: {
                 codigo: product.id
             },
@@ -26,25 +26,24 @@ export default function DeleteProductModal({ product, totalAmount, onClose }) {
     };
 
     const handleDeletePartial = () => {
-        
-        if(reduceAmount <= product.cantidad_actual){
+        // Validación de la cantidad a reducir
+        if (reduceAmount <= product.cantidad_actual) {
             console.log(`Reduciendo la cantidad del producto: ${product.nombre}`);
             onClose();
-            router.patch(`inventario/producto`, {
-                data: {
-                    codigo: product.id,
-                    cantidad: product.cantidad_actual - reduceAmount,
-                },
+            router.patch(route('producto.patch'), {
+                id_almacen: product.almacen_id,
+                id_producto: product.id,
+                cantidad_actual: product.cantidad_actual - reduceAmount,
+            }, {
                 onSuccess: () => {
-                    console.log('success');
                     showModificableAlert('Cantidad reducida', `Cantidad de ${product.nombre} actualizada.`, 'success');
+                    Inertia.replace(route('inventario.index'));
                 },
                 onError: (error) => showModificableAlert('Error al reducir la cantidad del producto', `Error: ${JSON.stringify(error)}`, 'error'),
             });
         } else {
             showModificableAlert('Cantidad excedida', `La cantidad máxima a reducir es de: ${product.cantidad_actual}.`, 'warning');
         }
-
     };
 
     return (

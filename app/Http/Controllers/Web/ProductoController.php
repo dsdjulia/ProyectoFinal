@@ -90,4 +90,23 @@ class ProductoController extends Controller
 
         return app(AlmacenController::class)->renderInventario($almacen->user);
     }
+
+    public function patch (Request $request){
+
+        $validated = $request ->validate([
+            'id_almacen' => 'required|integer|exists:almacen,id',
+            'id_producto' => 'required|integer|exists:productos,id',
+            'cantidad_actual' => 'required|integer'
+        ]);
+
+        $inventario = Inventario::where('id_producto', $validated['id_producto'])
+            ->where('id_almacen', $validated['id_almacen'])
+            ->first();
+
+        $inventario->cantidad_actual = $validated['cantidad_actual'];
+        $inventario->save();
+
+        return redirect()->route('inventario.index');
+
+    }
 }

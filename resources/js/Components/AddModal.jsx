@@ -25,11 +25,11 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes })
         const { name, value } = e.target;
 
         if (name === "almacen") {
-            // Buscamos el objeto del almacén y guardamos solo el nombre
-            const selectedAlmacen = almacenes.find(a => a.nombre === value);
+            // Buscamos el objeto del almacén y guardamos solo el id
+            const selectedAlmacen = almacenes.find(a => a.id === value);
             setFormData({
                 ...formData,
-                almacen: selectedAlmacen ? selectedAlmacen.nombre : "",
+                almacen: selectedAlmacen,
             });
         } else {
             setFormData({
@@ -44,7 +44,7 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes })
         // onAdd(formData);
         onClose();
 
-        router.post('inventario/producto', formData, {
+        router.post(route('producto.patch'), formData, {
             onSuccess: () => {
                 showModificableAlert('Producto añadido', `${formData.producto} agregado al inventario.`, 'success');
             },
@@ -72,7 +72,7 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes })
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">ID Producto</label>
+                        <label className="block text-sm font-medium text-gray-700">Código del producto</label>
                         <input
                             type="text"
                             name="codigo"

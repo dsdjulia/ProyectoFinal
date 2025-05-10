@@ -26,7 +26,6 @@ export default function ProductTable({props}) {
     const handleDeleteProduct = (product) => {
         setSelectedProduct(product);
         setIsDeleteModalOpen(true);
-
     };
 
     return (

@@ -29,7 +29,7 @@ class Inventario extends Model
 
     // Crear el modelo y migracion de almacen
 
-    public function almacen()
+    public function almacenes()
     {
         return $this->belongsTo(Almacen::class, 'id_almacen');
     }
