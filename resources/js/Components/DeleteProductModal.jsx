@@ -33,7 +33,7 @@ export default function DeleteProductModal({ product, totalAmount, onClose }) {
             router.patch(`inventario/producto`, {
                 data: {
                     codigo: product.id,
-                    cantidad: reduceAmount,
+                    cantidad: product.cantidad_actual - reduceAmount,
                 },
                 onSuccess: () => {
                     console.log('success');
