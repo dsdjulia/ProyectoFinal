@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Inertia } from "@inertiajs/inertia";
 import { router } from "@inertiajs/react";
+import { showModificableAlert } from "@/utils/alerts";
 
 export default function DeleteProductModal({ product, totalAmount, onClose }) {
     const [reduceAmount, setReduceAmount] = useState(0);
@@ -19,20 +20,31 @@ export default function DeleteProductModal({ product, totalAmount, onClose }) {
                 console.log('success');
                 showModificableAlert('Producto eliminado', `${product.nombre} eliminado del inventario.`, 'success');
             },
-            onError: (error) => showModificableAlert('Error al eliminar el producto', `Error: ${error}`, 'error'),
+            onError: (error) => showModificableAlert('Error al eliminar el producto', `Error: ${JSON.stringify(error)}`, 'error'),
         });
 
     };
 
     const handleDeletePartial = () => {
-        console.log(`Reduciendo ${reduceAmount} de: ${product.producto}`);
-        router.delete(`muestra/${product.codigo}/${reduceAmount}`, {
-            onSuccess: () => {
-                showModificableAlert('Producto eliminado', `${product.producto} eliminado del inventario.`, 'success');
-            },
-            onError: (error) => showModificableAlert('Error al reducir la cantidad', `Error: ${error}`, 'error'),
-        });
-        onClose();
+        
+        if(reduceAmount <= product.cantidad_actual){
+            console.log(`Reduciendo la cantidad del producto: ${product.nombre}`);
+            onClose();
+            router.patch(`inventario/producto`, {
+                data: {
+                    codigo: product.id,
+                    cantidad: reduceAmount,
+                },
+                onSuccess: () => {
+                    console.log('success');
+                    showModificableAlert('Cantidad reducida', `Cantidad de ${product.nombre} actualizada.`, 'success');
+                },
+                onError: (error) => showModificableAlert('Error al reducir la cantidad del producto', `Error: ${JSON.stringify(error)}`, 'error'),
+            });
+        } else {
+            showModificableAlert('Cantidad excedida', `La cantidad máxima a reducir es de: ${product.cantidad_actual}.`, 'warning');
+        }
+
     };
 
     return (
@@ -47,7 +59,7 @@ export default function DeleteProductModal({ product, totalAmount, onClose }) {
                         <p className="text-sm text-slate-400">Cantidad total disponible: <span className="font-bold text-slate-200">{totalAmount}</span></p>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-slate-300">Cantidad a Reducir</label>
+                        <label className="block text-sm font-medium text-slate-300">Cantidad a reducir</label>
                         <input
                             type="number"
                             min="0"
