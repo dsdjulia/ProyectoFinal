@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Inertia } from '@inertiajs/inertia';
 import { showModificableAlert } from "@/utils/alerts";
+import { router } from "@inertiajs/react";
 
 export default function AddModal({ isOpen, onClose, onAdd, context, almacenes }) {
     const [formData, setFormData] = useState({
@@ -35,15 +36,15 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes })
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        // onAdd(formData);
+        onClose();
 
-        Inertia.post('api/productos', formData, {
+        router.post('inventario/producto', formData, {
             onSuccess: () => {
-                onAdd(formData);
                 showModificableAlert('Producto añadido', `${formData.producto} agregado al inventario.`, 'success');
-                onClose();
             },
             onError: (errors) => {
-                showModificableAlert('Error al añadir el producto', `Error: ${errors}`, 'error');
+                showModificableAlert('Error al añadir el producto', `Error: ${JSON.stringify(errors)}`, 'error');
             }
         });
     };

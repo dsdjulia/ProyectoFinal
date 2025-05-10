@@ -22,7 +22,7 @@ class ProductoController extends Controller
         //
     }
 
-    public function destroy(Request $request)
+    public function delete(Request $request)
     {
         $request->validate([
             'codigo' => 'required|exists:productos,id',
@@ -40,15 +40,17 @@ class ProductoController extends Controller
     {
         $user = Auth::user();
 
+        dd($request);
+
         $data = $request->validate([
             'codigo' => 'required|string|unique:productos,codigo',
-            'nombre' => 'required|string',
+            'producto' => 'required|string',
             'descripcion' => 'nullable|string',
-            'id_categoria' => 'required|exists:categorias,id',
-            'id_almacen' => 'required|exists:almacenes,id',
-            'cantidad_actual' => 'required|integer|min:1',
-            'precio_unitario' => 'required|numeric|min:0',
-            'imagen' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+            // 'id_categoria' => 'required|exists:categorias,id',
+            'almacen' => 'required|exists:almacenes,id',
+            'existencias' => 'required|integer|min:1',
+            'precio' => 'required|numeric|min:0',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
         $producto = Producto::create([
@@ -61,9 +63,9 @@ class ProductoController extends Controller
 
         Inventario::create([
             'id_producto' => $producto->id,
-            'id_almacen' => $data['id_almacen'],
-            'cantidad_actual' => $data['cantidad_actual'],
-            'precio_unitario' => $data['precio_unitario'],
+            'id_almacen' => $data['_almacen'],
+            'cantidad_actual' => $data['existencias'],
+            'precio_unitario' => $data['precio'],
             'fecha_entrada' => now(),
             'fecha_salida' => null
         ]);

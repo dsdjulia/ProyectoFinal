@@ -1,22 +1,32 @@
 import { useState } from "react";
 import { Inertia } from "@inertiajs/inertia";
+import { router } from "@inertiajs/react";
 
 export default function DeleteProductModal({ product, totalAmount, onClose }) {
     const [reduceAmount, setReduceAmount] = useState(0);
 
-    const handleDeleteAll = () => {
-        console.log(`Eliminando el producto: ${product.producto}`);
+    console.log(product);
 
-        Inertia.delete(`muestra/${product.id}`, {
-            onSuccess: () => {},
+    const handleDeleteAll = () => {
+        console.log(`Eliminando el producto: ${product.nombre}`);
+        onClose();
+
+        router.delete(`inventario/producto`, {
+            data: {
+                codigo: product.id
+            },
+            onSuccess: () => {
+                console.log('success');
+                showModificableAlert('Producto eliminado', `${product.nombre} eliminado del inventario.`, 'success');
+            },
             onError: (error) => showModificableAlert('Error al eliminar el producto', `Error: ${error}`, 'error'),
         });
-        onClose();
+
     };
 
     const handleDeletePartial = () => {
         console.log(`Reduciendo ${reduceAmount} de: ${product.producto}`);
-        Inertia.delete(`muestra/${product.codigo}/${reduceAmount}`, {
+        router.delete(`muestra/${product.codigo}/${reduceAmount}`, {
             onSuccess: () => {
                 showModificableAlert('Producto eliminado', `${product.producto} eliminado del inventario.`, 'success');
             },
