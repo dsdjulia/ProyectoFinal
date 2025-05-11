@@ -19,6 +19,8 @@ export default function DeleteProductModal({ product, totalAmount, onClose }) {
             onSuccess: () => {
                 console.log('success');
                 showModificableAlert('Producto eliminado', `${product.nombre} eliminado del inventario.`, 'success');
+                router.visit(route('inventario.index'));
+
             },
             onError: (error) => showModificableAlert('Error al eliminar el producto', `Error: ${JSON.stringify(error)}`, 'error'),
         });
@@ -26,10 +28,9 @@ export default function DeleteProductModal({ product, totalAmount, onClose }) {
     };
 
     const handleDeletePartial = () => {
-        // Validación de la cantidad a reducir
         if (reduceAmount <= product.cantidad_actual) {
-            console.log(`Reduciendo la cantidad del producto: ${product.nombre}`);
             onClose();
+
             router.patch(route('producto.patch'), {
                 id_almacen: product.almacen_id,
                 id_producto: product.id,
@@ -37,7 +38,9 @@ export default function DeleteProductModal({ product, totalAmount, onClose }) {
             }, {
                 onSuccess: () => {
                     showModificableAlert('Cantidad reducida', `Cantidad de ${product.nombre} actualizada.`, 'success');
-                    Inertia.replace(route('inventario.index'));
+
+                    // Refrescar datos
+                    router.visit(route('inventario.index'));
                 },
                 onError: (error) => showModificableAlert('Error al reducir la cantidad del producto', `Error: ${JSON.stringify(error)}`, 'error'),
             });
@@ -45,7 +48,7 @@ export default function DeleteProductModal({ product, totalAmount, onClose }) {
             showModificableAlert('Cantidad excedida', `La cantidad máxima a reducir es de: ${product.cantidad_actual}.`, 'warning');
         }
     };
-
+    
     return (
         <div className="fixed inset-0 bg-slate-800 bg-opacity-30 flex items-center justify-center z-50">
             <div className="bg-slate-700 text-white rounded-md shadow-xl p-8 w-[50vw]">

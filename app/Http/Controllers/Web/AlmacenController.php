@@ -178,6 +178,8 @@ class AlmacenController extends Controller
 
         $stats = $this->calcularStockStats($almacenes);
 
+        
+
         return Inertia::render('Inventario', props: [
             'status' => true,
             'message' => 'Almacenes encontrados',

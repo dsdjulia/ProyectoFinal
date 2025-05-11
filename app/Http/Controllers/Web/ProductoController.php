@@ -94,7 +94,7 @@ class ProductoController extends Controller
     public function patch (Request $request){
 
         $validated = $request ->validate([
-            'id_almacen' => 'required|integer|exists:almacen,id',
+            'id_almacen' => 'required|integer|exists:almacenes,id',
             'id_producto' => 'required|integer|exists:productos,id',
             'cantidad_actual' => 'required|integer'
         ]);

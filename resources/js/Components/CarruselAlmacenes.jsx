@@ -27,6 +27,7 @@ function AddAlmacenModal({ isOpen, onClose, onAdd }) {
                 onSuccess: () => {
                     console.log('success');
                     showModificableAlert('Almacén añadido', `${form.nombre} agregado al inventario.`, 'success');
+                    router.visit(route('inventario.index'));
                 },
                 onError: (errors) => {
                     showModificableAlert('Error al añadir el almacén', `Error: ${errors}`, 'error');
@@ -81,8 +82,9 @@ function DeleteAlmacenModal({ isOpen, onClose, almacenes, onDelete }) {
                     id: selected
                 },
                 onSuccess: () => {
-                    console.log('success');
                     showModificableAlert('Almacén eliminado', `Almacén eliminado del inventario.`, 'success');
+                    
+                    router.visit(route('inventario.index'));
                 },
                 onError: (errors) => {
                     console.log(errors);
