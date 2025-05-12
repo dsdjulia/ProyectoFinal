@@ -6,9 +6,11 @@ use Inertia\Inertia;
 use App\Models\Almacen;
 use App\Models\Inventario;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Models\DetalleCompra;
 use App\Http\Controllers\Controller;
+use App\Models\DetalleVenta;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class AlmacenController extends Controller
 {
@@ -118,7 +120,6 @@ class AlmacenController extends Controller
             }
         }
 
-
         return $stats;
     }
 
@@ -178,7 +179,42 @@ class AlmacenController extends Controller
 
         $stats = $this->calcularStockStats($almacenes);
 
+        $userId = $user->id;
         
+        $detallesCompras = DetalleCompra::with(['producto', 'compra.proveedor'])
+            ->whereHas('compra', function ($query) use ($userId){
+                $query->where('id_user',$userId);
+            }) 
+            ->get()
+            ->map(function ($detalle) {
+            return [
+                'producto_id' => $detalle->id_producto,
+                'codigo' => $detalle->producto->codigo,
+                'nombre' => $detalle->producto->nombre,
+                'precio_unitario' => $detalle->precio_unitario,
+                'cantidad' => $detalle->cantidad,
+                'estado' => $detalle->estado,
+                'fecha_compra' => optional($detalle->compra)->fecha_compra,
+                'proveedor' => optional($detalle->compra->proveedor)->nombre, 
+            ];
+        });
+        
+        $detallesVentas = DetalleVenta::with(['producto', 'venta.comprador'])
+            ->whereHas('venta', function ($query) use ($userId){
+                $query->where('id_user',$userId);
+            }) 
+            ->get()
+            ->map(function ($detalle) {
+            return [
+                'producto_id' => $detalle->id_producto,
+                'codigo' => $detalle->producto->codigo,
+                'nombre' => $detalle->producto->nombre,
+                'precio_unitario' => $detalle->precio_unitario,
+                'cantidad' => $detalle->cantidad,
+                'fecha_venta' => optional($detalle->venta)->fecha_venta,
+                'cliente' => optional($detalle->venta->comprador)->nombre, 
+            ];
+        });
 
         return Inertia::render('Inventario', props: [
             'status' => true,
@@ -192,6 +228,8 @@ class AlmacenController extends Controller
             'agotado' => $stats['agotado'],
             'data' => $almacenes,
             'all_productos' => $allProductos,
+            'detalles_compras' => $detallesCompras,
+            'detalles_ventas' => $detallesVentas
         ]);
     }
 }
