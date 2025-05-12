@@ -178,12 +178,10 @@ class AlmacenController extends Controller
         });
 
         $stats = $this->calcularStockStats($almacenes);
-
-        $userId = $user->id;
         
         $detallesCompras = DetalleCompra::with(['producto', 'compra.proveedor'])
-            ->whereHas('compra', function ($query) use ($userId){
-                $query->where('id_user',$userId);
+            ->whereHas('compra', function ($query) use ($user){
+                $query->where('id_user',$user->id);
             }) 
             ->get()
             ->map(function ($detalle) {
@@ -200,8 +198,8 @@ class AlmacenController extends Controller
         });
         
         $detallesVentas = DetalleVenta::with(['producto', 'venta.comprador'])
-            ->whereHas('venta', function ($query) use ($userId){
-                $query->where('id_user',$userId);
+            ->whereHas('venta', function ($query) use ($user){
+                $query->where('id_user',$user->id);
             }) 
             ->get()
             ->map(function ($detalle) {
