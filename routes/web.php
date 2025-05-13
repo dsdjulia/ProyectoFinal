@@ -17,7 +17,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // LOGIN
-Route::get('/login', function () {
+Route::get('/', function () {
     return Inertia::render('Auth/Login');
 });
 
