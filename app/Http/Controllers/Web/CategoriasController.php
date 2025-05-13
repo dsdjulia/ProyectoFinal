@@ -15,7 +15,7 @@ class CategoriasController extends Controller
 
         $datos = $request->validate([
             'nombre' => 'required|string|min:1',
-            'perecedero' => 'required',
+            'perecedero' => 'required|boolean',
             'fecha_vencimiento' => 'nullable|date',
         ]);
 

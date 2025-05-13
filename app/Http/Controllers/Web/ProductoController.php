@@ -50,7 +50,7 @@ class ProductoController extends Controller
             //datos para crear inventario
             'id_almacen' => 'required|exists:almacenes,id',
             'cantidad_actual' => 'required|integer|min:1',
-            'precio_unitario' => 'required|numeric|min:0',
+            'precio_unitario' => 'required|decimal|min:0',
         ]);
 
         $producto = Producto::create([
@@ -79,7 +79,7 @@ class ProductoController extends Controller
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'descripcion' => 'required|string',
-            'precio_unitario' => 'required',
+            'precio_unitario' => 'required|decimal',
         ]);
 
         $producto = Producto::find($request->id);

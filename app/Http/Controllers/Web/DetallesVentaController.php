@@ -25,7 +25,7 @@ class DetallesVentaController extends Controller
             //producto
             'codigo' => 'required|string|min:1',
             //detalles
-            'cantidad' => 'required|numeric',
+            'cantidad' => 'required|decimal',
 
         ]);
 

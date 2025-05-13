@@ -20,7 +20,7 @@ class DetallesCompraController extends Controller
 
         $datos = $request->validate([
             'codigo' => 'required|string',
-            'precio_unitario' => 'required|numeric|min:0',
+            'precio_unitario' => 'required|decimal|min:0',
             'unidades' => 'required|integer|min:1',
             'fecha_compra' => 'required|date',
             'telefono' => 'required|string',
