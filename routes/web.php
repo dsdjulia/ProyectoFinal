@@ -22,8 +22,17 @@ Route::get('/', function () {
     return Inertia::render('Auth/Login');
 });
 
+Route::middleware('auth')->group(function () {
+    
+    Route::get('/autenticado',function(){
+        Inertia::render('Layouts/AuthenticatedLayout')->name('inventario.index');
+    });
+    
+});
 
-Route::get('/autenticado', Inertia::render('Layouts/AuthenticatedLayout'))->name('inventario.index');
+
+
+    
 // CRUD DE ALMACENES
 Route::get('/inventario', [AlmacenController::class ,'index'])->name('inventario.index');
 Route::get('/dashboard', [AlmacenController::class ,'index'])->name('dashboard.index');
