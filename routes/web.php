@@ -20,7 +20,7 @@ Route::middleware('auth')->group(function () {
 // LOGIN
 Route::get('/', function () {
     return Inertia::render('Auth/Login');
-});
+})->name("login");
 
 Route::middleware('auth')->group(function () {
 
