@@ -20,10 +20,10 @@ export default function Dashboard(props) {
                 </h2>
             }
         >
-            <Head title="Principal" />
+        
 
 
-           
+
         </AuthenticatedLayout>
     );
 }
