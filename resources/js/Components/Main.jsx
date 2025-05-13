@@ -6,7 +6,7 @@ import Sidebar from "./Sidebar";
 import DoughnutChart from "./DoughnutChart";
 import ProductOverview from "./ProductOverview";
 
-export default function Main({props}) 
+export default function Main({props})
 {
     return (
         <div className="w-full flex flex-col align-middle justify-start p-12 pt-0npm r pb-34 h-[200vh]">

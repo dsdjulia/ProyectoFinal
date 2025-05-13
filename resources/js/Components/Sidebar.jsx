@@ -27,7 +27,7 @@ export function Sidebar() {
   ];
 
   return (
-    <div className="flex items-center justify-center bg-transparent h-screen mr-12">
+    <div className="flex items-center justify-center bg-transparent h-screen ">
       <div
         className={`flex flex-col bg-slate-800 transition-all duration-300 pb-3 pt-6 px-6 h-full mr-2
           ${isExpanded ? "w-60 items-start" : "w-24 items-center"} `}
