@@ -22,6 +22,15 @@ Route::get('/', function () {
     return Inertia::render('Auth/Login');
 });
 
+Route::middleware('auth')->group(function () {
+
+    Route::get('/autenticado',function(){
+        return Inertia::render('Dashboard');
+    });
+
+});
+
+
 
 
 // CRUD DE ALMACENES
