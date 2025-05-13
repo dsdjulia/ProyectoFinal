@@ -16,6 +16,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
 // LOGIN
 Route::get('/', function () {
     return Inertia::render('Auth/Login');
@@ -23,6 +24,7 @@ Route::get('/', function () {
 
 // CRUD DE ALMACENES
 Route::get('/inventario', [AlmacenController::class ,'index'])->name('inventario.index');
+Route::get('/dashboard', [AlmacenController::class ,'index'])->name('dashboard.index');
 Route::delete('/inventario', [AlmacenController::class ,'delete'])->name('inventario.delete');
 Route::post('/inventario', [AlmacenController::class ,'store'])->name('inventario.store');
 
