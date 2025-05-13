@@ -27,25 +27,25 @@ class GastoSeeder extends Seeder
             [
                 'concepto'         => 'Compra de material de oficina',
                 'precio'           => 45.75,
-                'fecha'            => Carbon::now()->subDays(8)->toDateString(),
+                'fecha'            => Carbon::now()->subDays(8)->toDate(),
                 'gasto_recurrente' => false,
             ],
             [
                 'concepto'         => 'Pago electricidad',
                 'precio'           => 120.50,
-                'fecha'            => Carbon::now()->subMonth()->toDateString(),
+                'fecha'            => Carbon::now()->subMonth()->toDate(),
                 'gasto_recurrente' => true,
             ],
             [
                 'concepto'         => 'Suscripción Internet',
                 'precio'           => 30.00,
-                'fecha'            => Carbon::now()->subDays(5)->toDateString(),
+                'fecha'            => Carbon::now()->subDays(5)->toDate(),
                 'gasto_recurrente' => true,
             ],
             [
                 'concepto'         => 'Mantenimiento de software',
                 'precio'           => 200.00,
-                'fecha'            => Carbon::now()->subDays(15)->toDateString(),
+                'fecha'            => Carbon::now()->subDays(15)->toDate(),
                 'gasto_recurrente' => false,
             ],
         ];

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_user');
             $table->unsignedBigInteger('id_proveedor');
-            $table->dateTime('fecha_compra');
+            $table->date('fecha_compra');
             $table->timestamps();
 
             $table->foreign('id_user')->references('id')->on('users');

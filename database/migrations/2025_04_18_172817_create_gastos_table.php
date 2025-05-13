@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_user');
             $table->string('concepto');
-            $table->string('precio');
-            $table->string('fecha');
+            $table->decimal('precio');
+            $table->date('fecha');
             $table->boolean('gasto_recurrente');
             $table->timestamps();
 
