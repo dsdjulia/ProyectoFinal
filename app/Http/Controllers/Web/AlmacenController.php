@@ -92,7 +92,7 @@ class AlmacenController extends Controller
 
         $almacenesIds = $request->input('almacenes');
 
-        return $this->renderInventario($user,$almacenesIds);
+        return redirect()->route('inventario.index');
 
     }
 
