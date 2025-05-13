@@ -125,9 +125,8 @@ function DeleteAlmacenModal({ isOpen, onClose, almacenes, onDelete }) {
     );
 }
 
-export default function CarruselAlmacenes({arrayAlmacenes}) {
+export default function CarruselAlmacenes({arrayAlmacenes, selected, setSelected }) {
     const almacenes = arrayAlmacenes;
-    const [selected, setSelected] = useState([]);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 

@@ -4,6 +4,7 @@ import CarruselAlmacenes from "./CarruselAlmacenes";
 import AddModal from "./AddModal";
 import DeleteProductModal from "./DeleteProductModal";
 import { usePage } from "@inertiajs/inertia-react";
+import { router } from "@inertiajs/react";
 
 export default function ProductTable({props}) {
     console.log(props.data[0].productos);
@@ -14,8 +15,8 @@ export default function ProductTable({props}) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
-
-    const almacenes = props.data;
+    const [selected, setSelected] = useState([]);
+    const [almacenes, setAlmacenes] = useState(props.data);
 
     console.log(props.data);
 
@@ -27,6 +28,23 @@ export default function ProductTable({props}) {
         setSelectedProduct(product);
         setIsDeleteModalOpen(true);
     };
+
+    const limpiarFiltros = () => {
+        setSearchTerm('')
+        setSelected([])
+
+        router.visit(route('inventario.index'), {
+            method: 'get',
+            onSuccess: (page) => {
+                setSelected([]);  // Limpia selección
+                setAlmacenes(page.props.data);  // Actualiza almacenes
+            },
+            preserveState: true,  // Mantiene la pestaña activa
+            preserveScroll: true, // Mantiene el scroll
+            only: ['data'],       // Solo actualiza los almacenes
+        });
+
+    }
 
     return (
         <div>
@@ -132,14 +150,19 @@ export default function ProductTable({props}) {
                                 <button className="mr-2 bg-slate-300 text-slate-600 px-4 py-2 rounded-md font-semibold hover:bg-slate-400 hover:text-white">
                                     Buscar
                                 </button>
-                                <button className="hover:underline text-sm text-red-400">
+                                <button className="hover:underline text-sm text-red-400"
+                                onClick={() => limpiarFiltros()}>
                                     Limpiar Filtros
                                 </button>
                             </div>
                         </div>
 
                         <div className="text-right text-sm text-gray-500 mb-2">
-                            <CarruselAlmacenes arrayAlmacenes={almacenes}/>
+                            <CarruselAlmacenes 
+                                arrayAlmacenes={almacenes} 
+                                selected={selected} 
+                                setSelected={setSelected} 
+                            />
                         </div>
 
                         <div className="grid grid-cols-9 items-center bg-slate-100 font-semibold text-gray-700 py-2 px-8 gap-2 mt-8 mb-4">
