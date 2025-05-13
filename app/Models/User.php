@@ -66,4 +66,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Gasto::class, 'id_user', 'id');
     }
+    public function categorias()
+    {
+        return $this->hasMany(Categoria::class, 'id_user', 'id');
+    }
 }

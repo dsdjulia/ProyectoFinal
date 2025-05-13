@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('categorias', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('id_user');
             $table->string('nombre');
             $table->boolean('perecedero');
             $table->date('fecha_vencimiento')->nullable();
+
+            $table->foreign('id_user')->references('id')->on('users');
             $table->timestamps();
         });
     }

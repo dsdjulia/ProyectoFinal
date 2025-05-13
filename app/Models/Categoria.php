@@ -9,6 +9,7 @@ class Categoria extends Model
     protected $table = 'categorias';
 
     protected $fillable = [
+        'id_user',
         'nombre',
         'perecedero',
         'fecha_vencimiento',
@@ -17,5 +18,9 @@ class Categoria extends Model
     public function productos()
     {
         return $this->hasMany(Producto::class, 'id_categoria');
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class, 'id_user', 'id');
     }
 }

@@ -23,16 +23,21 @@ class CategoriaSeeder extends Seeder
                 'nombre'            => 'comida',
                 'perecedero'        => true,
                 'fecha_vencimiento' => Carbon::now()->addDays(7)->toDateString(),
+                'id_user'           => 1
             ],
             [
                 'nombre'            => 'ropa',
                 'perecedero'        => false,
                 'fecha_vencimiento' => null,
+                'id_user'           => 1
+
             ],
             [
                 'nombre'            => 'calzado',
                 'perecedero'        => false,
                 'fecha_vencimiento' => null,
+                'id_user'           => 1
+
             ],
         ];
 
