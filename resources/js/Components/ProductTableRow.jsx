@@ -23,11 +23,11 @@ export default function ProductTableRow({ product, context, almacenes = [], onUp
     return (
         <>
             <div
-                className="grid grid-cols-9 items-center bg-white rounded-sm border border-slate-200 p-4 gap-4 hover:px-2 transition-all cursor-pointer"
+                className="grid grid-cols-8 items-center bg-white rounded-sm border border-slate-200 p-2 gap-4 hover:px-1 hover:border-slate-600 hover:border-2 transition-all cursor-pointer "
                 onClick={handleRowClick}
             >
                 {/* Imagen */}
-                <div className="flex justify-center">
+               {/*  <div className="flex justify-center">
                     <div className="w-10 h-10 rounded-full overflow-hidden">
                         <img
                             src={product.imagen}
@@ -35,7 +35,7 @@ export default function ProductTableRow({ product, context, almacenes = [], onUp
                             className="object-cover w-full h-full"
                         />
                     </div>
-                </div>
+                </div> */}
 
                 {/* Código */}
                 <div className="text-gray-700 font-semibold text-left pl-2">

@@ -19,7 +19,7 @@ function AddAlmacenModal({ isOpen, onClose, onAdd }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-    
+
         if (form.nombre && form.direccion) {
             console.log('Entra a enviar');
             onClose();
@@ -32,11 +32,11 @@ function AddAlmacenModal({ isOpen, onClose, onAdd }) {
                 onError: (errors) => {
                     showModificableAlert('Error al añadir el almacén', `Error: ${errors}`, 'error');
             }
-            });  
+            });
         }
     };
-    
-    
+
+
 
     if (!isOpen) return null;
 
@@ -83,7 +83,7 @@ function DeleteAlmacenModal({ isOpen, onClose, almacenes, onDelete }) {
                 },
                 onSuccess: () => {
                     showModificableAlert('Almacén eliminado', `Almacén eliminado del inventario.`, 'success');
-                    
+
                     router.visit(route('inventario.index'));
                 },
                 onError: (errors) => {
@@ -91,7 +91,7 @@ function DeleteAlmacenModal({ isOpen, onClose, almacenes, onDelete }) {
                     showModificableAlert('Error al eliminar el almacén', `${JSON.stringify(errors)}`, 'error');
                 }
             });
-            
+
         }
     };
 
@@ -156,25 +156,25 @@ export default function CarruselAlmacenes({arrayAlmacenes, selected, setSelected
     }
 
     const handleAddAlmacen = (newAlmacen) => {
-        
+
     };
 
     const handleDeleteAlmacen = (index) => {
-        
+
     };
 
     return (
         <div className="w-full">
-            <div className="flex justify-between items-center mb-2 px-2">
+            <div className="flex justify-start gap-3 items-center mb-2 px-2">
                 <button
                     onClick={() => setShowAddModal(true)}
-                    className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 text-sm"
+                    className="bg-slate-500 text-white px-3 py-1 rounded hover:bg-slate-600 text-sm"
                 >
                     Añadir Almacén
                 </button>
                 <button
                     onClick={() => filtrarAlmacenes()}
-                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-green-600 text-sm"
+                    className="bg-slate-400 text-white px-3 py-1 rounded hover:bg-slate-500 text-sm"
                 >
                     Filtrar Almacenes
                 </button>

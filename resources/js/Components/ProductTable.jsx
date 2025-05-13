@@ -96,8 +96,8 @@ export default function ProductTable({props}) {
                                 />
                             </div>
                         </div>
-                        <div className="grid grid-cols-9 items-center bg-slate-100 font-semibold text-gray-700 py-2 px-8 gap-2 mb-6 mt-10">
-                            <div className="text-center">Imagen</div>
+                        <div className="grid grid-cols-8 items-center bg-slate-100 font-semibold text-gray-700 py-2 px-8 gap-2 mb-6 mt-10">
+                           {/*  <div className="text-center">Imagen</div> */}
                             <div className="text-start">ID Producto</div>
                             <div className="text-start pl-4 col-span-2">Artículo</div>
                             <div className="text-center">Precio</div>
@@ -158,15 +158,15 @@ export default function ProductTable({props}) {
                         </div>
 
                         <div className="text-right text-sm text-gray-500 mb-2">
-                            <CarruselAlmacenes 
-                                arrayAlmacenes={almacenes} 
-                                selected={selected} 
-                                setSelected={setSelected} 
+                            <CarruselAlmacenes
+                                arrayAlmacenes={almacenes}
+                                selected={selected}
+                                setSelected={setSelected}
                             />
                         </div>
 
-                        <div className="grid grid-cols-9 items-center bg-slate-100 font-semibold text-gray-700 py-2 px-8 gap-2 mt-8 mb-4">
-                            <div className="text-center">Imagen</div>
+                        <div className="grid grid-cols-8 items-center bg-slate-100 font-semibold text-gray-700 py-2 px-8 gap-2 mt-8 mb-4">
+                            {/* <div className="text-center">Imagen</div> */}
                             <div className="text-start">ID Producto</div>
                             <div className="text-start pl-4 col-span-2">Artículo</div>
                             <div className="text-center">Precio</div>

@@ -16,19 +16,14 @@ function NavItem({ icon, label, isExpanded, isActive, onClick }) {
 
 export function Sidebar() {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [activeItem, setActiveItem] = useState("home");
+  const [activeItem, setActiveItem] = useState("inventario");
 
   const navItems = [
-    { id: "home", icon: "home", label: "Inicio" },
-    { id: "allReports", icon: "description", label: "Todos los Reportes" },
-    { id: "breakdown", icon: "bar_chart", label: "Desglose" },
-    { id: "engagement", icon: "thumb_up", label: "Engagement" },
-    { id: "popularity", icon: "trending_up", label: "Popularidad" },
-    { id: "loyalty", icon: "favorite", label: "Lealtad" },
-    { id: "growth", icon: "show_chart", label: "Crecimiento" },
-    { id: "trends", icon: "insights", label: "Tendencias" },
-    { id: "listBuilding", icon: "list_alt", label: "List Building" },
-    { id: "personas", icon: "people", label: "Personas" },
+    { id: "inventario", icon: "inventory_2", label: "Inventario" },
+    { id: "pedidos", icon: "shopping_cart", label: "Pedidos" },
+    { id: "ventas", icon: "point_of_sale", label: "Ventas" },
+    { id: "detalleProducto", icon: "info", label: "Detalle de Producto" },
+    { id: "contactoProveedores", icon: "contacts", label: "Contacto Proveedores" },
   ];
 
   return (
@@ -61,18 +56,18 @@ export function Sidebar() {
             onClick={() => setActiveItem("settings")}
           />
         </div>
+      </div>
 
-        </div>
-        {/* Botón de expansión */}
-        <div
-          className=" shadow-[0_5px_16px_0px_#3981F733] h-6 w-6 flex items-center justify-center rounded-full bg-slate-700 cursor-pointer text-white hover:text-slate-100 hover:bg-slate-500"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          {isExpanded ? (
-            <i className="material-icons text-xs">chevron_left</i>
-          ) : (
-            <i className="material-icons text-xs">chevron_right</i>
-          )}
+      {/* Botón de expansión */}
+      <div
+        className="shadow-[0_5px_16px_0px_#3981F733] h-6 w-6 flex items-center justify-center rounded-full bg-slate-700 cursor-pointer text-white hover:text-slate-100 hover:bg-slate-500"
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        {isExpanded ? (
+          <i className="material-icons text-xs">chevron_left</i>
+        ) : (
+          <i className="material-icons text-xs">chevron_right</i>
+        )}
       </div>
     </div>
   );
