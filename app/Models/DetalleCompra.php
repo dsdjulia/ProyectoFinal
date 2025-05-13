@@ -26,4 +26,9 @@ class DetalleCompra extends Model
     public function compra(){
         return $this->belongsTo(Compra::class, 'id_compra', 'id');
     }
+
+    public function getSubtotalAttribute()
+    {   
+    return $this->cantidad * $this->precio_unitario;
+    }
 }

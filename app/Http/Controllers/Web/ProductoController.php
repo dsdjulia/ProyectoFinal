@@ -70,7 +70,8 @@ class ProductoController extends Controller
             'fecha_salida' => null
         ]);
 
-        return app(AlmacenController::class)->renderInventario($user);
+        return redirect()->route('inventario.index');
+        
     }
 
     public function update(Request $request)
@@ -86,9 +87,7 @@ class ProductoController extends Controller
             $producto->update($validated);
         }
 
-        $almacen = $producto->almacenes()->firstOrFail();
-
-        return app(AlmacenController::class)->renderInventario($almacen->user);
+        return redirect()->route('inventario.index');
     }
 
     public function patch (Request $request){

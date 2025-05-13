@@ -17,7 +17,7 @@ class DetallesCompraController extends Controller
         
         $user = Auth::user();
 
-        $validate = $request->validate([
+        $datos = $request->validate([
             'codigo' => 'required|string',
             'id_almacen' => 'required|exists:almacenes,id',
             'id_proveedor' => 'required|exists:proveedores,id',
@@ -26,31 +26,41 @@ class DetallesCompraController extends Controller
             'fecha_compra' =>'required|date'
         ]);
 
-        $producto = Producto::where('codigo' , $request['codigo'])->first();
+        $producto = Producto::where('codigo' , $datos['codigo'])->first();
+        $compra = Compra::create([
+            'id_user' => $user->id,
+            'id_proveedor' => $datos['id_proveedor'],
+            'fecha_compra'=> $datos['fecha_compra']
+        ]);
+        DetalleCompra::create([
+            'id_producto' => $producto->id,
+            'id_compra' => $compra->id,
+            'cantidad' => $datos['unidades'],
+            'precio_unitario' => $datos['precio_unitario'],
+            'estado'=> true
+        ]);
 
-        if($producto){
-            $compra = Compra::create([
-                'id_user' => $user->id,
-                'id_proveedor' => $request['id_proveedor'],
-                'fecha_compra'=> $request['fecha_compra']
-            ]);
-            $detalles = DetalleCompra::create([
-                'id_producto' => $producto->id,
-                'id_compra' => $compra->id,
-                'cantidad' => $request['unidades'],
-                'precio_unitario' => $request['precio_unitario'],
-                'estado'=> true
-            ]);
-            $inventario = Inventario::where('id_almacen', $request['id_almacen'])
-                ->where('id_producto' , $producto->id)
-                ->where('precio_unitario', $request['precio_unitario'])
-                ->first();
-            $inventario->cantidad_actual += $request['unidades'];
+        $inventario = Inventario::where('id_almacen', $datos['id_almacen'])
+            ->where('id_producto' , $producto->id)
+            ->where('precio_unitario', $datos['precio_unitario'])
+            ->first();
+
+        if($inventario){
+            $inventario->cantidad_actual += $datos['unidades'];
             $inventario->fecha_entrada = now();
             $inventario ->save();
+        }else {
+            Inventario::create([
+            'id_producto' => $producto->id,
+            'id_almacen' => $datos['id_almacen'],
+            'precio_unitario' => $datos['precio_unitario'],
+            'cantidad_actual' => $datos['unidades'],
+            'fecha_entrada' => now(),
+            'fecha_salida' => null
+            ]);
         }
 
-    }
+        return redirect()->route('inventario.index');
 
-    
+    }
 }

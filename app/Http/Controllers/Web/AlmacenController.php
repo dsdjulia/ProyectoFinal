@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Web;
 
 use Inertia\Inertia;
 use App\Models\Almacen;
+use App\Models\Categoria;
 use App\Models\Inventario;
+use App\Models\DetalleVenta;
 use Illuminate\Http\Request;
 use App\Models\DetalleCompra;
 use App\Http\Controllers\Controller;
-use App\Models\DetalleVenta;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -214,6 +215,13 @@ class AlmacenController extends Controller
             ];
         });
 
+        $allAlmacenes = Almacen::with(['productos' => function ($query) {
+            $query->withPivot('id_almacen','cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
+        }])
+        ->where('id_user', $user->id)->get();
+
+        $categorias = Categoria::where('id_user', $user->id)->get(); 
+        
         return Inertia::render('Inventario', props: [
             'status' => true,
             'message' => 'Almacenes encontrados',
@@ -226,8 +234,10 @@ class AlmacenController extends Controller
             'agotado' => $stats['agotado'],
             'data' => $almacenes,
             'all_productos' => $allProductos,
+            'all_almacenes' => $allAlmacenes,
             'detalles_compras' => $detallesCompras,
-            'detalles_ventas' => $detallesVentas
+            'detalles_ventas' => $detallesVentas,
+            'categorias' => $categorias
         ]);
     }
 }
