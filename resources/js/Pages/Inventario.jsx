@@ -10,23 +10,17 @@ export default function Index() {
     console.log(props);
 
     return (
-        <AuthenticatedLayout
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Lista de productos
-                </h2>
-            }
-        >
-            <div className="flex flex-col w-full">
-                <div className="flex w-full bg-slate-100">
-                    <div className="sticky top-0 h-screen">
-                        <Sidebar />
-                    </div>
-                    <div className="flex-1 overflow-y-auto">
+        <div className="flex flex-col w-full">
+            <div className="flex w-full bg-slate-100">
+                <div className="sticky top-0 left-0 h-screen">
+                    <Sidebar />
+                </div>
+                <AuthenticatedLayout>
+                    <div className=" overflow-y-auto bg-slate-100">
                         <Main props={props} />
                     </div>
-                </div>
+                </AuthenticatedLayout>
             </div>
-        </AuthenticatedLayout>
+        </div>
     );
 }
