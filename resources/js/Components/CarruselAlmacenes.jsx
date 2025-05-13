@@ -131,13 +131,30 @@ export default function CarruselAlmacenes({arrayAlmacenes}) {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const toggleSelect = (index) => {
+    const toggleSelect = (id) => {
         setSelected((prev) =>
-            prev.includes(index)
-                ? prev.filter((i) => i !== index)
-                : [...prev, index]
+            prev.includes(id)
+                ? prev.filter((selectedId) => selectedId !== id)  // Deseleccionar
+                : [...prev, id]  // Seleccionar
         );
     };
+
+
+    const filtrarAlmacenes = () => {
+        console.log(selected);
+        router.post(route(''), {
+            data: {
+                id: selected
+            },
+            onSuccess: () => {
+                console.log('Almacenes filtrados');
+            },
+            onError: (errors) => {
+                console.log(errors);
+                showModificableAlert('Error al filtrar los almacenes', `${JSON.stringify(errors)}`, 'error');
+            }
+        });
+    }
 
     const handleAddAlmacen = (newAlmacen) => {
         
@@ -147,8 +164,6 @@ export default function CarruselAlmacenes({arrayAlmacenes}) {
         
     };
 
-    console.log(almacenes);
-
     return (
         <div className="w-full">
             <div className="flex justify-between items-center mb-2 px-2">
@@ -157,6 +172,12 @@ export default function CarruselAlmacenes({arrayAlmacenes}) {
                     className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 text-sm"
                 >
                     Añadir Almacén
+                </button>
+                <button
+                    onClick={() => filtrarAlmacenes()}
+                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-green-600 text-sm"
+                >
+                    Filtrar Almacenes
                 </button>
                 <button
                     onClick={() => setShowDeleteModal(true)}
@@ -171,9 +192,9 @@ export default function CarruselAlmacenes({arrayAlmacenes}) {
                     {almacenes.map((almacen, index) => (
                         <div
                             key={index}
-                            onClick={() => toggleSelect(index)}
+                            onClick={() => toggleSelect(almacen.id)}
                             className={`min-w-[250px] rounded-xl p-4 shadow-md flex-shrink-0 cursor-pointer
-                                ${selected.includes(index)
+                                ${selected.includes(almacen.id)
                                     ? "bg-slate-300 shadow-inner"
                                     : "bg-slate-100 shadow-md"
                                 }`}
