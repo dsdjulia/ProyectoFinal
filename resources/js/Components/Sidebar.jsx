@@ -29,7 +29,7 @@ export function Sidebar() {
   return (
     <div className="flex items-center justify-center bg-transparent h-screen ">
       <div
-        className={`flex flex-col bg-slate-800 transition-all duration-300 pb-3 pt-6 px-6 h-full mr-2
+        className={`flex flex-col bg-slate-800 transition-all duration-300 pb-3 pt-6 px-6 h-full
           ${isExpanded ? "w-60 items-start" : "w-24 items-center"} `}
       >
         {/* Contenedor de ítems apilados */}
@@ -60,7 +60,7 @@ export function Sidebar() {
 
       {/* Botón de expansión */}
       <div
-        className="shadow-[0_5px_16px_0px_#3981F733] h-6 w-6 flex items-center justify-center rounded-full bg-slate-700 cursor-pointer text-white hover:text-slate-100 hover:bg-slate-500"
+        className="shadow-[0_5px_16px_0px_#3981F733] h-6 w-6 flex items-center justify-center rounded-full bg-slate-700 cursor-pointer text-white hover:text-slate-100 hover:bg-slate-500 absolute"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         {isExpanded ? (
