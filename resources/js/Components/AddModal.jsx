@@ -22,54 +22,76 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes, c
         fecha_caducidad: '',
         // status: context === "orders" ? "" : undefined,
 
+
         // datos proveedor
+        id_proveedor: "",
         nombre_proveedor: "",
         telefono: "",
         email: "",
     });
 
     console.log(categorias);
+    console.log(proveedores);
 
     const [mostrarNuevaCategoria, setMostrarNuevaCategoria] = useState(false);
     const [mostrarFecha, setMostrarFecha] = useState(false);
+    const [mostrarNuevoProveedor, setMostrarNuevoProveedor] = useState(false);
 
-const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
 
-    // Caso específico para el campo 'perecedero'
-    if (name === "perecedero") {
-        const isPerecedero = value === "true";  // Convertimos a booleano
+        // Caso específico para el campo 'perecedero'
+        if (name === "perecedero") {
+            const isPerecedero = value === "true";  // Convertimos a booleano
+            setFormData({
+                ...formData,
+                [name]: isPerecedero,
+            });
+            setMostrarFecha(isPerecedero);  // Mostramos la fecha si es true
+            return;
+        }
+
+        // Caso específico para el campo 'almacen'
+        if (name === "almacen") {
+            const selectedAlmacen = almacenes.find(a => a.id === value);
+            setFormData({
+                ...formData,
+                id_almacen: selectedAlmacen ? selectedAlmacen.id : "",  // Solo el ID
+            });
+            return;
+        }
+
+        // Manejo genérico para otros campos
         setFormData({
             ...formData,
-            [name]: isPerecedero,
+            [name]: value,
         });
-        setMostrarFecha(isPerecedero);  // Mostramos la fecha si es true
-        return;
-    }
 
-    // Caso específico para el campo 'almacen'
-    if (name === "almacen") {
-        const selectedAlmacen = almacenes.find(a => a.id === value);
-        setFormData({
-            ...formData,
-            id_almacen: selectedAlmacen ? selectedAlmacen.id : "",  // Solo el ID
-        });
-        return;
-    }
+        console.log(formData);
+    };
 
-    // Manejo genérico para otros campos
-    setFormData({
-        ...formData,
-        [name]: value,
-    });
 
-    console.log(formData);
-};
+
+    const handleProveedorChange = (e) => {
+        const value = e.target.value;
+
+        if(value === 'nuevo') {
+            setFormData({ ...formData, id_proveedor: null });
+        } else {
+            setFormData({ ...formData, id_proveedor: value });
+        }   
+        setMostrarNuevoProveedor(value === 'nuevo');
+    };
 
 
     const handleCategoriaChange = (e) => {
         const value = e.target.value;
-        setFormData({ ...formData, id_categoria: null });
+
+        if(value === 'nueva') {
+            setFormData({ ...formData, id_categoria: null });
+        } else {
+            setFormData({ ...formData, id_categoria: value });
+        }
         setMostrarNuevaCategoria(value === 'nueva');
     };
 
@@ -109,7 +131,7 @@ const handleInputChange = (e) => {
                                 onChange={handleInputChange}
                                 className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
                             >
-                                <option value="null">Seleccionar producto</option>
+                                <option value="">Seleccionar producto</option>
                                 {productos.map((producto) => (
                                     <option key={producto.id} value={producto.id}>
                                         {producto.nombre}
@@ -137,18 +159,20 @@ const handleInputChange = (e) => {
                                 className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
                             />
                         </div>
-                        {/* <div>
+                        <div>
                             <label className="block text-sm font-medium text-gray-700">Proveedor</label>
                             <select
-                                name="nombre_proveedor"
-                                value={formData.nombre_proveedor}
+                                name="id_proveedor"
+                                value={formData.id_proveedor}
                                 onChange={handleProveedorChange}
                                 className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
                             >
                                 <option value="">Seleccionar proveedor</option>
                                 <option value="nuevo">Nuevo proveedor</option>
-                                {proveedores.map((proveedor) => (
-                                    <option key={proveedor.id} value={proveedor.nombre}>{proveedor.nombre}</option>
+                                {proveedores.map((proveedor, index) => (
+                                    <option key={`${proveedor.id}-proveedor`} value={proveedor.id}> // Tengo que hacer eso para que no haya conflicto con otras ids iguales
+                                        {proveedor.nombre}
+                                    </option>
                                 ))}
                             </select>
 
@@ -180,23 +204,7 @@ const handleInputChange = (e) => {
                                     />
                                 </div>
                             )}
-                        </div> */}
-                        {/* <div>
-                            <label className="block text-sm font-medium text-gray-700">Proveedor</label>
-                            <select
-                                name="id_proveedor"
-                                value={formData.id_proveedor}
-                                onChange={handleInputChange}
-                                className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
-                            >
-                                <option value="null">Seleccionar proveedor</option>
-                                {proveedores.map((proveedor) => (
-                                    <option key={proveedor.id} value={proveedor.id}>
-                                        {proveedor.nombre}
-                                    </option>
-                                ))}
-                            </select>
-                        </div> */}
+                        </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Categoría</label>
                             <select
@@ -205,10 +213,10 @@ const handleInputChange = (e) => {
                                 onChange={handleCategoriaChange}
                                 className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
                             >
-                                <option value="null">Seleccionar categoría</option>
+                                <option value="">Seleccionar categoría</option>
                                 <option value="nueva">Nueva categoría</option>
                                 {categorias.map((categoria) => (
-                                    <option key={categoria.id} value={categoria.id}>{categoria.nombre}</option>
+                                    <option key={`${categoria.id}-categoria`} value={categoria.id}>{categoria.nombre}</option>
                                 ))}
                             </select>
 
@@ -257,7 +265,7 @@ const handleInputChange = (e) => {
                                 onChange={handleInputChange}
                                 className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
                             >
-                                <option value="null">Seleccionar</option>
+                                <option value="">Seleccionar</option>
                                 <option value="pendiente">Pendiente</option>
                                 <option value="recibido">Recibido</option>
                                 <option value="cancelado">Cancelado</option>
@@ -273,7 +281,7 @@ const handleInputChange = (e) => {
                             >
                                 <option value="">Seleccionar almacén</option>
                                 {almacenes.map((almacen) => (
-                                    <option key={almacen.id} value={almacen.id}>
+                                    <option key={`${almacen.id}-almacen`} value={almacen.id}>
                                         {almacen.nombre}
                                     </option>
                                 ))}
@@ -358,10 +366,10 @@ const handleInputChange = (e) => {
                                     onChange={handleCategoriaChange}
                                     className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
                                 >
-                                    <option value="null">Seleccionar categoría</option>
+                                    <option value="">Seleccionar categoría</option>
                                     <option value="nueva">Nueva categoría</option>
                                     {categorias.map((categoria) => (
-                                        <option key={categoria.id} value={categoria.id}>{categoria.nombre}</option>
+                                        <option key={`${categoria.id}-categoria2`} value={categoria.id}>{categoria.nombre}</option>
                                     ))}
                                 </select>
 
@@ -382,7 +390,7 @@ const handleInputChange = (e) => {
                                             onChange={handleInputChange}
                                             className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
                                         >
-                                            <option value="null">Seleccionar</option>
+                                            <option value="">Seleccionar</option>
                                             <option value="true">Sí</option>
                                             <option value="false">No</option>
                                         </select>
@@ -413,7 +421,7 @@ const handleInputChange = (e) => {
                                 >
                                     <option value="">Seleccionar almacén</option>
                                     {almacenes.map((almacen) => (
-                                        <option key={almacen.id} value={almacen.id}>
+                                        <option key={`${almacen.id}-almacen2`} value={almacen.id}>
                                             {almacen.nombre}
                                         </option>
                                     ))}
