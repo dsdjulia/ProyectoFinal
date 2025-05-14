@@ -17,38 +17,50 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes, c
         id_almacen: "",
         precio_unitario: "",
         cantidad_actual: "",
-        perecedero: '',
+        nombre_categoria: "",
+        perecedero: false,
         fecha_caducidad: ''
         // status: context === "orders" ? "" : undefined,
     });
 
+    console.log(categorias);
+
     const [mostrarNuevaCategoria, setMostrarNuevaCategoria] = useState(false);
     const [mostrarFecha, setMostrarFecha] = useState(false);
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
+const handleInputChange = (e) => {
+    const { name, value } = e.target;
 
-        if (name === "almacen") {
-            // Buscamos el objeto del almacén y guardamos solo el id
-            const selectedAlmacen = almacenes.find(a => a.id === value);
-            setFormData({
-                ...formData,
-                almacen: selectedAlmacen,
-            });
-        } else {
-            setFormData({
-                ...formData,
-                [name]: value,
-            });
-        }
+    // Caso específico para el campo 'perecedero'
+    if (name === "perecedero") {
+        const isPerecedero = value === "true";  // Convertimos a booleano
+        setFormData({
+            ...formData,
+            [name]: isPerecedero,
+        });
+        setMostrarFecha(isPerecedero);  // Mostramos la fecha si es true
+        return;
+    }
 
-        if (name === 'perecedero' && value === 'si') {
-            setMostrarFecha(true);
-        } else if (name === 'perecedero') {
-            setMostrarFecha(false);
-        }
-        console.log(formData);
-    };
+    // Caso específico para el campo 'almacen'
+    if (name === "almacen") {
+        const selectedAlmacen = almacenes.find(a => a.id === value);
+        setFormData({
+            ...formData,
+            id_almacen: selectedAlmacen ? selectedAlmacen.id : "",  // Solo el ID
+        });
+        return;
+    }
+
+    // Manejo genérico para otros campos
+    setFormData({
+        ...formData,
+        [name]: value,
+    });
+
+    console.log(formData);
+};
+
 
     const handleCategoriaChange = (e) => {
         const value = e.target.value;
@@ -173,11 +185,11 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes, c
                                     onChange={handleCategoriaChange}
                                     className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
                                 >
-                                    <option value="">Seleccionar categoría</option>
+                                    <option value="null">Seleccionar categoría</option>
+                                    <option value="nueva">Nueva categoría</option>
                                     {categorias.map((categoria) => (
                                         <option key={categoria.id} value={categoria.id}>{categoria.nombre}</option>
                                     ))}
-                                    <option value="nueva">Nueva categoría</option>
                                 </select>
 
                                 {mostrarNuevaCategoria && (
@@ -185,7 +197,7 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes, c
                                         <label className="block text-sm font-medium text-gray-700">Nombre nueva categoria</label>
                                         <input
                                             type="text"
-                                            name="nombre"
+                                            name="nombre_categoria"
                                             value={formData.nombre}
                                             onChange={handleInputChange}
                                             className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
@@ -198,8 +210,8 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes, c
                                             className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
                                         >
                                             <option value="">Seleccionar</option>
-                                            <option value="si">Sí</option>
-                                            <option value="no">No</option>
+                                            <option value="true">Sí</option>
+                                            <option value="false">No</option>
                                         </select>
 
                                         {mostrarFecha && (

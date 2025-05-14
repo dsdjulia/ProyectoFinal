@@ -47,14 +47,15 @@ class ProductoController extends Controller
             'codigo' => 'required|string|unique:productos,codigo',
             'nombre' => 'required|string',
             'descripcion' => 'nullable|string',
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'imagen' => 'nullable|string',
+            // 'imagen' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             //datos para crear inventario
             'id_almacen' => 'required|exists:almacenes,id',
             'cantidad_actual' => 'required|integer|min:1',
             'precio_unitario' => 'required|numeric|min:1',
             //datos para la categoria
             'nombre_categoria' => 'nullable|string',
-            'perecedero' => 'nullable|string'
+            'perecedero' => 'nullable|boolean'
         ]);
 
         $categoria = Categoria::where('id',$data['id_categoria'])->first();
