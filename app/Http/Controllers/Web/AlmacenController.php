@@ -251,20 +251,4 @@ class AlmacenController extends Controller
         ]);
 
     }
-
-    public function producto()
-    {
-        $user = Auth::user();
-        return Inertia::render('Producto');
-    }
-    public function pedidos()
-    {
-        $user = Auth::user();
-        return Inertia::render('Pedidos');
-    }
-    public function dashboard()
-    {
-        $user = Auth::user();
-        return Inertia::render('Dashobard');
-    }
 }
