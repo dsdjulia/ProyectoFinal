@@ -26,7 +26,7 @@ class GastoController extends Controller
         
         $datos = $request->validate([
             'concepto' => 'required|string|min:1',
-            'precio' => 'required|decimal',
+            'precio' => 'required|numeric',
             'fecha' => 'required|date',
             'gasto_recurrente'=> 'required|boolean'
         ]);
