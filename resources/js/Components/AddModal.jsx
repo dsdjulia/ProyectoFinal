@@ -76,6 +76,8 @@ const handleInputChange = (e) => {
         router.post(route('producto.patch'), formData, {
             onSuccess: () => {
                 showModificableAlert('Producto añadido', `${formData.producto} agregado al inventario.`, 'success');
+                router.visit(route('inventario.index'), { preserveScroll: true });
+
             },
             onError: (errors) => {
                 showModificableAlert('Error al añadir el producto', `Error: ${JSON.stringify(errors)}`, 'error');
