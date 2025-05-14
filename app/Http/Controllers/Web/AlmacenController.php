@@ -220,7 +220,7 @@ class AlmacenController extends Controller
         }])
         ->where('id_user', $user->id)->get();
 
-        $categorias = Categoria::where('id_user', $user->id)->get(); 
+        $categorias = Categoria::where('id_user', $user->id)->with('productos')->get(); 
         
         return Inertia::render('Inventario', props: [
             'status' => true,
