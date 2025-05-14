@@ -170,7 +170,7 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes, c
                                 <option value="">Seleccionar proveedor</option>
                                 <option value="nuevo">Nuevo proveedor</option>
                                 {proveedores.map((proveedor, index) => (
-                                    <option key={`${proveedor.id}-proveedor`} value={proveedor.id}> // Tengo que hacer eso para que no haya conflicto con otras ids iguales
+                                    <option key={`${proveedor.id}-proveedor`} value={proveedor.id}>
                                         {proveedor.nombre}
                                     </option>
                                 ))}
