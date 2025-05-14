@@ -18,6 +18,7 @@ export default function ProductTable({props}) {
     const [selected, setSelected] = useState([]);
     const [almacenes, setAlmacenes] = useState(props.data);
     const [categorias, setCategorias] = useState(props.categorias);
+    const [proveedores, setProveedores] = useState(props.all_proveedores);
 
     console.log(props.data);
 
@@ -205,6 +206,8 @@ export default function ProductTable({props}) {
                 context={activeTab === "ordenes" ? "orders" : "stock"}
                 almacenes={almacenes}
                 categorias={categorias}
+                productos={products}
+                proveedores={proveedores}
             />
 
             {isDeleteModalOpen && selectedProduct && (

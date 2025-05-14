@@ -25,16 +25,19 @@ class ProductoController extends Controller
 
     public function delete(Request $request)
     {
-        $request->validate([
-            'codigo' => 'required|exists:productos,id',
+        $datos = $request->validate([
+            'id_producto' => 'required|exists:productos,id',
+            'id_almacen' =>'required|exists:almacenes,id',
+            'precio_unitario' => 'required|numeric'
         ]);
 
-        $producto = Producto::findOrFail($request->codigo);
+        Inventario::where('id_producto',$datos['id_producto'])
+            ->where('id_almacen',$datos['id_almacen'])
+            ->where('precio_unitario',$datos['precio_unitario'])
+            ->first()->delete();
+        
+        return redirect()->route('inventario.index');
 
-        $almacen = $producto->almacenes()->firstOrFail(); 
-        $producto->delete();
-
-        return app(AlmacenController::class)->renderInventario($almacen->user);
     }
 
     public function store(Request $request)
@@ -43,7 +46,6 @@ class ProductoController extends Controller
 
         $data = $request->validate([
             // datos para crear producto
-            'id_categoria' => 'nullable|exists:categorias,id',
             'codigo' => 'required|string|unique:productos,codigo',
             'nombre' => 'required|string',
             'descripcion' => 'nullable|string',
@@ -54,12 +56,13 @@ class ProductoController extends Controller
             'cantidad_actual' => 'required|integer|min:1',
             'precio_unitario' => 'required|numeric|min:1',
             //datos para la categoria
+            'id_categoria' => 'exists:categorias,id',
             'nombre_categoria' => 'nullable|string',
             'perecedero' => 'nullable|boolean'
         ]);
 
         $categoria = Categoria::where('id',$data['id_categoria'])
-            ->where('nombre', $data['nombre_categoria'])->first();
+            ->where('id_user',$user->id)->first();
 
         if(!$categoria){
             $newCategoria = Categoria::create([
