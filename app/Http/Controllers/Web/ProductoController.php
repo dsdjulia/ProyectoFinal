@@ -58,7 +58,8 @@ class ProductoController extends Controller
             'perecedero' => 'nullable|boolean'
         ]);
 
-        $categoria = Categoria::where('id',$data['id_categoria'])->first();
+        $categoria = Categoria::where('id',$data['id_categoria'])
+            ->where('nombre', $data['nombre_categoria'])->first();
 
         if(!$categoria){
             $newCategoria = Categoria::create([
