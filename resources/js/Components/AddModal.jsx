@@ -4,7 +4,7 @@ import { Inertia } from '@inertiajs/inertia';
 import { showModificableAlert } from "@/utils/alerts";
 import { router } from "@inertiajs/react";
 
-export default function AddModal({ isOpen, onClose, onAdd, context, almacenes }) {
+export default function AddModal({ isOpen, onClose, onAdd, context, almacenes, categorias }) {
     const [formData, setFormData] = useState({
         //datos producto
         id_categoria: "",
@@ -14,12 +14,16 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes })
         imagen: "",
 
         // datos inventario
-        id_almacen: context === "stock" ? "" : undefined,
+        id_almacen: "",
         precio_unitario: "",
         cantidad_actual: "",
-
+        perecedero: '',
+        fecha_caducidad: ''
         // status: context === "orders" ? "" : undefined,
     });
+
+    const [mostrarNuevaCategoria, setMostrarNuevaCategoria] = useState(false);
+    const [mostrarFecha, setMostrarFecha] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -37,6 +41,19 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes })
                 [name]: value,
             });
         }
+
+        if (name === 'perecedero' && value === 'si') {
+            setMostrarFecha(true);
+        } else if (name === 'perecedero') {
+            setMostrarFecha(false);
+        }
+        console.log(formData);
+    };
+
+    const handleCategoriaChange = (e) => {
+        const value = e.target.value;
+        setFormData({ ...formData, id_categoria: null });
+        setMostrarNuevaCategoria(value === 'nueva');
     };
 
     const handleSubmit = (e) => {
@@ -128,6 +145,8 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes })
 
 
                     {context === "orders" && (
+                        <>
+
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Estado</label>
                             <select
@@ -142,25 +161,80 @@ export default function AddModal({ isOpen, onClose, onAdd, context, almacenes })
                                 <option value="cancelado">Cancelado</option>
                             </select>
                         </div>
+                        </>
                     )}
                     {context === "stock" && (
+                        <>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Categoría</label>
+                                <select
+                                    name="id_categoria"
+                                    value={formData.id_categoria}
+                                    onChange={handleCategoriaChange}
+                                    className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
+                                >
+                                    <option value="">Seleccionar categoría</option>
+                                    {categorias.map((categoria) => (
+                                        <option key={categoria.id} value={categoria.id}>{categoria.nombre}</option>
+                                    ))}
+                                    <option value="nueva">Nueva categoría</option>
+                                </select>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">Almacén</label>
-                            <select
-                                name="id_almacen"
-                                value={formData.id_almacen}
-                                onChange={handleInputChange}
-                                className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
-                            >
-                                <option value="">Seleccionar</option>
-                                {almacenes.map((almacen) => (
-                                    <option key={almacen.id} value={almacen.nombre}>
-                                        {almacen.nombre}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                                {mostrarNuevaCategoria && (
+                                    <div className="mt-4 space-y-2">
+                                        <label className="block text-sm font-medium text-gray-700">Nombre nueva categoria</label>
+                                        <input
+                                            type="text"
+                                            name="nombre"
+                                            value={formData.nombre}
+                                            onChange={handleInputChange}
+                                            className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
+                                        />
+                                        <label className="block text-sm font-medium text-gray-700">Perecedero</label>
+                                        <select
+                                            name="perecedero"
+                                            value={formData.perecedero}
+                                            onChange={handleInputChange}
+                                            className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
+                                        >
+                                            <option value="">Seleccionar</option>
+                                            <option value="si">Sí</option>
+                                            <option value="no">No</option>
+                                        </select>
+
+                                        {mostrarFecha && (
+                                            <div className="mt-2">
+                                                <label className="block text-sm font-medium text-gray-700">Fecha de Caducidad</label>
+                                                <input
+                                                    type="date"
+                                                    name="fecha_caducidad"
+                                                    value={formData.fecha_caducidad}
+                                                    onChange={handleInputChange}
+                                                    className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Almacén</label>
+                                <select
+                                    name="id_almacen"
+                                    value={formData.id_almacen}
+                                    onChange={handleInputChange}
+                                    className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
+                                >
+                                    <option value="">Seleccionar almacén</option>
+                                    {almacenes.map((almacen) => (
+                                        <option key={almacen.id} value={almacen.id}>
+                                            {almacen.nombre}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </>
                     )}
 
                     <div className="flex justify-end gap-2">

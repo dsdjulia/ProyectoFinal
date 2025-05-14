@@ -17,6 +17,7 @@ export default function ProductTable({props}) {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [selected, setSelected] = useState([]);
     const [almacenes, setAlmacenes] = useState(props.data);
+    const [categorias, setCategorias] = useState(props.categorias);
 
     console.log(props.data);
 
@@ -203,6 +204,7 @@ export default function ProductTable({props}) {
                 onAdd={handleAddProduct}
                 context={activeTab === "ordenes" ? "orders" : "stock"}
                 almacenes={almacenes}
+                categorias={categorias}
             />
 
             {isDeleteModalOpen && selectedProduct && (
