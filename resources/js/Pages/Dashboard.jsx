@@ -20,7 +20,7 @@ export default function Index() {
                     <div className=" overflow-y-auto bg-slate-100">
                         <Main props={props} />
                     </div>
-                    <Footer/>
+                    <Footer />
                 </AuthenticatedLayout>
             </div>
         </div>
