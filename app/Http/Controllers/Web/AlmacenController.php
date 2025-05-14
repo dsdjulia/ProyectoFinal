@@ -100,8 +100,6 @@ class AlmacenController extends Controller
         $user = Auth::user();
 
         return Inertia::render('Producto');
-
-
     }
 
 

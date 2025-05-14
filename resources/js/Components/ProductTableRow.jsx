@@ -11,6 +11,7 @@ export default function ProductTableRow({ product, context, almacenes = [], onUp
 
     const handleRowClick = () => {
         console.log(`Selected: ${product.producto}`);
+        
     };
 
     const handleEditSave = (updatedData) => {
