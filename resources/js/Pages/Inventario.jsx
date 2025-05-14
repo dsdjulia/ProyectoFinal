@@ -2,8 +2,8 @@
 import Sidebar from "@/Components/Sidebar";
 import { usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import Footer from "@/Components/Footer";
 import InventarioTabla from "@/Components/InventarioTabla";
-
 
 export default function Index() {
     const { props } = usePage();
@@ -19,6 +19,7 @@ export default function Index() {
                     <div className=" overflow-y-auto bg-slate-100">
                         <InventarioTabla props={props} />
                     </div>
+                <Footer/>
                 </AuthenticatedLayout>
             </div>
         </div>
