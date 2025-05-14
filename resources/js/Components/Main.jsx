@@ -76,7 +76,9 @@ export default function Main({props})
                 </div>
             </div>
             <hr />
-            <ProductOverview/>
+
+            {/*<ProductOverview/>*/}
+            
             <ProductTable props={props}/>
         </div>
     );
