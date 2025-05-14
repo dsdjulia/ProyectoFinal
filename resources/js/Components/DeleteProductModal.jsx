@@ -14,7 +14,9 @@ export default function DeleteProductModal({ product, totalAmount, onClose }) {
 
         router.delete(route('producto.delete'), {
             data: {
-                id_producto: product.id
+                id_producto: product.id,
+                id_almacen: product.almacen_id,
+                precio_unitario: product.precio_unitario
             },
             onSuccess: () => {
                 console.log('success');
