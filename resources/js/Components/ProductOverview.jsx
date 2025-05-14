@@ -71,7 +71,7 @@ const ProductOverview = ({ producto }) => {
   };
 
   return (
-    <div className=" flex flex-col lg:flex-row gap-12 bg-slate-100 px-12 ">
+    <div className=" flex flex-col lg:flex-row gap-12 bg-slate-100 px-12 mb-20">
       {/* Tarjeta del producto con imagen y detalles */}
       <div className="w-full lg:w-2/5 bg-transparent p-4 flex flex-col items-center justify-around pt-20">
         <div className="text-center">
