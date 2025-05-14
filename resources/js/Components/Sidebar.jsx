@@ -19,17 +19,17 @@ export function Sidebar({ active }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const navItems = [
-    { id: "dashboard", icon: "dashboard", label: "Dashboard", path: "/inventario" },
-    { id: "inventario", icon: "inventory_2", label: "Inventario", path: "routes.inventario"},
-    { id: "pedidos", icon: "shopping_cart", label: "Pedidos", path: "/inventario" },
-    { id: "ventas", icon: "point_of_sale", label: "Ventas", path: "/inventario" },
-    { id: "detalleProducto", icon: "info", label: "Detalle de Producto", path: "/producto" },
-    { id: "contactoProveedores", icon: "contacts", label: "Contacto Proveedores", path: "/inventario" },
+    { id: "dashboard", icon: "dashboard", label: "Dashboard", path: "dashboard.index" },
+    { id: "inventario", icon: "inventory_2", label: "Inventario", path: "inventario.index"},
+    { id: "pedidos", icon: "shopping_cart", label: "Pedidos", path: "pedidos.index" },
+    { id: "ventas", icon: "point_of_sale", label: "Ventas", path: "ventas.index" },
+    { id: "detalleProducto", icon: "info", label: "Detalle de Producto", path: "producto.index" },
+    { id: "contactoProveedores", icon: "contacts", label: "Contacto Proveedores", path: "proveedores.index" },
   ];
 
   const handleNavigation = (path) => {
     if (window.location.pathname !== path) {
-      router.visit(path);
+      router.visit(route(path));
     }
   };
 

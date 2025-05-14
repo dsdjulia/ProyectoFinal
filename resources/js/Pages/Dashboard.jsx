@@ -14,7 +14,7 @@ export default function Index() {
         <div className="flex flex-col w-full">
             <div className="flex w-full bg-slate-100">
                 <div className="sticky top-0 left-0 h-screen">
-                    <Sidebar />
+                    <Sidebar active={"dashboard"}/>
                 </div>
                 <AuthenticatedLayout>
                     <div className=" overflow-y-auto bg-slate-100">
