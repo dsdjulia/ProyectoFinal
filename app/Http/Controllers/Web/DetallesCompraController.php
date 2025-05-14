@@ -22,21 +22,26 @@ class DetallesCompraController extends Controller
             'codigo' => 'required|string',
             'precio_unitario' => 'required|numeric|min:0',
             'unidades' => 'required|integer|min:1',
-            'fecha_compra' => 'required|date',
-            'telefono' => 'required|string',
-            'email' => 'required|email',
+
+            'id_proveedor' => 'nullable|exists:proveedor,id',
+            'nombre_proveedor' => 'nullable|string',
+            'telefono' => 'nullable|string',
+            'email' => 'nullable|email',
         ]);
 
-        $producto = Producto::where('codigo', $datos['codigo'])->firstOrFail();
-        $proveedor = Proveedor::where('telefono', $datos['telefono'])
-            ->where('email', $datos['email'])->firstOrFail();
+        $producto = Producto::where('codigo', $datos['codigo'])->first();
+        $proveedor = Proveedor::firstOrCreate([
+            'nombre' => $datos['nombre_proveedor'],
+            'telefono' => $datos['telefono'],
+            'email' => $datos['email'],
+        ]);
 
-        $almacen = Almacen::where('id_user', $user->id)->firstOrFail();
+        $almacen = Almacen::where('id_user', $user->id)->first();
 
         $compra = Compra::create([
             'id_user' => $user->id,
             'id_proveedor' => $proveedor->id,
-            'fecha_compra' => $datos['fecha_compra']
+            'fecha_compra' => now()
         ]);
 
         DetalleCompra::create([
