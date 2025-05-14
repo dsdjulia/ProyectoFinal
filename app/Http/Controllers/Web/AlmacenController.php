@@ -180,12 +180,19 @@ class AlmacenController extends Controller
 
         $stats = $this->calcularStockStats($almacenes);
         
-        $detallesCompras = DetalleCompra::with(['producto', 'compra.proveedor'])
+        $detallesComprasRaw = DetalleCompra::with(['producto', 'compra.proveedor'])
             ->whereHas('compra', function ($query) use ($user){
-                $query->where('id_user',$user->id);
+                $query->where('id_user', $user->id);
             }) 
-            ->get()
-            ->map(function ($detalle) {
+            ->get();
+
+        $all_proveedores = $detallesComprasRaw
+            ->pluck('compra.proveedor') 
+            ->filter()                  
+            ->unique('id')             
+            ->values();                
+
+        $detallesCompras = $detallesComprasRaw->map(function ($detalle) {
             return [
                 'producto_id' => $detalle->id_producto,
                 'codigo' => $detalle->producto->codigo,
@@ -194,7 +201,7 @@ class AlmacenController extends Controller
                 'cantidad' => $detalle->cantidad,
                 'estado' => $detalle->estado,
                 'fecha_compra' => optional($detalle->compra)->fecha_compra,
-                'proveedor' => optional($detalle->compra->proveedor)->nombre, 
+                'proveedor' => optional($detalle->compra->proveedor)->nombre,
             ];
         });
         
@@ -222,6 +229,7 @@ class AlmacenController extends Controller
 
         $categorias = Categoria::where('id_user', $user->id)->with('productos')->get(); 
         
+        
         return Inertia::render('Inventario', props: [
             'status' => true,
             'message' => 'Almacenes encontrados',
@@ -235,6 +243,7 @@ class AlmacenController extends Controller
             'data' => $almacenes,
             'all_productos' => $allProductos,
             'all_almacenes' => $allAlmacenes,
+            'all_proveedores' =>$all_proveedores,
             'detalles_compras' => $detallesCompras,
             'detalles_ventas' => $detallesVentas,
             'categorias' => $categorias
