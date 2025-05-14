@@ -1,9 +1,10 @@
-// resources/js/Pages/Dashboard/Index.jsx
+// resources/js/Pages/Pedidos/Index.jsx
 import Sidebar from "@/Components/Sidebar";
-import Main from "@/Components/Main";
 import Header from "@/Components/Header";
 import { usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+
+import OrdenesCompra from "@/Components/OrdenesCompra";
 
 export default function Index() {
     const { props } = usePage();
@@ -13,11 +14,11 @@ export default function Index() {
         <div className="flex flex-col w-full">
             <div className="flex w-full bg-slate-100">
                 <div className="sticky top-0 left-0 h-screen">
-                    <Sidebar />
+                    <Sidebar active={"inventario"}/>
                 </div>
                 <AuthenticatedLayout>
                     <div className=" overflow-y-auto bg-slate-100">
-                        <Main props={props} />
+                        <OrdenesCompra props={props} />
                     </div>
                 </AuthenticatedLayout>
             </div>

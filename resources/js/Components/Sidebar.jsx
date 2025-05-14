@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { router } from "@inertiajs/react";
 
-function NavItem({ icon, label, isExpanded, isActive, onClick }) {
+function NavItem({ icon, label, routePath, isExpanded, isActive, onClick }) {
   return (
     <div
-      className={`flex items-center my-1 p-2 rounded-lg cursor-pointer w-full text-white font-bold hover:text-slate-600 hover:bg-slate-100
-        ${isActive ? "bg-slate-600 text-slate-600" : ""}
+      className={`flex items-center my-1 p-2 rounded-lg cursor-pointer w-full font-bold
+        ${isActive ? "bg-white text-slate-800" : "text-white hover:bg-slate-100 hover:text-slate-800"}
         ${isExpanded ? "justify-start" : "justify-center"}`}
       onClick={onClick}
     >
@@ -14,18 +15,23 @@ function NavItem({ icon, label, isExpanded, isActive, onClick }) {
   );
 }
 
-export function Sidebar() {
+export function Sidebar({ active }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [activeItem, setActiveItem] = useState("dashboard");
 
   const navItems = [
-    { id: "dashboard", icon: "dashboard", label: "Dashboard" },
-    { id: "inventario", icon: "inventory_2", label: "Inventario" },
-    { id: "pedidos", icon: "shopping_cart", label: "Pedidos" },
-    { id: "ventas", icon: "point_of_sale", label: "Ventas" },
-    { id: "detalleProducto", icon: "info", label: "Detalle de Producto" },
-    { id: "contactoProveedores", icon: "contacts", label: "Contacto Proveedores" },
+    { id: "dashboard", icon: "dashboard", label: "Dashboard", path: "/inventario" },
+    { id: "inventario", icon: "inventory_2", label: "Inventario", path: "routes.inventario"},
+    { id: "pedidos", icon: "shopping_cart", label: "Pedidos", path: "/inventario" },
+    { id: "ventas", icon: "point_of_sale", label: "Ventas", path: "/inventario" },
+    { id: "detalleProducto", icon: "info", label: "Detalle de Producto", path: "/producto" },
+    { id: "contactoProveedores", icon: "contacts", label: "Contacto Proveedores", path: "/inventario" },
   ];
+
+  const handleNavigation = (path) => {
+    if (window.location.pathname !== path) {
+      router.visit(path);
+    }
+  };
 
   return (
     <div className="flex items-center justify-center bg-transparent h-screen relative">
@@ -35,28 +41,28 @@ export function Sidebar() {
         onMouseEnter={() => setIsExpanded(true)}
         onMouseLeave={() => setIsExpanded(false)}
       >
-        {/* Ítems */}
         <div className="flex flex-col flex-1 w-full gap-1 justify-start">
           {navItems.map((item) => (
             <NavItem
               key={item.id}
               icon={item.icon}
               label={item.label}
+              routePath={item.path}
               isExpanded={isExpanded}
-              isActive={activeItem === item.id}
-              onClick={() => setActiveItem(item.id)}
+              isActive={active === item.id}
+              onClick={() => handleNavigation(item.path)}
             />
           ))}
         </div>
 
-        {/* Configuración */}
         <div className="mb-2 w-full">
           <NavItem
             icon="settings"
             label="Configuración"
+            routePath="/configuracion"
             isExpanded={isExpanded}
-            isActive={activeItem === "settings"}
-            onClick={() => setActiveItem("settings")}
+            isActive={active === "settings"}
+            onClick={() => handleNavigation("/configuracion")}
           />
         </div>
       </div>

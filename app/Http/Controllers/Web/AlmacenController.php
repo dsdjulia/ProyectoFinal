@@ -24,19 +24,19 @@ class AlmacenController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-    
+
         $data = $request->validate([
             'nombre' => 'required|string|max:255',
             'direccion' => 'required|string|max:255'
         ]);
-    
+
         // Crear el registro
         Almacen::create([
             'id_user' => $user->id,
             'nombre' => $data['nombre'],
             'direccion' => $data['direccion'],
         ]);
-    
+
         // Redirigir a la página de inventario con un mensaje de éxito
         return $this->renderInventario($user);
 
@@ -51,7 +51,7 @@ class AlmacenController extends Controller
         ]);
 
         $id = intval($validated['id']);
-        
+
         $almacen = Almacen::where('id_user', $user->id)
             ->where('id', $id)
             ->firstOrFail();
@@ -109,7 +109,7 @@ class AlmacenController extends Controller
             foreach ($almacenes as $almacen) {
                 foreach ($almacen['productos'] as $producto) {
                     $cantidad = $producto['cantidad_actual'];
-    
+
                     if ($cantidad === 0) {
                         $stats['agotado']++;
                     } elseif ($cantidad < 10) {
@@ -179,18 +179,18 @@ class AlmacenController extends Controller
         });
 
         $stats = $this->calcularStockStats($almacenes);
-        
+
         $detallesComprasRaw = DetalleCompra::with(['producto', 'compra.proveedor'])
             ->whereHas('compra', function ($query) use ($user){
                 $query->where('id_user', $user->id);
-            }) 
+            })
             ->get();
 
         $all_proveedores = $detallesComprasRaw
-            ->pluck('compra.proveedor') 
-            ->filter()                  
-            ->unique('id')             
-            ->values();                
+            ->pluck('compra.proveedor')
+            ->filter()
+            ->unique('id')
+            ->values();
 
         $detallesCompras = $detallesComprasRaw->map(function ($detalle) {
             return [
@@ -204,11 +204,11 @@ class AlmacenController extends Controller
                 'proveedor' => optional($detalle->compra->proveedor)->nombre,
             ];
         });
-        
+
         $detallesVentas = DetalleVenta::with(['producto', 'venta.comprador'])
             ->whereHas('venta', function ($query) use ($user){
                 $query->where('id_user',$user->id);
-            }) 
+            })
             ->get()
             ->map(function ($detalle) {
             return [
@@ -218,7 +218,7 @@ class AlmacenController extends Controller
                 'precio_unitario' => $detalle->precio_unitario,
                 'cantidad' => $detalle->cantidad,
                 'fecha_venta' => optional($detalle->venta)->fecha_venta,
-                'cliente' => optional($detalle->venta->comprador)->nombre, 
+                'cliente' => optional($detalle->venta->comprador)->nombre,
             ];
         });
 
@@ -227,9 +227,9 @@ class AlmacenController extends Controller
         }])
         ->where('id_user', $user->id)->get();
 
-        $categorias = Categoria::where('id_user', $user->id)->with('productos')->get(); 
-        
-        
+        $categorias = Categoria::where('id_user', $user->id)->with('productos')->get();
+
+
         return Inertia::render('Inventario', props: [
             'status' => true,
             'message' => 'Almacenes encontrados',
@@ -246,7 +246,25 @@ class AlmacenController extends Controller
             'all_proveedores' =>$all_proveedores,
             'detalles_compras' => $detallesCompras,
             'detalles_ventas' => $detallesVentas,
-            'categorias' => $categorias
+            'categorias' => $categorias,
+
         ]);
+
+    }
+
+    public function producto()
+    {
+        $user = Auth::user();
+        return Inertia::render('Producto');
+    }
+    public function pedidos()
+    {
+        $user = Auth::user();
+        return Inertia::render('Pedidos');
+    }
+    public function dashboard()
+    {
+        $user = Auth::user();
+        return Inertia::render('Dashobard');
     }
 }

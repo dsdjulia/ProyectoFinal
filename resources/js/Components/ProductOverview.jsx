@@ -71,84 +71,64 @@ const ProductOverview = ({ producto }) => {
   };
 
   return (
-    <div className="p-6">
-      <header className="mb-6">
-        <h1 className="text-2xl font-bold">Detalle del Producto</h1>
-        <p className="text-lg text-gray-600">{producto}</p>
-      </header>
+    <div className=" flex flex-col lg:flex-row gap-12 bg-slate-100 px-12 ">
+      {/* Tarjeta del producto con imagen y detalles */}
+      <div className="w-full lg:w-2/5 bg-transparent p-4 flex flex-col items-center justify-around pt-20">
+        <div className="text-center">
+          <h1 className="text-xl font-bold">{producto.nombre}</h1>
+          <p className="text-gray-600 text-sm mt-1">{producto.descripcion}</p>
+        </div>
+        <img
+          src={producto.imagen}
+          alt={producto.nombre}
+          className="w-full max-w-xs object-contain rounded-md mb-4"
+        />
+      </div>
 
-      <div className="flex flex-col lg:flex-row gap-6">
-        {/* Gráficos */}
-        <div className="flex flex-col gap-6 w-full lg:w-3/5">
-          <div className="flex flex-col md:flex-row gap-4">
-            {/* Ingresos */}
-            <div className="p-4 bg-white rounded-md shadow  w-full md:w-1/2">
-              <h2 className="text-base font-bold mb-2">Ingresos Mensuales</h2>
-              <div className="h-48">
-                <Bar
-                  data={revenueData}
-                  options={{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    layout: { padding: 10 }
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* Donut */}
-            <div className="p-4 bg-white rounded-md shadow min-h-[200px] w-full md:w-1/2">
-              <h2 className="text-base font-bold mb-2">Distribución de Ventas</h2>
-              <div className="h-48">
-                <Doughnut
-                  data={salesDistributionData}
-                  options={{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: "left" } },
-                    layout: { padding: 10 }
-                  }}
-                />
-              </div>
+      {/* Gráficos y estadísticas */}
+      <div className="w-full lg:w-3/5 flex flex-col gap-6">
+        <div className="flex flex-col md:flex-row gap-4">
+          {/* Ingresos */}
+          <div className="p-4 bg-white rounded-md shadow w-full md:w-1/2">
+            <h2 className="text-sm font-bold mb-2">Ingresos Mensuales</h2>
+            <div className="h-40">
+              <Bar data={revenueData} options={{ responsive: true, maintainAspectRatio: false }} />
             </div>
           </div>
 
-          {/* Línea */}
-          <div className="p-4 bg-white rounded-md shadow min-h-[200px]">
-            <h2 className="text-base font-bold mb-2">Tendencia del Stock</h2>
-            <div className="h-32">
-              <Line
-                data={stockTrendData}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  layout: { padding: 10 }
-                }}
-              />
+          {/* Distribución */}
+          <div className="p-4 bg-white rounded-md shadow w-full md:w-1/2">
+            <h2 className="text-sm font-bold mb-2">Distribución de Ventas</h2>
+            <div className="h-40">
+              <Doughnut data={salesDistributionData} options={{ responsive: true, maintainAspectRatio: false }} />
             </div>
           </div>
         </div>
 
-        {/* Estadísticas */}
-        <div className="flex flex-col justify-start gap-8 w-full lg:w-2/5">
-          <div>
-            <h2 className="text-lg font-bold">Beneficio Neto Estimado</h2>
-            <p className="text-3xl font-semibold text-green-500">${netProfitEstimate}</p>
+        {/* Tendencia del stock */}
+        <div className="p-4 bg-white rounded-md shadow">
+          <h2 className="text-sm font-bold mb-2">Tendencia del Stock</h2>
+          <div className="h-32">
+            <Line data={stockTrendData} options={{ responsive: true, maintainAspectRatio: false }} />
           </div>
+        </div>
 
-          <div>
-            <h2 className="text-lg font-bold">Stock Disponible</h2>
-            <p className="text-3xl font-semibold text-yellow-500">{stock} unidades</p>
-            <p className="text-sm text-gray-500 mt-1">
-              Nivel recomendado de reabastecimiento:{" "}
-              <span className="font-medium">{recommendedReorder} unidades</span>
+        {/* Estadísticas */}
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="bg-white rounded-md shadow p-4 w-full md:w-1/3">
+            <h2 className="text-sm font-bold">Beneficio Neto Estimado</h2>
+            <p className="text-2xl font-semibold text-green-500 mt-1">${netProfitEstimate}</p>
+          </div>
+          <div className="bg-white rounded-md shadow p-4 w-full md:w-1/3">
+            <h2 className="text-sm font-bold">Stock Disponible</h2>
+            <p className="text-2xl font-semibold text-yellow-500 mt-1">{stock} unidades</p>
+            <p className="text-xs text-gray-500 mt-1">
+              Reorden sugerido: <span className="font-medium">{recommendedReorder} unidades</span>
             </p>
           </div>
-
-          <div>
-            <h2 className="text-lg font-bold">Estimación de Ventas Este Mes</h2>
-            <p className="text-3xl font-semibold text-blue-500">{estimatedSold} unidades</p>
+          <div className="bg-white rounded-md shadow p-4 w-full md:w-1/3">
+            <h2 className="text-sm font-bold">Ventas Estimadas Este Mes</h2>
+            <p className="text-2xl font-semibold text-blue-500 mt-1">{estimatedSold} unidades</p>
           </div>
         </div>
       </div>

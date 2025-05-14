@@ -36,7 +36,9 @@ Route::post('/inventario/producto', [ProductoController::class ,'store'])->name(
 Route::patch('/inventario/producto', [ProductoController::class ,'patch'])->name('producto.patch');
 
 
-
+Route::get('/producto', [AlmacenController::class ,'producto'])->name('producto.index');
+Route::get('/pedidos', [AlmacenController::class ,'pedidos'])->name('pedidos.index');
+Route::get('/dashboard', [AlmacenController::class ,'dashboard'])->name('dashboard.index');
 
 
 require __DIR__ . '/auth.php';
