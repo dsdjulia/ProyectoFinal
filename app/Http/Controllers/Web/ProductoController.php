@@ -54,7 +54,7 @@ class ProductoController extends Controller
             'precio_unitario' => 'required|numeric|min:1',
             //datos para la categoria
             'nombre_categoria' => 'nullable|string',
-            'perecedero' => 'nullable|string'
+            'perecedero' => 'nullable|boolean'
         ]);
 
         $categoria = Categoria::where('id',$data['id_categoria'])->first();
@@ -64,7 +64,7 @@ class ProductoController extends Controller
                 'id_user' => $user->id,
                 'nombre' => $data['nombre'],
                 'perecedero'=> $data['perecedero'],
-                'fecha_vencimiento' => $data['perecedero'] ? now()->addDays(14) : null
+                'fecha_vencimiento' => $data['perecedero'] ? now()->addDays(14)->toDate() : null
             ]);
         }
 
