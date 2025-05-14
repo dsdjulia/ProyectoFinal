@@ -65,7 +65,7 @@ class ProductoController extends Controller
                 'id_user' => $user->id,
                 'nombre' => $data['nombre'],
                 'perecedero'=> $data['perecedero'],
-                'fecha_vencimiento' => $data['perecedero'] ? now()->addDays(14) : null
+                'fecha_vencimiento' => $data['perecedero'] ? now()->addDays(14)->toDate() : null
             ]);
         }
 
