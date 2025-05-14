@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Web;
+use App\Http\Controllers\Controller;
 
 use Inertia\Inertia;
 use App\Models\Almacen;
@@ -9,7 +10,6 @@ use App\Models\Inventario;
 use App\Models\DetalleVenta;
 use Illuminate\Http\Request;
 use App\Models\DetalleCompra;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class InventarioController extends Controller

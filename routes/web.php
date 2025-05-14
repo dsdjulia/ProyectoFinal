@@ -3,11 +3,11 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\AlmacenController;
-use App\Http\Controllers\Web\InventarioController;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\ProductoController;
-use App\Http\Controllers\Web\NavegacionController;
 
+use App\Http\Controllers\Web\InventarioController;
+use App\Http\Controllers\Web\DetallesCompraController;
 
 
 // EDIT PROFILE
@@ -38,10 +38,10 @@ Route::patch('/inventario/producto', [ProductoController::class ,'patch'])->name
 
 
 Route::get('/producto', [AlmacenController::class ,'producto'])->name('producto.index');
-Route::get('/pedidos', [AlmacenController::class ,'pedidos'])->name('pedidos.index');
 
 
 Route::get('/dashboard', [InventarioController::class ,'dashboard'])->name('dashboard.index');
+Route::get('/pedidos', [DetallesCompraController::class ,'index'])->name('pedidos.index');
 
 
 require __DIR__ . '/auth.php';
