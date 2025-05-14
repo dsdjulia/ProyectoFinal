@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\ProductoController;
 
 use App\Http\Controllers\Web\InventarioController;
 use App\Http\Controllers\Web\DetallesCompraController;
+use App\Http\Controllers\Web\DetallesVentaController;
 
 
 // EDIT PROFILE
@@ -39,10 +40,9 @@ Route::patch('/inventario/producto', [ProductoController::class ,'patch'])->name
 Route::get('/producto', [AlmacenController::class ,'getProduct'])->name('producto.show');
 
 
-
-
 Route::get('/dashboard', [InventarioController::class ,'dashboard'])->name('dashboard.index');
 Route::get('/pedidos', [DetallesCompraController::class ,'index'])->name('pedidos.index');
+Route::get('/ventas', [DetallesVentaController::class ,'index'])->name('ventas.index');
 
 
 require __DIR__ . '/auth.php';
