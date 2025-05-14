@@ -3,7 +3,7 @@ import Sidebar from "@/Components/Sidebar";
 import Header from "@/Components/Header";
 import { usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-
+import Footer from "@/Components/Footer";
 import OrdenesCompra from "@/Components/OrdenesCompra";
 
 export default function Index() {
@@ -20,6 +20,7 @@ export default function Index() {
                     <div className=" overflow-y-auto bg-slate-100">
                         <OrdenesCompra props={props} />
                     </div>
+                    <Footer/>
                 </AuthenticatedLayout>
             </div>
         </div>

@@ -4,6 +4,7 @@ import Main from "@/Components/Main";
 import Header from "@/Components/Header";
 import { usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import Footer from "@/Components/Footer";
 
 export default function Index() {
     const { props } = usePage();
@@ -19,6 +20,7 @@ export default function Index() {
                     <div className=" overflow-y-auto bg-slate-100">
                         <Main props={props} />
                     </div>
+                    <Footer />
                 </AuthenticatedLayout>
             </div>
         </div>

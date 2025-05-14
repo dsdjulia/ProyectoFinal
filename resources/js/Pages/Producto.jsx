@@ -6,6 +6,7 @@ import { usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import ProductOverview from "@/Components/ProductOverview";
 import { useState } from "react";
+import Footer from "@/Components/Footer";
 
 export default function Index() {
     const { props } = usePage();
@@ -75,6 +76,7 @@ export default function Index() {
                         {/* Vista del producto */}
                         <ProductOverview producto={producto} />
                     </div>
+                    <Footer/>
                 </AuthenticatedLayout>
             </div>
         </div>

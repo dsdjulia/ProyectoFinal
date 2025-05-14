@@ -41,7 +41,7 @@ export function Sidebar({ active }) {
         onMouseEnter={() => setIsExpanded(true)}
         onMouseLeave={() => setIsExpanded(false)}
       >
-        <div className="flex flex-col flex-1 w-full gap-1 justify-start">
+        <div className="flex flex-col flex-1 w-full gap-2 justify-start ">
           {navItems.map((item) => (
             <NavItem
               key={item.id}
@@ -55,16 +55,7 @@ export function Sidebar({ active }) {
           ))}
         </div>
 
-        <div className="mb-2 w-full">
-          <NavItem
-            icon="settings"
-            label="Configuración"
-            routePath="/configuracion"
-            isExpanded={isExpanded}
-            isActive={active === "settings"}
-            onClick={() => handleNavigation("/configuracion")}
-          />
-        </div>
+
       </div>
     </div>
   );
