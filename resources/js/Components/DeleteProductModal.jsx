@@ -42,7 +42,7 @@ export default function DeleteProductModal({ product, totalAmount, onClose }) {
                     // Refrescar datos
                     // Esto reemplaza la página sin recargar, actualizando los datos directamente tengo que mirarlo
                     //Inertia.replace(route('inventario.index'), props);
-                    router.patch(route('inventario.index'));
+                    router.visit(route('inventario.index'));
                 },
                 onError: (error) => showModificableAlert('Error al reducir la cantidad del producto', `Error: ${JSON.stringify(error)}`, 'error'),
             });

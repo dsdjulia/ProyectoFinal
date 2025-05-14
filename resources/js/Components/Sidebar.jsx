@@ -16,9 +16,10 @@ function NavItem({ icon, label, isExpanded, isActive, onClick }) {
 
 export function Sidebar() {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [activeItem, setActiveItem] = useState("inventario");
+  const [activeItem, setActiveItem] = useState("dashboard");
 
   const navItems = [
+    { id: "dashboard", icon: "dashboard", label: "Dashboard" },
     { id: "inventario", icon: "inventory_2", label: "Inventario" },
     { id: "pedidos", icon: "shopping_cart", label: "Pedidos" },
     { id: "ventas", icon: "point_of_sale", label: "Ventas" },
@@ -27,13 +28,15 @@ export function Sidebar() {
   ];
 
   return (
-    <div className="flex items-center justify-center bg-transparent h-screen ">
+    <div className="flex items-center justify-center bg-transparent h-screen relative">
       <div
         className={`flex flex-col bg-slate-800 transition-all duration-300 pb-3 pt-6 px-6 h-full
           ${isExpanded ? "w-60 items-start" : "w-24 items-center"} `}
+        onMouseEnter={() => setIsExpanded(true)}
+        onMouseLeave={() => setIsExpanded(false)}
       >
-        {/* Contenedor de ítems apilados */}
-        <div className="flex flex-col flex-1 w-full gap-1 justify-start ">
+        {/* Ítems */}
+        <div className="flex flex-col flex-1 w-full gap-1 justify-start">
           {navItems.map((item) => (
             <NavItem
               key={item.id}
@@ -46,7 +49,7 @@ export function Sidebar() {
           ))}
         </div>
 
-        {/* Ítem de Configuración separado */}
+        {/* Configuración */}
         <div className="mb-2 w-full">
           <NavItem
             icon="settings"
@@ -56,18 +59,6 @@ export function Sidebar() {
             onClick={() => setActiveItem("settings")}
           />
         </div>
-      </div>
-
-      {/* Botón de expansión */}
-      <div
-        className="shadow-[0_5px_16px_0px_#3981F733] h-6 w-6 flex items-center justify-center rounded-full bg-slate-700 cursor-pointer text-white hover:text-slate-100 hover:bg-slate-500 absolute"
-        onClick={() => setIsExpanded(!isExpanded)}
-      >
-        {isExpanded ? (
-          <i className="material-icons text-xs">chevron_left</i>
-        ) : (
-          <i className="material-icons text-xs">chevron_right</i>
-        )}
       </div>
     </div>
   );
