@@ -36,8 +36,9 @@ Route::delete('/inventario/producto', [ProductoController::class ,'delete'])->na
 Route::post('/inventario/producto', [ProductoController::class ,'store'])->name('producto.store');
 Route::patch('/inventario/producto', [ProductoController::class ,'patch'])->name('producto.patch');
 
+Route::get('/producto', [AlmacenController::class ,'getProduct'])->name('producto.show');
 
-Route::get('/producto', [AlmacenController::class ,'producto'])->name('producto.index');
+
 
 
 Route::get('/dashboard', [InventarioController::class ,'dashboard'])->name('dashboard.index');

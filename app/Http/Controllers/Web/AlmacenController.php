@@ -96,6 +96,14 @@ class AlmacenController extends Controller
 
     }
 
+    public function getProduct(Request $request){
+        $user = Auth::user();
+
+        return Inertia::render('Producto');
+
+
+    }
+
 
     public function calcularStockStats($almacenes)
     {
