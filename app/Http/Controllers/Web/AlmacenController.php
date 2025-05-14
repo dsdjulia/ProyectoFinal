@@ -38,7 +38,7 @@ class AlmacenController extends Controller
         ]);
     
         // Redirigir a la página de inventario con un mensaje de éxito
-        return redirect()->route('inventario.index');
+        return $this->renderInventario($user);
 
     }
 
@@ -60,7 +60,7 @@ class AlmacenController extends Controller
 
         $almacen->delete();
 
-        return redirect()->route('inventario.index');
+        return $this->renderInventario($user);
 
     }
 

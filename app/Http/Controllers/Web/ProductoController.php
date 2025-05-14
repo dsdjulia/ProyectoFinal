@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use Inertia\Inertia;
 use App\Models\Almacen;
 use App\Models\Producto;
+use App\Models\Categoria;
 use App\Models\Inventario;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -42,7 +43,7 @@ class ProductoController extends Controller
 
         $data = $request->validate([
             // datos para crear producto
-            'id_categoria' => 'required|exists:categorias,id',
+            'id_categoria' => 'nullable|exists:categorias,id',
             'codigo' => 'required|string|unique:productos,codigo',
             'nombre' => 'required|string',
             'descripcion' => 'nullable|string',
@@ -50,11 +51,25 @@ class ProductoController extends Controller
             //datos para crear inventario
             'id_almacen' => 'required|exists:almacenes,id',
             'cantidad_actual' => 'required|integer|min:1',
-            'precio_unitario' => 'required|decimal|min:0',
+            'precio_unitario' => 'required|numeric|min:1',
+            //datos para la categoria
+            'nombre_categoria' => 'nullable|string',
+            'perecedero' => 'nullable|string'
         ]);
 
+        $categoria = Categoria::where('id',$data['id_categoria'])->first();
+
+        if(!$categoria){
+            $newCategoria = Categoria::create([
+                'id_user' => $user->id,
+                'nombre' => $data['nombre'],
+                'perecedero'=> $data['perecedero'],
+                'fecha_vencimiento' => $data['perecedero'] ? now()->addDays(14) : null
+            ]);
+        }
+
         $producto = Producto::create([
-            'id_categoria' => $data['id_categoria'],
+            'id_categoria' => $data['id_categoria'] ? $data['id_categoria'] : $newCategoria->id,
             'codigo' => $data['codigo'],
             'nombre'=> $data['nombre'],
             'descripcion'=> $data['descripcion'],
