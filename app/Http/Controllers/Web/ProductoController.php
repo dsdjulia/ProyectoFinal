@@ -43,7 +43,6 @@ class ProductoController extends Controller
 
         $data = $request->validate([
             // datos para crear producto
-            'id_categoria' => 'nullable|exists:categorias,id',
             'codigo' => 'required|string|unique:productos,codigo',
             'nombre' => 'required|string',
             'descripcion' => 'nullable|string',
@@ -54,12 +53,13 @@ class ProductoController extends Controller
             'cantidad_actual' => 'required|integer|min:1',
             'precio_unitario' => 'required|numeric|min:1',
             //datos para la categoria
+            'id_categoria' => 'exists:categorias,id',
             'nombre_categoria' => 'nullable|string',
             'perecedero' => 'nullable|boolean'
         ]);
 
         $categoria = Categoria::where('id',$data['id_categoria'])
-            ->where('nombre', $data['nombre_categoria'])->first();
+            ->where('id_user',$user->id)->first();
 
         if(!$categoria){
             $newCategoria = Categoria::create([
