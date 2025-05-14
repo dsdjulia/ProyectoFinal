@@ -198,7 +198,7 @@ const handleInputChange = (e) => {
                                         <input
                                             type="text"
                                             name="nombre_categoria"
-                                            value={formData.nombre}
+                                            value={formData.nombre_categoria}
                                             onChange={handleInputChange}
                                             className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
                                         />
