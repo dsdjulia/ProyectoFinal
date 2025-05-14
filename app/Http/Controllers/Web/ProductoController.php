@@ -64,7 +64,7 @@ class ProductoController extends Controller
         if(!$categoria){
             $newCategoria = Categoria::create([
                 'id_user' => $user->id,
-                'nombre' => $data['nombre'],
+                'nombre' => $data['nombre_categoria'],
                 'perecedero'=> $data['perecedero'],
                 'fecha_vencimiento' => $data['perecedero'] ? now()->addDays(14)->toDate() : null
             ]);
