@@ -12,6 +12,7 @@ export default function OrdenesCompra({ props }) {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [almacenes, setAlmacenes] = useState(props.data);
     const [categorias, setCategorias] = useState(props.categorias);
+    const [proveedores, setProveedores] = useState(props.all_proveedores);
 
     const handleAddProduct = (newProduct) => {
         setProducts([...products, newProduct]);
@@ -82,6 +83,7 @@ export default function OrdenesCompra({ props }) {
                     context="orders"
                     almacenes={almacenes}
                     categorias={categorias}
+                    proveedores={proveedores}
                 />
 
                 {isDeleteModalOpen && selectedProduct && (
