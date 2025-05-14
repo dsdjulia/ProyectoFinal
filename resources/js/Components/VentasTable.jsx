@@ -41,7 +41,7 @@ export default function VentasTable({ props }) {
                         >
                             <div>{venta.producto_id}</div>
                             <div className="col-span-2">{venta.nombre}</div>
-                            <div className="text-center">${venta.precio_unitario.toFixed(2)}</div>
+                            <div className="text-center">{venta.precio_unitario}</div>
                             <div className="text-center">{venta.cantidad}</div>
                             <div className="text-center">{venta.fecha_venta}</div>
                             <div className="text-center">{venta.cliente || "N/A"}</div>
