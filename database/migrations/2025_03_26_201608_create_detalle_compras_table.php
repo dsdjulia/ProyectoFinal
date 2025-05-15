@@ -19,7 +19,7 @@ return new class extends Migration
 
             $table->integer('cantidad_actual');
             $table->decimal('precio_unitario');
-            $table->boolean('estado')->default(true);
+            $table->boolean('estado');
             $table->date('fecha_vencimiento')->nullable();
             $table->timestamps();
 
