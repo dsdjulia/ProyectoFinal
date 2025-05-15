@@ -110,6 +110,7 @@ class DetallesCompraController extends Controller
         ]);
 
         DetalleCompra::create([
+            'id_almacen' => $almacen->id,
             'id_producto' => $producto->id,
             'id_compra' => $compra->id,
             'cantidad_actual' => $datos['cantidad_actual'],
@@ -124,7 +125,7 @@ class DetallesCompraController extends Controller
         $user = Auth::user();
 
         $datos = $request->validate([
-            
+
         ]);
 
         $inventario = Inventario::where('id_producto', $datos['precio_unitario'])
@@ -228,6 +229,7 @@ class DetallesCompraController extends Controller
         // Mapear detalles de compras y ventas (igual que antes)
         $detallesCompras = $detallesComprasRaw->map(function ($detalle) {
             return [
+                'id_almacen' => $detalle->almacen->id,
                 'cantidad_actual' => $detalle->cantidad_actual,
                 'codigo' => $detalle->producto->codigo,
                 'estado' => $detalle->estado,
