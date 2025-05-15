@@ -217,7 +217,7 @@ class DetallesCompraController extends Controller
         // Mapear detalles de compras y ventas (igual que antes)
         $detallesCompras = $detallesComprasRaw->map(function ($detalle) {
             return [
-                'cantidad' => $detalle->cantidad,
+                'cantidad_actual' => $detalle->cantidad_actual,
                 'codigo' => $detalle->producto->codigo,
                 'estado' => $detalle->estado,
                 'fecha_compra' => optional($detalle->compra)->fecha_compra,
@@ -239,7 +239,7 @@ class DetallesCompraController extends Controller
                     'codigo' => $detalle->producto->codigo,
                     'nombre' => $detalle->producto->nombre,
                     'precio_unitario' => $detalle->precio_unitario,
-                    'cantidad' => $detalle->cantidad,
+                    'cantidad_actual' => $detalle->cantidad_actual,
                     'fecha_venta' => optional($detalle->venta)->fecha_venta,
                     'cliente' => optional($detalle->venta->comprador)->nombre,
                 ];
