@@ -6,6 +6,8 @@ export default function Chip({ status }) {
 
     const chipStyle = statusStyles[status] || "bg-gray-300 border-gray-600 text-gray-700";
 
+    console.log(status);
+
     return (
       <span
         className={`inline-block px-3 py-1 text-sm font-semibold border rounded-full ${chipStyle}`}

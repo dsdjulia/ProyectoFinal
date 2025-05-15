@@ -23,7 +23,7 @@ export default function AddModal({
         precio_unitario: "",
         cantidad_actual: "",
         perecedero: false,
-        fecha_caducidad: "",
+        fecha_vencimiento: "",
         id_proveedor: "",
         nombre_categoria: "",
         nombre_proveedor: "",
@@ -304,8 +304,8 @@ export default function AddModal({
                             </label>
                             <input
                                 type="date"
-                                name="fecha_caducidad"
-                                value={formData.fecha_caducidad}
+                                name="fecha_vencimiento"
+                                value={formData.fecha_vencimiento}
                                 onChange={handleInputChange}
                                 className="w-full border rounded-lg py-2 px-4"
                             />
