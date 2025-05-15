@@ -101,7 +101,7 @@ export default function AddModal({
                 );
                 onAdd && onAdd(formData);
                 onClose();
-                router.visit(route("inventario.index"), {
+                router.visit(route("pedidos.index"), {
                     preserveScroll: true,
                 });
             },
