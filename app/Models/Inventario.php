@@ -19,6 +19,7 @@ class Inventario extends Model
         'cantidad_actual',
         'fecha_entrada',
         'fecha_salida',
+        'fecha_vencimiento',
     ];
 
 

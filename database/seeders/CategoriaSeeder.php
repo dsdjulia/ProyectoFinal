@@ -2,13 +2,14 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
+use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Categoria;
 /* Carbon es una clase que extiende la funcionalidad de DateTime en PHP y permite:
 obtener la fecha y hora actual, sumar o restar intervalos de tiempo,
 parsear cadenas a fechas, y formatear fechas */
-use Carbon\Carbon;
+use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class CategoriaSeeder extends Seeder
 {
@@ -17,30 +18,19 @@ class CategoriaSeeder extends Seeder
      */
     public function run(): void
     {
+        $user = User::where('email', 'user@gmail.com')->first();
 
+        if (!$user) {
+            $this->command->warn('Usuario user@gmail.com no encontrado. Ejecuta primero UserSeeder.');
+            return;
+        }
+    
         $categorias = [
-            [
-                'nombre'            => 'comida',
-                'perecedero'        => true,
-                'fecha_vencimiento' => Carbon::now()->addDays(7)->toDateString(),
-                'id_user'           => 1
-            ],
-            [
-                'nombre'            => 'ropa',
-                'perecedero'        => false,
-                'fecha_vencimiento' => null,
-                'id_user'           => 1
-
-            ],
-            [
-                'nombre'            => 'calzado',
-                'perecedero'        => false,
-                'fecha_vencimiento' => null,
-                'id_user'           => 1
-
-            ],
+            ['nombre' => 'comida',  'id_user' => $user->id],
+            ['nombre' => 'ropa',    'id_user' => $user->id],
+            ['nombre' => 'calzado', 'id_user' => $user->id],
         ];
-
+    
         foreach ($categorias as $categoria) {
             Categoria::create($categoria);
         }

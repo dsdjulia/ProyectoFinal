@@ -5,14 +5,18 @@ import Chip from "@/Components/Chip";
 import EditProductModal from "@/Components/EditProductModal";
 import DeleteProductModal from "@/Components/DeleteProductModal";
 
-export default function ProductTableRow({ product, context, almacenes = [], onUpdate, categorias = [], proveedores = [], }) {
+export default function ProductTableRow({
+    product,
+    context,
+    almacenes = [],
+    onUpdate,
+    categorias = [],
+    proveedores = [],
+    onDelete,
+    onCantidadClick, // ✅ nuevo prop para abrir modal de cantidad
+}) {
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-
-    const handleRowClick = () => {
-        console.log(`Selected: ${product.producto}`);
-        // Aquí puedes abrir un modal o redirigir a la vista de detalle
-    };
 
     const handleEditSave = (updatedData) => {
         if (onUpdate) {
@@ -21,27 +25,18 @@ export default function ProductTableRow({ product, context, almacenes = [], onUp
         setEditModalOpen(false);
     };
 
-    const handleSellProduct = (e) => {
-        e.stopPropagation();
-        console.log(`Vender producto: ${product.nombre}`);
-        // Aquí podrías abrir un modal de venta o similar
-    };
-
     return (
         <>
             <div
                 className="relative group grid grid-cols-8 items-center bg-white rounded-sm border border-slate-200 p-2 gap-4 hover:px-1 hover:border-slate-600 hover:border-2 transition-all cursor-pointer"
-                onClick={handleRowClick}
-                 title="Ver detalle del producto"
+                title="Ver detalle del producto"
             >
-
-
                 {/* Código */}
                 <div className="text-gray-700 font-semibold text-left pl-2">
                     {product.codigo}
                 </div>
 
-                {/* Nombre del producto con tooltip */}
+                {/* Nombre con tooltip */}
                 <div className="relative group flex items-center col-span-2">
                     <span className="text-gray-800 font-bold truncate w-full text-left">
                         {product.nombre}
@@ -51,24 +46,17 @@ export default function ProductTableRow({ product, context, almacenes = [], onUp
                     </div>
                 </div>
 
-                     {/* Imagen */}
-               {/*  <div className="flex justify-center">
-                    <div className="w-10 h-10 rounded-full overflow-hidden">
-                        <img
-                            src={product.imagen}
-                            alt={product.nombre}
-                            className="object-cover w-full h-full"
-                        />
-                    </div>
-                </div> */}
-
                 {/* Precio */}
-                <div className="text-gray-700 text-center">{product.precio_unitario} €</div>
+                <div className="text-gray-700 text-center">
+                    {product.precio_unitario} €
+                </div>
 
-                {/* Existencias */}
-                <div className="text-gray-700 text-center">{product.cantidad_actual}</div>
+                {/* Cantidad */}
+                <div className="text-gray-700 text-center">
+                    {product.cantidad_actual}
+                </div>
 
-                {/* Estado */}
+                {/* Estado o almacén */}
                 <div className="text-gray-700 text-center">
                     {context === "orders" ? (
                         <Chip status={product.estado || "false"} />
@@ -78,7 +66,9 @@ export default function ProductTableRow({ product, context, almacenes = [], onUp
                 </div>
 
                 {/* Fecha */}
-                <div className="text-gray-700 text-center">{product.fecha_entrada}</div>
+                <div className="text-gray-700 text-center">
+                    {product.fecha_entrada}
+                </div>
 
                 {/* Acciones */}
                 <div className="flex justify-center gap-4 items-center">
@@ -106,35 +96,54 @@ export default function ProductTableRow({ product, context, almacenes = [], onUp
                         <span className="material-icons">delete</span>
                     </div>
 
-                    {/* Vender */}
+                    {/* Vender o Recibir */}
                     <div
-                        className="flex items-center justify-center text-green-500 w-8 h-8 rounded-full hover:text-green-600 cursor-pointer"
-                        onClick={handleSellProduct}
-                        title="Vender producto"
+                        className={`flex items-center justify-center w-8 h-8 rounded-full cursor-pointer ${
+                            context === "orders"
+                                ? "text-blue-500 hover:text-blue-600"
+                                : "text-green-500 hover:text-green-600"
+                        }`}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (onCantidadClick) {
+                                onCantidadClick(
+                                    context === "orders" ? "recepcion" : "venta",
+                                    product
+                                );
+                            }
+                        }}
+                        title={
+                            context === "orders"
+                                ? "Marcar como recibido"
+                                : "Vender producto"
+                        }
                     >
-                        <span className="material-icons">sell</span>
+                        <span className="material-icons">
+                            {context === "orders" ? "inventory_2" : "sell"}
+                        </span>
                     </div>
                 </div>
             </div>
 
-            {/* Modales */}
+            {/* Modal de edición */}
             {isEditModalOpen && (
                 <EditProductModal
                     product={product}
                     context={context}
                     almacenes={almacenes}
                     categorias={categorias}
-                    producto={product}
                     proveedores={proveedores}
                     onClose={() => setEditModalOpen(false)}
                     onSave={handleEditSave}
                 />
             )}
 
+            {/* Modal de eliminación */}
             {isDeleteModalOpen && (
                 <DeleteProductModal
                     product={product}
                     onClose={() => setDeleteModalOpen(false)}
+                    onDelete={onDelete}
                 />
             )}
         </>

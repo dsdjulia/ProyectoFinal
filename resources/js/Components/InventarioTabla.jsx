@@ -3,20 +3,24 @@ import ProductTableRow from "./ProductTableRow";
 import CarruselAlmacenes from "./CarruselAlmacenes";
 import AddModal from "./AddModal";
 import DeleteProductModal from "./DeleteProductModal";
+import CantidadModal from "./CantidadModal";
 import DoughnutChart from "./DoughnutChart";
 import { router } from "@inertiajs/react";
 
 export default function InventarioTabla({ props }) {
-    const [almacenes, setAlmacenes] = useState(props.data);
-    const [products, setProducts] = useState(props.all_productos);
-    const [categorias, setCategorias] = useState(props.categorias);
-    const [proveedores, setProveedores] = useState(props.all_proveedores);
+    const [almacenes, setAlmacenes] = useState(props.data ?? []);
+    const [products, setProducts] = useState(props.all_productos ?? []);
+    const [categorias, setCategorias] = useState(props.categorias ?? []);
+    const [proveedores, setProveedores] = useState(props.all_proveedores ?? []);
 
     const [searchTerm, setSearchTerm] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [selected, setSelected] = useState([]);
+
+    const [isCantidadModalOpen, setCantidadModalOpen] = useState(false);
+    const [tipoOperacion, setTipoOperacion] = useState(""); // 'venta' o 'recepcion'
 
     const handleAddProduct = (newProduct) => {
         setProducts([...products, newProduct]);
@@ -25,6 +29,18 @@ export default function InventarioTabla({ props }) {
     const handleDeleteProduct = (product) => {
         setSelectedProduct(product);
         setIsDeleteModalOpen(true);
+    };
+
+    const handleCantidadConfirm = (cantidad) => {
+        if (!selectedProduct || !tipoOperacion) return;
+
+        router.post("/productos/actualizar-stock", {
+            producto_id: selectedProduct.id,
+            cantidad,
+            tipo: tipoOperacion,
+        });
+
+        setCantidadModalOpen(false);
     };
 
     const limpiarFiltros = () => {
@@ -50,14 +66,10 @@ export default function InventarioTabla({ props }) {
                 <div className="flex items-center border-r justify-start align-middle w-1/3">
                     <div className="flex items-center">
                         <div className="flex items-center justify-center w-14 h-14 bg-blue-100 rounded-full">
-                            <span className="material-icons text-blue-500 text-2xl">
-                                euro
-                            </span>
+                            <span className="material-icons text-blue-500 text-2xl">euro</span>
                         </div>
                         <div className="flex flex-col pl-4 justify-center">
-                            <p className="mt-2 text-gray-500 text-sm">
-                                PRECIO TOTAL INVENTARIO
-                            </p>
+                            <p className="mt-2 text-gray-500 text-sm">PRECIO TOTAL INVENTARIO</p>
                             <p className="text-xl font-bold text-gray-800">
                                 {props.total_precio.toFixed(2)}€
                             </p>
@@ -83,27 +95,21 @@ export default function InventarioTabla({ props }) {
                                 <span className="w-3 h-3 rounded-full bg-teal-500 mr-2"></span>
                                 <p className="text-sm text-gray-500">
                                     Disponible:{" "}
-                                    <span className="text-gray-800 font-medium">
-                                        {props.disponible}
-                                    </span>
+                                    <span className="text-gray-800 font-medium">{props.disponible}</span>
                                 </p>
                             </div>
                             <div className="flex items-center">
                                 <span className="w-3 h-3 rounded-full bg-orange-500 mr-2"></span>
                                 <p className="text-sm text-gray-500">
                                     Stock bajo:{" "}
-                                    <span className="text-gray-800 font-medium">
-                                        {props.lowStock}
-                                    </span>
+                                    <span className="text-gray-800 font-medium">{props.lowStock}</span>
                                 </p>
                             </div>
                             <div className="flex items-center">
                                 <span className="w-3 h-3 rounded-full bg-red-500 mr-2"></span>
                                 <p className="text-sm text-gray-500">
                                     Agotado:{" "}
-                                    <span className="text-gray-800 font-medium">
-                                        {props.agotado}
-                                    </span>
+                                    <span className="text-gray-800 font-medium">{props.agotado}</span>
                                 </p>
                             </div>
                         </div>
@@ -113,9 +119,7 @@ export default function InventarioTabla({ props }) {
 
             {/* Table Section */}
             <div className="bg-white rounded-lg overflow-hidden shadow-lg p-6 relative flex flex-col gap-6">
-                <h2 className="text-xl font-semibold text-gray-700 mb-4">
-                    Inventario
-                </h2>
+                <h2 className="text-xl font-semibold text-gray-700 mb-4">Inventario</h2>
 
                 <button
                     onClick={() => setIsModalOpen(true)}
@@ -177,6 +181,11 @@ export default function InventarioTabla({ props }) {
                                 context="stock"
                                 almacenes={almacenes}
                                 onDelete={() => handleDeleteProduct(product)}
+                                onCantidadClick={(tipo) => {
+                                    setSelectedProduct(product);
+                                    setTipoOperacion(tipo);
+                                    setCantidadModalOpen(true);
+                                }}
                             />
                         ))}
                 </div>
@@ -198,6 +207,14 @@ export default function InventarioTabla({ props }) {
                         onClose={() => setIsDeleteModalOpen(false)}
                     />
                 )}
+
+                <CantidadModal
+                    isOpen={isCantidadModalOpen}
+                    onClose={() => setCantidadModalOpen(false)}
+                    onConfirm={handleCantidadConfirm}
+                    producto={selectedProduct}
+                    tipo={tipoOperacion}
+                />
             </div>
         </div>
     );

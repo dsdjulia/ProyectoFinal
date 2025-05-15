@@ -28,36 +28,42 @@ class ProductoSeeder extends Seeder
                 'codigo'      => 'COM001',
                 'nombre'      => 'Manzana',
                 'descripcion' => 'Manzana roja fresca',
+                'perecedero'  => true,
             ],
             [
                 'categoria'   => 'comida',
                 'codigo'      => 'COM002',
                 'nombre'      => 'Pan',
                 'descripcion' => 'Pan integral recién horneado',
+                'perecedero'  => true,
             ],
             [
                 'categoria'   => 'ropa',
                 'codigo'      => 'ROP001',
                 'nombre'      => 'Camiseta',
                 'descripcion' => 'Camiseta de algodón unisex',
+                'perecedero'  => false,
             ],
             [
                 'categoria'   => 'ropa',
                 'codigo'      => 'ROP002',
                 'nombre'      => 'Pantalón',
                 'descripcion' => 'Pantalón vaquero slim fit',
+                'perecedero'  => false,
             ],
             [
                 'categoria'   => 'calzado',
                 'codigo'      => 'CAL001',
                 'nombre'      => 'Zapatillas',
                 'descripcion' => 'Zapatillas deportivas cómodas',
+                'perecedero'  => false,
             ],
             [
                 'categoria'   => 'calzado',
                 'codigo'      => 'CAL002',
                 'nombre'      => 'Botas',
                 'descripcion' => 'Botas de cuero resistentes',
+                'perecedero'  => false,
             ],
         ];
 
@@ -67,6 +73,7 @@ class ProductoSeeder extends Seeder
                 'codigo'       => $item['codigo'],
                 'nombre'       => $item['nombre'],
                 'descripcion'  => $item['descripcion'],
+                'perecedero'   => $item['perecedero'],
                 'imagen'       => 'sin-imagen.png',
             ]);
         }

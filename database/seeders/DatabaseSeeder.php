@@ -3,14 +3,15 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Almacen;
-use App\Models\DetalleCompra;
-use App\Models\DetalleVenta;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Producto;
-use App\Models\Inventario;
 use App\Models\Venta;
+use App\Models\Almacen;
+use App\Models\Producto;
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Inventario;
+use App\Models\DetalleVenta;
+use App\Models\DetalleCompra;
 use Illuminate\Database\Seeder;
+use Database\Seeders\UserSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,7 +20,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
         $this->call([
             UserSeeder::class,
             CategoriaSeeder::class,

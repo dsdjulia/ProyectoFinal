@@ -2,6 +2,7 @@ import { useState } from "react";
 import ProductTableRow from "./ProductTableRow";
 import AddModal from "./AddModal";
 import DeleteProductModal from "./DeleteProductModal";
+import CantidadModal from "./CantidadModal"; // 👈 Importación del nuevo modal
 import { router } from "@inertiajs/react";
 
 export default function OrdenesCompra({ props }) {
@@ -9,12 +10,15 @@ export default function OrdenesCompra({ props }) {
     const [almacenes, setAlmacenes] = useState(props.data);
     const [categorias, setCategorias] = useState(props.categorias);
     const [proveedores, setProveedores] = useState(props.all_proveedores);
-    const [compras, setCompras] = useState(props.detalles_compras);// pintar compras
+    const [compras, setCompras] = useState(props.detalles_compras);
 
     const [searchTerm, setSearchTerm] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
+
+    const [isCantidadModalOpen, setCantidadModalOpen] = useState(false);
+    const [tipoOperacion, setTipoOperacion] = useState(""); // "venta" o "recepcion"
 
     const handleAddProduct = (newProduct) => {
         setProducts([...products, newProduct]);
@@ -25,8 +29,19 @@ export default function OrdenesCompra({ props }) {
         setIsDeleteModalOpen(true);
     };
 
+    const handleCantidadConfirm = (cantidad) => {
+        console.log(`Cantidad ${tipoOperacion}:`, cantidad, "de", selectedProduct?.nombre);
+
+        // Aquí podrías usar router.post o router.put para actualizar backend:
+        router.post("/productos/actualizar-stock", {
+            producto_id: selectedProduct.id,
+            cantidad,
+            tipo: tipoOperacion,
+        });
+    };
+
     return (
-        <div className="w-full flex flex-col align-middle justify-start p-12 pt-0npm r pb-34 h-full">
+        <div className="w-full flex flex-col align-middle justify-start p-12 pt-0 pb-34 h-full">
             <div className="bg-white rounded-lg overflow-hidden shadow-lg mt-4">
                 <div className="flex justify-between items-center mb-4 p-6">
                     <h2 className="text-xl font-semibold text-gray-700">
@@ -74,6 +89,11 @@ export default function OrdenesCompra({ props }) {
                                 context="orders"
                                 almacenes={almacenes}
                                 onDelete={() => handleDeleteProduct(product)}
+                                onCantidadClick={(tipo) => {
+                                    setSelectedProduct(product);
+                                    setTipoOperacion(tipo); // "recepcion"
+                                    setCantidadModalOpen(true);
+                                }}
                             />
                         ))}
                 </div>
@@ -95,6 +115,14 @@ export default function OrdenesCompra({ props }) {
                         onClose={() => setIsDeleteModalOpen(false)}
                     />
                 )}
+
+                <CantidadModal
+                    isOpen={isCantidadModalOpen}
+                    onClose={() => setCantidadModalOpen(false)}
+                    onConfirm={handleCantidadConfirm}
+                    producto={selectedProduct}
+                    tipo={tipoOperacion}
+                />
             </div>
         </div>
     );

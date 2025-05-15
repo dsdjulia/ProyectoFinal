@@ -14,22 +14,22 @@ class AlmacenSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::pluck('id');
+        $user = User::where('email', 'user@gmail.com')->first();
 
-        if ($users->isEmpty()) {
-            $this->command->warn('No hay usuarios en la tabla users. Ejecuta primero UserSeeder.');
+        if (!$user) {
+            $this->command->warn('No se encontró el usuario user@gmail.com');
             return;
         }
 
         $almacenes = [
-            ['nombre'    => 'Almacén Central', 'direccion' => 'Calle Mayor 1, Madrid'],
-            ['nombre'    => 'Depósito Norte',   'direccion' => 'Calle Norte 10, Madrid'],
-            ['nombre'    => 'Sucursal Sur',     'direccion' => 'Avenida Sur 5, Barcelona'],
+            ['nombre' => 'Almacén Central', 'direccion' => 'Calle Mayor 1, Madrid'],
+            ['nombre' => 'Depósito Norte', 'direccion' => 'Calle Norte 10, Madrid'],
+            ['nombre' => 'Sucursal Sur',   'direccion' => 'Avenida Sur 5, Barcelona'],
         ];
 
         foreach ($almacenes as $data) {
             Almacen::create([
-                'id_user'   => $users->random(),
+                'id_user'   => $user->id,
                 'nombre'    => $data['nombre'],
                 'direccion' => $data['direccion'],
             ]);
