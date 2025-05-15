@@ -3,80 +3,52 @@
 namespace App\Http\Controllers\Web;
 
 use Inertia\Inertia;
-use App\Models\Almacen;
-use App\Models\Categoria;
-use App\Models\Inventario;
-use App\Models\DetalleVenta;
 use Illuminate\Http\Request;
-use App\Models\DetalleCompra;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
+use App\Models\{Almacen, Categoria, Inventario, DetalleCompra};
 
 class AlmacenController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
-        return $this->renderInventario($user);
+        return $this->renderInventario(Auth::user());
     }
 
     public function store(Request $request)
     {
-        $user = Auth::user();
+        $data = $this->validateAlmacen($request);
 
-        $data = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'direccion' => 'required|string|max:255'
-        ]);
-
-        // Crear el registro
         Almacen::create([
-            'id_user' => $user->id,
+            'id_user' => Auth::id(),
             'nombre' => $data['nombre'],
             'direccion' => $data['direccion'],
         ]);
 
-        // Redirigir a la página de inventario con un mensaje de éxito
-        return $this->renderInventario($user);
-
+        return $this->renderInventario(Auth::user());
     }
 
     public function delete(Request $request)
     {
-        $user = Auth::user();
+        $data = $request->validate(['id' => 'required|integer']);
 
-        $validated = $request->validate([
-            'id' => 'required|integer',
-        ]);
-
-        $id = intval($validated['id']);
-
-        $almacen = Almacen::where('id_user', $user->id)
-            ->where('id', $id)
-            ->firstOrFail();
-
+        $almacen = $this->findUserAlmacen($data['id']);
+        
         Inventario::where('id_almacen', $almacen->id)->delete();
-
         $almacen->delete();
 
-        return $this->renderInventario($user);
-
+        return $this->renderInventario(Auth::user());
     }
 
     public function update(Request $request)
     {
-        $user = Auth::user();
-
         $data = $request->validate([
             'id' => 'required|exists:almacenes,id',
             'nombre' => 'required|string|min:4|max:255',
             'direccion' => 'required|string|min:4|max:255',
         ]);
 
-        $almacen = Almacen::where('id_user', $user->id)
-            ->where('id', $data['id'])
-            ->firstOrFail();
+        $almacen = $this->findUserAlmacen($data['id']);
 
         $almacen->update([
             'nombre' => $data['nombre'],
@@ -84,75 +56,83 @@ class AlmacenController extends Controller
         ]);
 
         return redirect()->route('inventario.index');
-
     }
 
-    public function show(Request $request){
-        $user = Auth::user();
-
-        $almacenesIds = $request->input('almacenes');
-
-        return redirect()->route('inventario.index');
-
-    }
-
-    public function getProduct(Request $request){
-
+    public function getProduct()
+    {
         return Inertia::render('Producto');
     }
 
-
-    public function calcularStockStats($almacenes)
+    private function validateAlmacen(Request $request)
     {
-        $stats = [
-            'disponible' => 0,
-            'lowStock' => 0,
-            'agotado' => 0,
-        ];
+        return $request->validate([
+            'nombre' => 'required|string|max:255',
+            'direccion' => 'required|string|max:255',
+        ]);
+    }
 
-        if($almacenes){
-            foreach ($almacenes as $almacen) {
-                foreach ($almacen['productos'] as $producto) {
-                    $cantidad = $producto['cantidad_actual'];
+    private function findUserAlmacen($id)
+    {
+        return Almacen::where('id_user', Auth::id())
+            ->where('id', $id)
+            ->firstOrFail();
+    }
 
-                    if ($cantidad === 0) {
-                        $stats['agotado']++;
-                    } elseif ($cantidad < 10) {
-                        $stats['lowStock']++;
-                    } else {
-                        $stats['disponible']++;
-                    }
-                }
+    private function calcularStockStats($almacenes)
+    {
+        $stats = ['disponible' => 0, 'lowStock' => 0, 'agotado' => 0];
+
+        foreach ($almacenes as $almacen) {
+            foreach ($almacen['productos'] as $producto) {
+                $cantidad = $producto['cantidad_actual'];
+                match (true) {
+                    $cantidad === 0 => $stats['agotado']++,
+                    $cantidad < 10 => $stats['lowStock']++,
+                    default => $stats['disponible']++,
+                };
             }
         }
 
         return $stats;
     }
 
-
     public function renderInventario($user, $almacenesIds = null)
-        {
-        $almacenesQuery = Almacen::with(['productos' => function ($query) {
-            $query->withPivot('id_almacen','cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
-        }])
-        ->where('id_user', $user->id);
+    {
+        $almacenes = $this->obtenerAlmacenesConProductos($user->id, $almacenesIds);
+        $stats = $this->calcularStockStats($almacenes);
+        $allProductos = collect($almacenes)->pluck('productos')->flatten(1)->values();
+        $allProveedores = $this->obtenerProveedores($user->id);
+        $categorias = Categoria::where('id_user', $user->id)->with('productos')->get();
 
-        if ($almacenesIds && is_array($almacenesIds)) {
-            $almacenesQuery->whereIn('id', $almacenesIds);
+        return Inertia::render('Inventario', [
+            'status' => true,
+            'message' => 'Almacenes encontrados',
+            'count' => count($almacenes),
+            'total_productos' => collect($almacenes)->sum('productos_count'),
+            'total_unidades' => collect($almacenes)->sum('cantidad_total'),
+            'total_precio' => collect($almacenes)->sum('precio_total'),
+            'disponible' => $stats['disponible'],
+            'lowStock' => $stats['lowStock'],
+            'agotado' => $stats['agotado'],
+            'data' => $almacenes,
+            'all_productos' => $allProductos,
+            'all_proveedores' => $allProveedores,
+            'categorias' => $categorias,
+        ]);
+    }
+
+    private function obtenerAlmacenesConProductos($userId, $almacenesIds = null)
+    {
+        $query = Almacen::with(['productos' => function ($q) {
+            $q->withPivot('id_almacen', 'cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
+        }])->where('id_user', $userId);
+
+        if (is_array($almacenesIds)) {
+            $query->whereIn('id', $almacenesIds);
         }
 
-        $allProductos = [];
-
-        $almacenes = $almacenesQuery->get()->map(function ($almacen) use (&$allProductos) {
+        return $query->get()->map(function ($almacen) {
             $productos = $almacen->productos;
-
-            $precioTotal = $productos->sum(fn($producto) =>
-                $producto->pivot->cantidad_actual * $producto->pivot->precio_unitario
-            );
-
-            $cantidadTotal = $productos->sum(fn($producto) =>
-                $producto->pivot->cantidad_actual
-            );
 
             $productosData = $productos->map(function ($producto) use ($almacen) {
                 return [
@@ -169,91 +149,26 @@ class AlmacenController extends Controller
                 ];
             })->toArray();
 
-            // Acumular productos en la lista global
-            $allProductos = array_merge($allProductos, $productosData);
-
             return [
                 'id' => $almacen->id,
                 'nombre' => $almacen->nombre,
                 'direccion' => $almacen->direccion,
-                'productos_count' => $productos->count(),
-                'cantidad_total' => $cantidadTotal,
-                'precio_total' => $precioTotal,
+                'productos_count' => count($productos),
+                'cantidad_total' => $productos->sum('pivot.cantidad_actual'),
+                'precio_total' => $productos->sum(fn($p) => $p->pivot->cantidad_actual * $p->pivot->precio_unitario),
                 'productos' => $productosData,
             ];
         });
+    }
 
-        $stats = $this->calcularStockStats($almacenes);
-
-        $detallesComprasRaw = DetalleCompra::with(['producto', 'compra.proveedor'])
-            ->whereHas('compra', function ($query) use ($user){
-                $query->where('id_user', $user->id);
-            })
-            ->get();
-
-        $all_proveedores = $detallesComprasRaw
+    private function obtenerProveedores($userId)
+    {
+        return DetalleCompra::with(['producto', 'compra.proveedor'])
+            ->whereHas('compra', fn($q) => $q->where('id_user', $userId))
+            ->get()
             ->pluck('compra.proveedor')
             ->filter()
             ->unique('id')
             ->values();
-
-        $detallesCompras = $detallesComprasRaw->map(function ($detalle) {
-            return [
-                'producto_id' => $detalle->id_producto,
-                'codigo' => $detalle->producto->codigo,
-                'nombre' => $detalle->producto->nombre,
-                'precio_unitario' => $detalle->precio_unitario,
-                'cantidad' => $detalle->cantidad,
-                'estado' => $detalle->estado,
-                'fecha_compra' => optional($detalle->compra)->fecha_compra,
-                'proveedor' => optional($detalle->compra->proveedor)->nombre,
-            ];
-        });
-
-        $detallesVentas = DetalleVenta::with(['producto', 'venta.comprador'])
-            ->whereHas('venta', function ($query) use ($user){
-                $query->where('id_user',$user->id);
-            })
-            ->get()
-            ->map(function ($detalle) {
-            return [
-                'producto_id' => $detalle->id_producto,
-                'codigo' => $detalle->producto->codigo,
-                'nombre' => $detalle->producto->nombre,
-                'precio_unitario' => $detalle->precio_unitario,
-                'cantidad' => $detalle->cantidad,
-                'fecha_venta' => optional($detalle->venta)->fecha_venta,
-                'cliente' => optional($detalle->venta->comprador)->nombre,
-            ];
-        });
-
-        $allAlmacenes = Almacen::with(['productos' => function ($query) {
-            $query->withPivot('id_almacen','cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
-        }])
-        ->where('id_user', $user->id)->get();
-
-        $categorias = Categoria::where('id_user', $user->id)->with('productos')->get();
-
-
-        return Inertia::render('Inventario', props: [
-            'status' => true,
-            'message' => 'Almacenes encontrados',
-            'count' => $almacenes->count(),
-            'total_productos' => $almacenes->sum('productos_count'),
-            'total_unidades' => $almacenes->sum('cantidad_total'),
-            'total_precio' => $almacenes->sum('precio_total'),
-            'disponible' => $stats['disponible'],
-            'lowStock' => $stats['lowStock'],
-            'agotado' => $stats['agotado'],
-            'data' => $almacenes,
-            'all_productos' => $allProductos,
-            'all_almacenes' => $allAlmacenes,
-            'all_proveedores' =>$all_proveedores,
-            'detalles_compras' => $detallesCompras,
-            'detalles_ventas' => $detallesVentas,
-            'categorias' => $categorias,
-
-        ]);
-
     }
 }

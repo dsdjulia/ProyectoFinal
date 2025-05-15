@@ -56,7 +56,7 @@ class ProductoController extends Controller
             'cantidad_actual' => 'required|integer|min:1',
             'precio_unitario' => 'required|numeric|min:1',
             //datos para la categoria
-            'id_categoria' => 'exists:categorias,id',
+            'id_categoria' => '',
             'nombre_categoria' => 'nullable|string',
             'perecedero' => 'nullable|boolean'
         ]);
