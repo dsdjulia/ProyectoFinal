@@ -125,11 +125,14 @@ class DetallesCompraController extends Controller
         $user = Auth::user();
 
         $datos = $request->validate([
-
+            ''
         ]);
 
-        $inventario = Inventario::where('id_producto', $datos['precio_unitario'])
+        $detalleCompra = DetalleCompra::where('');
+
+        $inventario = Inventario::where('id_producto', $datos['id_producto'])
             ->where('precio_unitario', $datos['precio_unitario'])
+            ->where('codigo', $datos['codigo'])
             ->first();
 
         if ($inventario) {
@@ -230,6 +233,7 @@ class DetallesCompraController extends Controller
         $detallesCompras = $detallesComprasRaw->map(function ($detalle) {
             return [
                 'id_almacen' => $detalle->almacen->id,
+                'detalle_id' => $detalle->id,
                 'cantidad_actual' => $detalle->cantidad_actual,
                 'codigo' => $detalle->producto->codigo,
                 'estado' => $detalle->estado,
