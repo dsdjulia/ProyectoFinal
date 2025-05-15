@@ -75,7 +75,7 @@ if (!producto) {
 
 
   return (
-    <div className="w-full bg-slate-100 p-6 h-full">
+    <div className="w-full bg-slate-100 p-6 h-[80vh]">
       <h2 className="text-xl font-bold text-slate-700 mb-2">Ningún Producto Seleccionado</h2>
       <p className="text-sm text-gray-600 mb-4">Primero selecciona un producto para su visualización</p>
 
@@ -148,7 +148,7 @@ if (!producto) {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-12 bg-slate-100 px-12 mb-20">
+    <div className="flex flex-col lg:flex-row gap-12 bg-slate-100 px-12 mb-20 ">
       {/* Tarjeta del producto con imagen y detalles */}
       <div className="w-full lg:w-2/5 bg-transparent p-4 flex flex-col items-center justify-around pt-20">
         <div className="text-center">

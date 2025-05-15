@@ -48,7 +48,7 @@ export default function Index() {
                 </div>
 
                 <AuthenticatedLayout>
-                    <div className="overflow-y-auto flex flex-col items-center w-full mt-8 px-6 gap-6 h-screen">
+                    <div className="overflow-y-auto flex flex-col items-center w-full mt-8 px-6 gap-6 h-[90vh]">
                         {/* Formulario de búsqueda */}
                         <div className="w-full  flex justify-start h-[24px]">
                             <form
