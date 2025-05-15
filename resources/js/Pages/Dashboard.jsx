@@ -1,20 +1,47 @@
 // resources/js/Pages/Dashboard/Index.jsx
 import Sidebar from "@/Components/Sidebar";
-import Main from "@/Components/Main";
-import Header from "@/Components/Header";
 import { usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Footer from "@/Components/Footer";
+import { useState } from "react";
+import { Bar, Doughnut, Line } from "react-chartjs-2";
+import Main from "@/Components/Main";
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+    ArcElement,
+    Filler,
+} from "chart.js";
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+    ArcElement,
+    Filler
+);
 
 export default function Index() {
     const { props } = usePage();
-    console.log(props);
+    const [timeRange, setTimeRange] = useState("este-mes");
 
     return (
         <div className="flex flex-col w-full">
             <div className="flex w-full bg-slate-100">
                 <div className="sticky top-0 left-0 h-screen">
-                    <Sidebar active={"dashboard"}/>
+                    <Sidebar active={"dashboard"} />
                 </div>
                 <AuthenticatedLayout>
                     <div className=" overflow-y-auto bg-slate-100">

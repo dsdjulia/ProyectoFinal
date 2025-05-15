@@ -84,13 +84,13 @@ class DetallesCompraController extends Controller
 
         $detallesCompras = $detallesComprasRaw->map(function ($detalle) {
             return [
-                'producto_id' => $detalle->id_producto,
-                'codigo' => $detalle->producto->codigo,
-                'nombre' => $detalle->producto->nombre,
-                'precio_unitario' => $detalle->precio_unitario,
                 'cantidad' => $detalle->cantidad,
+                'codigo' => $detalle->producto->codigo,
                 'estado' => $detalle->estado,
                 'fecha_compra' => optional($detalle->compra)->fecha_compra,
+                'nombre' => $detalle->producto->nombre,
+                'producto_id' => $detalle->id_producto,
+                'precio_unitario' => $detalle->precio_unitario,
                 'proveedor' => optional($detalle->compra->proveedor)->nombre,
             ];
         });

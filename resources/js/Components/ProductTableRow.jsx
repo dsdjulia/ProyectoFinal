@@ -11,7 +11,7 @@ export default function ProductTableRow({ product, context, almacenes = [], onUp
 
     const handleRowClick = () => {
         console.log(`Selected: ${product.producto}`);
-        
+        // Aquí puedes abrir un modal o redirigir a la vista de detalle
     };
 
     const handleEditSave = (updatedData) => {
@@ -21,22 +21,20 @@ export default function ProductTableRow({ product, context, almacenes = [], onUp
         setEditModalOpen(false);
     };
 
+    const handleSellProduct = (e) => {
+        e.stopPropagation();
+        console.log(`Vender producto: ${product.nombre}`);
+        // Aquí podrías abrir un modal de venta o similar
+    };
+
     return (
         <>
             <div
-                className="grid grid-cols-8 items-center bg-white rounded-sm border border-slate-200 p-2 gap-4 hover:px-1 hover:border-slate-600 hover:border-2 transition-all cursor-pointer "
+                className="relative group grid grid-cols-8 items-center bg-white rounded-sm border border-slate-200 p-2 gap-4 hover:px-1 hover:border-slate-600 hover:border-2 transition-all cursor-pointer"
                 onClick={handleRowClick}
+                 title="Ver detalle del producto"
             >
-                {/* Imagen */}
-               {/*  <div className="flex justify-center">
-                    <div className="w-10 h-10 rounded-full overflow-hidden">
-                        <img
-                            src={product.imagen}
-                            alt={product.nombre}
-                            className="object-cover w-full h-full"
-                        />
-                    </div>
-                </div> */}
+
 
                 {/* Código */}
                 <div className="text-gray-700 font-semibold text-left pl-2">
@@ -48,10 +46,21 @@ export default function ProductTableRow({ product, context, almacenes = [], onUp
                     <span className="text-gray-800 font-bold truncate w-full text-left">
                         {product.nombre}
                     </span>
-                    <div className="absolute top-6 left-6 max-w-xs bg-gray-700 text-white text-xs rounded-md py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 overflow-hidden text-ellipsis whitespace-nowrap">
+                    <div className="absolute top-6 left-6 max-w-xs bg-slate-700 text-white text-xs rounded-md py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 overflow-hidden text-ellipsis whitespace-nowrap">
                         {product.nombre}
                     </div>
                 </div>
+
+                     {/* Imagen */}
+               {/*  <div className="flex justify-center">
+                    <div className="w-10 h-10 rounded-full overflow-hidden">
+                        <img
+                            src={product.imagen}
+                            alt={product.nombre}
+                            className="object-cover w-full h-full"
+                        />
+                    </div>
+                </div> */}
 
                 {/* Precio */}
                 <div className="text-gray-700 text-center">{product.precio_unitario} €</div>
@@ -72,24 +81,38 @@ export default function ProductTableRow({ product, context, almacenes = [], onUp
                 <div className="text-gray-700 text-center">{product.fecha_entrada}</div>
 
                 {/* Acciones */}
-                <div className="flex justify-center gap-8 items-center">
+                <div className="flex justify-center gap-4 items-center">
+                    {/* Editar */}
                     <div
                         className="flex items-center justify-center w-8 h-8 rounded-full text-slate-500 hover:text-slate-700 cursor-pointer"
                         onClick={(e) => {
                             e.stopPropagation();
                             setEditModalOpen(true);
                         }}
+                        title="Editar producto"
                     >
                         <span className="material-icons">edit</span>
                     </div>
+
+                    {/* Eliminar */}
                     <div
                         className="flex items-center justify-center text-red-400 w-8 h-8 rounded-full hover:text-red-500 cursor-pointer"
                         onClick={(e) => {
                             e.stopPropagation();
                             setDeleteModalOpen(true);
                         }}
+                        title="Eliminar producto"
                     >
                         <span className="material-icons">delete</span>
+                    </div>
+
+                    {/* Vender */}
+                    <div
+                        className="flex items-center justify-center text-green-500 w-8 h-8 rounded-full hover:text-green-600 cursor-pointer"
+                        onClick={handleSellProduct}
+                        title="Vender producto"
+                    >
+                        <span className="material-icons">sell</span>
                     </div>
                 </div>
             </div>

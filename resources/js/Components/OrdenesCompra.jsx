@@ -6,13 +6,15 @@ import { router } from "@inertiajs/react";
 
 export default function OrdenesCompra({ props }) {
     const [products, setProducts] = useState(props.all_productos);
+    const [almacenes, setAlmacenes] = useState(props.data);
+    const [categorias, setCategorias] = useState(props.categorias);
+    const [proveedores, setProveedores] = useState(props.all_proveedores);
+    const [compras, setCompras] = useState(props.detalles_compras);// pintar compras
+
     const [searchTerm, setSearchTerm] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const [almacenes, setAlmacenes] = useState(props.data);
-    const [categorias, setCategorias] = useState(props.categorias);
-    const [proveedores, setProveedores] = useState(props.all_proveedores);
 
     const handleAddProduct = (newProduct) => {
         setProducts([...products, newProduct]);
