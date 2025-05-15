@@ -1,3 +1,4 @@
+import { showModificableAlert } from "@/utils/alerts";
 import { router } from "@inertiajs/react";
 import { useState } from "react";
 
@@ -7,7 +8,7 @@ export default function CantidadModal({ isOpen, onClose, onConfirm, producto, ti
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        router.post(route("proveedores.index"), producto, {
+        router.post(route("pedidos.addInventario"), producto, {
             onSuccess: () => {
                 showModificableAlert(
                     "Pedido recibido",
@@ -35,7 +36,7 @@ export default function CantidadModal({ isOpen, onClose, onConfirm, producto, ti
     if (!isOpen) return null;
 
     const esVenta = tipo === "venta";
-    const titulo = esVenta ? "¿Cuántas unidades has vendido?" : "¿Cuántas unidades has recibido?";
+    const titulo = esVenta ? "¿Cuántas unidades has vendido?" : "¿Has recibido el pedido?";
     const botonTexto = esVenta ? "Registrar venta" : "Registrar recepción";
     const color = esVenta ? "green" : "blue";
 
@@ -46,18 +47,11 @@ export default function CantidadModal({ isOpen, onClose, onConfirm, producto, ti
                 <p className="text-gray-600 mb-4">
                     Producto: <strong>{producto?.nombre}</strong>
                 </p>
+                <p className="text-gray-600 mb-4">
+                    Cantidad: <strong>{producto?.cantidad_actual}</strong>
+                </p>
                 <form onSubmit={handleSubmit}>
-                    <label className="block mb-2 text-sm font-medium text-gray-700">
-                        Cantidad:
-                    </label>
-                    <input
-                        type="number"
-                        min="1"
-                        value={cantidad}
-                        onChange={(e) => setCantidad(e.target.value)}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-slate-500"
-                        required
-                    />
+
                     <div className="flex justify-end gap-3">
                         <button
                             type="button"
