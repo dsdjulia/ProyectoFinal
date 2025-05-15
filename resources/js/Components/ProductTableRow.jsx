@@ -5,7 +5,7 @@ import Chip from "@/Components/Chip";
 import EditProductModal from "@/Components/EditProductModal";
 import DeleteProductModal from "@/Components/DeleteProductModal";
 
-export default function ProductTableRow({ product, context, almacenes = [], onUpdate }) {
+export default function ProductTableRow({ product, context, almacenes = [], onUpdate, categorias = [], proveedores = [], }) {
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
@@ -100,6 +100,9 @@ export default function ProductTableRow({ product, context, almacenes = [], onUp
                     product={product}
                     context={context}
                     almacenes={almacenes}
+                    categorias={categorias}
+                    producto={product}
+                    proveedores={proveedores}
                     onClose={() => setEditModalOpen(false)}
                     onSave={handleEditSave}
                 />

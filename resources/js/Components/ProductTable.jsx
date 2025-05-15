@@ -191,6 +191,9 @@ export default function ProductTable({props}) {
                                         product={product}
                                         context="stock"
                                         almacenes={almacenes}
+                                        categorias={categorias}
+                                        productos={products}
+                                        proveedores={proveedores}
                                         onDelete={() => handleDeleteProduct(product)}
                                     />
                                 ))}
