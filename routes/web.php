@@ -42,6 +42,7 @@ Route::get('/inventario/producto', [AlmacenController::class ,'getProduct'])->na
 
 Route::get('/pedidos', [DetallesCompraController::class ,'index'])->name('pedidos.index');
 Route::post('/pedidos', [DetallesCompraController::class ,'store'])->name('pedidos.store');
+Route::post('/pedidos', [DetallesCompraController::class ,'addInventario'])->name('pedidos.addInventario');
 
 
 Route::get('/dashboard', [InventarioController::class ,'dashboard'])->name('dashboard.index');

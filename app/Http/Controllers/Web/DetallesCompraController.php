@@ -125,10 +125,17 @@ class DetallesCompraController extends Controller
         $user = Auth::user();
 
         $datos = $request->validate([
-            ''
+            //Producto para buscar inventario
+            'id_producto' ,
+            'precio_unitario' ,
+            'codigo' ,
+            'detalle_id'
         ]);
 
-        $detalleCompra = DetalleCompra::where('');
+        $detalleCompra = DetalleCompra::where('id',$datos['detalle_id'])
+            ->first();
+        
+        $detalleCompra->estado = true;
 
         $inventario = Inventario::where('id_producto', $datos['id_producto'])
             ->where('precio_unitario', $datos['precio_unitario'])
