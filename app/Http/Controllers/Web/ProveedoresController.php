@@ -26,7 +26,10 @@ class ProveedoresController extends Controller
             ->filter()
             ->unique('id')
             ->values();
+
         return Inertia::render('Proveedores', [
+            'status' => true,
+            'mensaje' => 'Proveedores encontrados',
             'proveedores' => $all_proveedores
         ]);
     }
