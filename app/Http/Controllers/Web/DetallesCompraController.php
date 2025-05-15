@@ -141,6 +141,7 @@ class DetallesCompraController extends Controller
             ->first();
         
         $detalleCompra->estado = true;
+        $detalleCompra->save();
 
         $inventario = Inventario::where('id_producto', $datos['id_producto'])
             ->where('precio_unitario', $datos['precio_unitario'])
