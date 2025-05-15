@@ -35,8 +35,9 @@ class AlmacenController extends Controller
         $almacen = $this->findUserAlmacen($data['id']);
         
         Inventario::where('id_almacen', $almacen->id)->delete();
+        DetalleCompra::where('id_almacen', $almacen->id)->delete();
+        
         $almacen->delete();
-
         return $this->renderInventario(Auth::user());
     }
 

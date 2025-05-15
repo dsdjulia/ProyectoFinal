@@ -1,171 +1,177 @@
 <?php
 
 namespace App\Http\Controllers\Web;
-use App\Http\Controllers\Controller;
 
+use Exception;
 use Inertia\Inertia;
-use App\Models\Almacen;
-use App\Models\Categoria;
-use App\Models\Inventario;
+use App\Models\Gasto;
+use App\Models\Venta;
+use App\Models\Producto;
 use App\Models\DetalleVenta;
 use Illuminate\Http\Request;
-use App\Models\DetalleCompra;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class InventarioController extends Controller
 {
-    //
-
-    public function dashboard(){
-
+    public function dashboard(Request $request)
+    {
         $user = Auth::user();
 
-        $almacenesQuery = Almacen::with(['productos' => function ($query) {
-            $query->withPivot('id_almacen','cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
-        }])
-        ->where('id_user', $user->id);
-
-        $allProductos = [];
-
-        $almacenes = $almacenesQuery->get()->map(function ($almacen) use (&$allProductos) {
-            $productos = $almacen->productos;
-
-            $precioTotal = $productos->sum(fn($producto) =>
-                $producto->pivot->cantidad_actual * $producto->pivot->precio_unitario
-            );
-
-            $cantidadTotal = $productos->sum(fn($producto) =>
-                $producto->pivot->cantidad_actual
-            );
-
-            $productosData = $productos->map(function ($producto) use ($almacen) {
-                return [
-                    'id' => $producto->id,
-                    'codigo' => $producto->codigo,
-                    'nombre' => $producto->nombre,
-                    'precio_unitario' => $producto->pivot->precio_unitario,
-                    'cantidad_actual' => $producto->pivot->cantidad_actual,
-                    'fecha_entrada' => $producto->pivot->fecha_entrada,
-                    'fecha_salida' => $producto->pivot->fecha_salida,
-                    'imagen' => $producto->imagen,
-                    'almacen_id' => $almacen->id,
-                    'almacen_nombre' => $almacen->nombre,
-                ];
-            })->toArray();
-
-            // Acumular productos en la lista global
-            $allProductos = array_merge($allProductos, $productosData);
-
-            return [
-                'id' => $almacen->id,
-                'nombre' => $almacen->nombre,
-                'direccion' => $almacen->direccion,
-                'productos_count' => $productos->count(),
-                'cantidad_total' => $cantidadTotal,
-                'precio_total' => $precioTotal,
-                'productos' => $productosData,
-            ];
-        });
-
-        $stats = $this->calcularStockStats($almacenes);
-
-        $detallesComprasRaw = DetalleCompra::with(['producto', 'compra.proveedor'])
-            ->whereHas('compra', function ($query) use ($user){
-                $query->where('id_user', $user->id);
-            })
-            ->get();
-
-        $all_proveedores = $detallesComprasRaw
-            ->pluck('compra.proveedor')
-            ->filter()
-            ->unique('id')
-            ->values();
-
-        $detallesCompras = $detallesComprasRaw->map(function ($detalle) {
-            return [
-                'producto_id' => $detalle->id_producto,
-                'codigo' => $detalle->producto->codigo,
-                'nombre' => $detalle->producto->nombre,
-                'precio_unitario' => $detalle->precio_unitario,
-                'cantidad' => $detalle->cantidad,
-                'estado' => $detalle->estado,
-                'fecha_compra' => optional($detalle->compra)->fecha_compra,
-                'proveedor' => optional($detalle->compra->proveedor)->nombre,
-            ];
-        });
-
-        $detallesVentas = DetalleVenta::with(['producto', 'venta.comprador'])
-            ->whereHas('venta', function ($query) use ($user){
-                $query->where('id_user',$user->id);
-            })
-            ->get()
-            ->map(function ($detalle) {
-            return [
-                'producto_id' => $detalle->id_producto,
-                'codigo' => $detalle->producto->codigo,
-                'nombre' => $detalle->producto->nombre,
-                'precio_unitario' => $detalle->precio_unitario,
-                'cantidad' => $detalle->cantidad,
-                'fecha_venta' => optional($detalle->venta)->fecha_venta,
-                'cliente' => optional($detalle->venta->comprador)->nombre,
-            ];
-        });
-
-        $allAlmacenes = Almacen::with(['productos' => function ($query) {
-            $query->withPivot('id_almacen','cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
-        }])
-        ->where('id_user', $user->id)->get();
-
-        $categorias = Categoria::where('id_user', $user->id)->with('productos')->get();
-
-
-        return Inertia::render('Dashboard', props: [
-            'status' => true,
-            'message' => 'Almacenes encontrados',
-            'count' => $almacenes->count(),
-            'total_productos' => $almacenes->sum('productos_count'),
-            'total_unidades' => $almacenes->sum('cantidad_total'),
-            'total_precio' => $almacenes->sum('precio_total'),
-            'disponible' => $stats['disponible'],
-            'lowStock' => $stats['lowStock'],
-            'agotado' => $stats['agotado'],
-            'data' => $almacenes,
-            'all_productos' => $allProductos,
-            'all_almacenes' => $allAlmacenes,
-            'all_proveedores' =>$all_proveedores,
-            'detalles_compras' => $detallesCompras,
-            'detalles_ventas' => $detallesVentas,
-            'categorias' => $categorias,
-
-        ]);
-        
-    }
-    
-    public function calcularStockStats($almacenes)
-    {
-        $stats = [
-            'disponible' => 0,
-            'lowStock' => 0,
-            'agotado' => 0,
-        ];
-
-        if($almacenes){
-            foreach ($almacenes as $almacen) {
-                foreach ($almacen['productos'] as $producto) {
-                    $cantidad = $producto['cantidad_actual'];
-
-                    if ($cantidad === 0) {
-                        $stats['agotado']++;
-                    } elseif ($cantidad < 10) {
-                        $stats['lowStock']++;
-                    } else {
-                        $stats['disponible']++;
-                    }
-                }
-            }
+        if (!$user) {
+            return response()->json(['error' => 'Usuario no autenticado'], 401);
         }
 
-        return $stats;
-    }
+        $userId = $user->id;
 
+        $fechaInicio = now()->startOfMonth()->toDateTimeString();
+        $fechaFin = now()->endOfMonth()->toDateTimeString();
+
+        $fechaInicioAnterior = now()->subMonth()->startOfMonth()->toDateTimeString();
+        $fechaFinAnterior = now()->subMonth()->endOfMonth()->toDateTimeString();
+
+        try {
+            // Total almacenes (actual y anterior)
+            $totalAlmacenes = DB::table('almacenes')
+                ->where('id_user', $userId)
+                ->count();
+
+            // No tienes histórico, ponemos 0 para anterior
+            $totalAlmacenesAnterior = 0;
+
+            // Total productos (actual y anterior)
+            $totalProductos = Producto::count();
+            $totalProductosAnterior = 0;
+
+            // Total ventas (actual y anterior)
+            $totalVentas = DetalleVenta::join('ventas', 'detalle_ventas.id_venta', '=', 'ventas.id')
+                ->where('ventas.id_user', $userId)
+                ->whereBetween('ventas.fecha_venta', [$fechaInicio, $fechaFin])
+                ->select(DB::raw('SUM(detalle_ventas.cantidad * detalle_ventas.precio_unitario) as total'))
+                ->value('total') ?? 0;
+
+            $totalVentasAnterior = DetalleVenta::join('ventas', 'detalle_ventas.id_venta', '=', 'ventas.id')
+                ->where('ventas.id_user', $userId)
+                ->whereBetween('ventas.fecha_venta', [$fechaInicioAnterior, $fechaFinAnterior])
+                ->select(DB::raw('SUM(detalle_ventas.cantidad * detalle_ventas.precio_unitario) as total'))
+                ->value('total') ?? 0;
+
+            // Total gastos (actual y anterior)
+            $totalGastos = Gasto::where('id_user', $userId)
+                ->whereBetween('fecha', [$fechaInicio, $fechaFin])
+                ->sum('precio');
+
+            $totalGastosAnterior = Gasto::where('id_user', $userId)
+                ->whereBetween('fecha', [$fechaInicioAnterior, $fechaFinAnterior])
+                ->sum('precio');
+
+            // Beneficio mensual (actual y anterior)
+            $beneficioMensual = $totalVentas - $totalGastos;
+            $beneficioMensualAnterior = $totalVentasAnterior - $totalGastosAnterior;
+
+            // Función para calcular crecimiento en porcentaje (ventas, beneficio)
+            $calcGrowthPercent = function ($current, $previous) {
+                if ($previous == 0) {
+                    if ($current == 0) {
+                        return '0%';
+                    }
+                    return 'N/A';
+                }
+                $growth = (($current - $previous) / abs($previous)) * 100;
+                return ($growth >= 0 ? '+' : '') . round($growth, 1) . '%';
+            };
+
+            // Función para crecimiento absoluto (almacenes, productos)
+            $calcGrowthAbsolute = function ($current, $previous) {
+                $diff = $current - $previous;
+                if ($previous == 0) {
+                    if ($current == 0) return '0';
+                    return 'Nuevo';
+                }
+                return ($diff > 0 ? '+' : '') . $diff;
+            };
+
+            // Calcular crecimientos
+            $growthAlmacenes = $calcGrowthAbsolute($totalAlmacenes, $totalAlmacenesAnterior);
+            $growthProductos = $calcGrowthAbsolute($totalProductos, $totalProductosAnterior);
+            $growthVentas = $calcGrowthPercent($totalVentas, $totalVentasAnterior);
+            $growthBeneficio = $calcGrowthPercent($beneficioMensual, $beneficioMensualAnterior);
+
+            // Producto estrella
+            $productoEstrella = Producto::select('productos.id', 'productos.nombre', 'productos.imagen', 'productos.descripcion', DB::raw('SUM(detalle_ventas.cantidad) as total_vendido'))
+                ->join('detalle_ventas', 'productos.id', '=', 'detalle_ventas.id_producto')
+                ->join('ventas', 'detalle_ventas.id_venta', '=', 'ventas.id')
+                ->where('ventas.id_user', $userId)
+                ->whereBetween('ventas.fecha_venta', [$fechaInicio, $fechaFin])
+                ->groupBy('productos.id', 'productos.nombre', 'productos.imagen', 'productos.descripcion')
+                ->orderByDesc('total_vendido')
+                ->first();
+
+            // Ventas última semana
+            $fechaInicioSemana = now()->subDays(6)->startOfDay()->toDateTimeString();
+            $fechaFinSemana = now()->endOfDay()->toDateTimeString();
+
+            $ventasUltimaSemana = DetalleVenta::join('ventas', 'detalle_ventas.id_venta', '=', 'ventas.id')
+                ->where('ventas.id_user', $userId)
+                ->whereBetween('ventas.fecha_venta', [$fechaInicioSemana, $fechaFinSemana])
+                ->select(
+                    DB::raw('DATE(ventas.fecha_venta) as fecha'),
+                    DB::raw('SUM(detalle_ventas.cantidad * detalle_ventas.precio_unitario) as total')
+                )
+                ->groupBy('fecha')
+                ->orderBy('fecha')
+                ->get();
+
+            // Gastos últimos 5 meses
+            $fechaCincoMesesAntes = now()->subMonths(4)->startOfMonth()->toDateString();
+
+            $gastosMensuales = Gasto::where('id_user', $userId)
+                ->where('fecha', '>=', $fechaCincoMesesAntes)
+                ->select(
+                    DB::raw('DATE_FORMAT(fecha, "%Y-%m") as mes'),
+                    DB::raw('SUM(precio) as total_gastos')
+                )
+                ->groupBy('mes')
+                ->orderBy('mes')
+                ->get();
+
+            // Distribución ventas por categoría
+            $distribucionVentas = Producto::select('categorias.nombre as categoria', DB::raw('SUM(detalle_ventas.cantidad) as total_vendido'))
+                ->join('categorias', 'productos.id_categoria', '=', 'categorias.id')
+                ->join('detalle_ventas', 'productos.id', '=', 'detalle_ventas.id_producto')
+                ->join('ventas', 'detalle_ventas.id_venta', '=', 'ventas.id')
+                ->where('ventas.id_user', $userId)
+                ->whereBetween('ventas.fecha_venta', [$fechaInicio, $fechaFin])
+                ->groupBy('categorias.nombre')
+                ->orderByDesc('total_vendido')
+                ->get();
+
+            return Inertia::render('Dashboard', [
+                'total_almacenes' => $totalAlmacenes,
+                'growth_almacenes' => $growthAlmacenes,
+                'total_productos' => $totalProductos,
+                'growth_productos' => $growthProductos,
+                'total_ventas' => round($totalVentas, 2),
+                'growth_ventas' => $growthVentas,
+                'beneficio_mensual' => round($beneficioMensual, 2),
+                'growth_beneficio' => $growthBeneficio,
+                'producto_estrella' => $productoEstrella,
+                'ventas_ultima_semana' => $ventasUltimaSemana,
+                'gastos_mensuales' => $gastosMensuales,
+                'distribucion_ventas' => $distribucionVentas,
+            ]);
+        } catch (Exception $e) {
+            Log::error('Error al obtener estadísticas: ' . $e->getMessage(), [
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'error' => 'Error interno al obtener las estadísticas. Inténtalo más tarde.',
+            ], 500);
+        }
+    }
 }
