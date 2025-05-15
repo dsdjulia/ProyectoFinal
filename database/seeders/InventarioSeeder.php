@@ -48,6 +48,7 @@ class InventarioSeeder extends Seeder
                     'cantidad_actual'  => rand(1, 100),
                     'fecha_entrada'    => $fechaEntrada,
                     'fecha_salida'     => $fechaSalida,
+                    'fecha_vencimiento'=> Carbon::parse($fechaEntrada)->addDays(rand(1, 60))->toDateString(),
                 ]);
             }
         }

@@ -22,6 +22,8 @@ return new class extends Migration
 
             $table->date('fecha_entrada')->nullable();
             $table->date('fecha_salida')->nullable();
+
+            $table->date('fecha_vencimiento')->nullable();
             $table->timestamps();
             
             
