@@ -7,6 +7,7 @@ use App\Models\Producto;
 use App\Models\DetalleCompra;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Carbon\Carbon;
 
 class DetalleCompraSeeder extends Seeder
 {
@@ -33,11 +34,17 @@ class DetalleCompraSeeder extends Seeder
             $seleccion = $productos->shuffle()->take(rand(1, 3));
 
             foreach ($seleccion as $productoId) {
+                // 2) Genera una fecha de vencimiento entre 30 y 365 días a partir de hoy
+                $fechaVenc = Carbon::now()
+                    ->addDays(rand(30, 365))
+                    ->toDateString(); // formato 'Y-m-d'
+
                 DetalleCompra::create([
-                    'id_compra'       => $compraId,
-                    'id_producto'     => $productoId,
-                    'cantidad'        => rand(1, 10),
-                    'precio_unitario' => rand(100, 1000) / 100, // precio entre 1.00 y 10.00
+                    'id_compra'         => $compraId,
+                    'id_producto'       => $productoId,
+                    'cantidad'          => rand(1, 10),
+                    'precio_unitario'   => rand(100, 1000) / 100, // precio entre 1.00 y 10.00
+                    'fecha_vencimiento' => $fechaVenc,            // 3) Nuevo campo
                 ]);
             }
         }

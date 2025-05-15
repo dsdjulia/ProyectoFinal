@@ -17,6 +17,7 @@ class DetalleCompra extends Model
         'id_almacen',
         'cantidad_actual',
         'precio_unitario',
+        'fecha_vencimiento',
         'estado',
     ];
 

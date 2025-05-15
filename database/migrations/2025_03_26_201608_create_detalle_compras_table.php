@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('cantidad_actual');
             $table->decimal('precio_unitario');
             $table->boolean('estado')->default(true);
+            $table->date('fecha_vencimiento')->nullable();
             $table->timestamps();
 
             $table->foreign('id_compra')->references('id')->on('compras');
