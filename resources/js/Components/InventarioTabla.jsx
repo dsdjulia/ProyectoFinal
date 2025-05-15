@@ -68,7 +68,7 @@ export default function InventarioTabla({ props }) {
 
     if (!almacenes || almacenes.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center h-[70vh] text-center gap-6">
+            <div className="flex flex-col items-center justify-center h-[80vh] text-center gap-6">
                 <span className="material-icons text-slate-400 text-7xl">warehouse</span>
                 <h1 className="text-3xl font-bold text-gray-700">
                     ¡Primero debes ingresar tu primer almacén!
@@ -176,12 +176,7 @@ export default function InventarioTabla({ props }) {
                         selected={selected}
                         setSelected={setSelected}
                     />
-                    <button
-                        onClick={() => setIsAlmacenModalOpen(true)}
-                        className="bg-slate-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-slate-700"
-                    >
-                        Añadir Almacén
-                    </button>
+
                 </div>
 
                 {/* Cabecera tabla */}

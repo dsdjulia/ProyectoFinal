@@ -4,6 +4,7 @@ import AddModal from "./AddModal";
 import DeleteProductModal from "./DeleteProductModal";
 import CantidadModal from "./CantidadModal"; // 👈 Importación del nuevo modal
 import { router } from "@inertiajs/react";
+import AddAlmacenModal from "./AddAlmacenModal";
 
 export default function OrdenesCompra({ props }) {
     const [products, setProducts] = useState(props.all_productos);
@@ -11,7 +12,7 @@ export default function OrdenesCompra({ props }) {
     const [categorias, setCategorias] = useState(props.categorias);
     const [proveedores, setProveedores] = useState(props.all_proveedores);
     const [compras, setCompras] = useState(props.detalles_compras);
-
+    const [isAlmacenModalOpen, setIsAlmacenModalOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -24,13 +25,23 @@ export default function OrdenesCompra({ props }) {
         setProducts([...products, newProduct]);
     };
 
+
+    const handleAddAlmacen = (newAlmacen) => {
+        setAlmacenes([...almacenes, newAlmacen]);
+    };
+
     const handleDeleteProduct = (product) => {
         setSelectedProduct(product);
         setIsDeleteModalOpen(true);
     };
 
     const handleCantidadConfirm = (cantidad) => {
-        console.log(`Cantidad ${tipoOperacion}:`, cantidad, "de", selectedProduct?.nombre);
+        console.log(
+            `Cantidad ${tipoOperacion}:`,
+            cantidad,
+            "de",
+            selectedProduct?.nombre
+        );
 
         // Aquí podrías usar router.post o router.put para actualizar backend:
         router.post("/productos/actualizar-stock", {
@@ -39,6 +50,31 @@ export default function OrdenesCompra({ props }) {
             tipo: tipoOperacion,
         });
     };
+
+    if (!almacenes || almacenes.length === 0) {
+        return (
+            <div className="flex flex-col items-center justify-center h-[80vh] text-center gap-6">
+                <span className="material-icons text-slate-400 text-7xl">
+                    warehouse
+                </span>
+                <h1 className="text-3xl font-bold text-gray-700">
+                    ¡Primero debes ingresar tu primer almacén!
+                </h1>
+                <button
+                    onClick={() => setIsAlmacenModalOpen(true)}
+                    className="bg-slate-600 text-white px-6 py-3 rounded-lg text-md font-semibold hover:bg-slate-700 transition"
+                >
+                    Crear Almacén
+                </button>
+
+                <AddAlmacenModal
+                    isOpen={isAlmacenModalOpen}
+                    onClose={() => setIsAlmacenModalOpen(false)}
+                    onAdd={handleAddAlmacen}
+                />
+            </div>
+        );
+    }
 
     return (
         <div className="w-full flex flex-col align-middle justify-start p-12 pt-0 pb-34 h-full">
@@ -122,6 +158,11 @@ export default function OrdenesCompra({ props }) {
                     onConfirm={handleCantidadConfirm}
                     producto={selectedProduct}
                     tipo={tipoOperacion}
+                />
+                <AddAlmacenModal
+                    isOpen={isAlmacenModalOpen}
+                    onClose={() => setIsAlmacenModalOpen(false)}
+                    onAdd={handleAddAlmacen}
                 />
             </div>
         </div>
