@@ -14,6 +14,7 @@ class DetalleCompra extends Model
     protected $fillable = [
         'id_producto',
         'id_compra',
+        'id_almacen',
         'cantidad_actual',
         'precio_unitario',
         'estado',
@@ -21,6 +22,9 @@ class DetalleCompra extends Model
 
     public function producto(){
         return $this->belongsTo(Producto::class, 'id_producto');
+    }
+    public function almacen(){
+        return $this->belongsTo(Almacen::class, 'id_almacen');
     }
 
     public function compra(){
