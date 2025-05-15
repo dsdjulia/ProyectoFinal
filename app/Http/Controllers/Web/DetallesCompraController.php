@@ -42,6 +42,7 @@ class DetallesCompraController extends Controller
             'precio_unitario' => 'required|numeric|min:0',
             'cantidad_actual' => 'required|integer|min:1',
             'id_almacen' => 'required|exists:almacenes,id',
+            'fecha_vencimiento' => 'nullable|date',
 
             //Proveedor
             'id_proveedor' => 'nullable',
@@ -110,6 +111,7 @@ class DetallesCompraController extends Controller
         ]);
 
         DetalleCompra::create([
+            'fecha_vencimiento'=> $datos['fecha_vencimiento'] ? $datos['fecha_vencimiento'] : null ,
             'id_almacen' => $almacen->id,
             'id_producto' => $producto->id,
             'id_compra' => $compra->id,
@@ -126,20 +128,22 @@ class DetallesCompraController extends Controller
 
         $datos = $request->validate([
             //Producto para buscar inventario
-            'id_producto' => 'required|numeric' ,
+            'id_producto' => 'required|numeric',
+            'id_almacen' => 'required|numeric',
             'precio_unitario' => 'required|numeric' ,
             'codigo' => 'required|string',
-            'detalle_id' => 'required|numeric'
+            'detalle_id' => 'required|numeric',
+            'fecha_vencimiento' => 'nullable|date',
+            'cantidad_actual' =>'required|numeric'
         ]);
 
-        $detalleCompra = DetalleCompra::where('id',$datos['detalle_id'])
+        $detalleCompra = DetalleCompra::where('id',$datos['id_producto'])
             ->first();
         
         $detalleCompra->estado = true;
 
         $inventario = Inventario::where('id_producto', $datos['id_producto'])
             ->where('precio_unitario', $datos['precio_unitario'])
-            ->where('codigo', $datos['codigo'])
             ->first();
 
         if ($inventario) {
@@ -149,13 +153,13 @@ class DetallesCompraController extends Controller
         }
 
         $inventario = Inventario::create([
-            'id_producto',
-            'id_almacen',
-            'precio_unitario',
-            'cantidad_actual',
-            'fecha_entrada',
-            'fecha_salida',
-            'fecha_vencimiento',
+            'id_producto' => $datos['id_producto'],
+            'id_almacen'=> $datos['id_almacen'],
+            'precio_unitario' => $datos['precio_unitario'],
+            'cantidad_actual' => $datos['cantidad_actual'],
+            'fecha_entrada' => now(),
+            'fecha_salida' => null,
+            'fecha_vencimiento' => $datos['fecha_vencimiento'] ? $datos['fecha_vencimiento'] : null,
         ]);
 
         return $this->renderInventario($user);
