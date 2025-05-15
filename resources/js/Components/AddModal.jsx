@@ -137,7 +137,7 @@ export default function AddModal({
                 </button>
 
                 <Dialog.Title className="text-lg font-semibold text-gray-800 mb-4">
-                    Añadir Nuevo Registro
+                    Añadir Nuevo Pedido
                 </Dialog.Title>
 
                 <form
