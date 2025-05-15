@@ -201,9 +201,9 @@ export default function AddModal({
                         >
                             <option value="">Seleccionar categoría</option>
                             <option value="nueva">Nueva categoría</option>
-                            {categorias.map((c) => (
-                                <option key={c.id} value={c.id}>
-                                    {c.nombre}
+                            {categorias.map((categoria) => (
+                                <option key={categoria.id} value={categoria.id}>
+                                    {categoria.nombre}
                                 </option>
                             ))}
                         </select>
