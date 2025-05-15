@@ -132,6 +132,7 @@ export default function ProductTableRow({
                     context={context}
                     almacenes={almacenes}
                     categorias={categorias}
+                    producto={product}
                     proveedores={proveedores}
                     onClose={() => setEditModalOpen(false)}
                     onSave={handleEditSave}

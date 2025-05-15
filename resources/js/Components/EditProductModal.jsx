@@ -5,7 +5,7 @@ import { Inertia } from "@inertiajs/inertia";
 export default function EditproductoModal({ producto, onClose, context, almacenes = [], categorias = [], proveedores = []}) {
 
     const [formData, setFormData] = useState({
-        id_categoria: producto.categoria,
+        id_categoria: "",
         codigo: producto.codigo,
         nombre: producto.nombre,
         imagen: producto.imagen,
@@ -17,12 +17,13 @@ export default function EditproductoModal({ producto, onClose, context, almacene
         id_proveedor: "",
         nombre_categoria: "",
         nombre_proveedor: "",
-        telefono: "",
-        email: "",
+
 
         status: context === "orders" ? producto.status : undefined,
         almacen: context === "stock" ? producto.almacen_nombre : undefined,
     });
+
+    console.log(producto);
     console.log(formData);
 
     const [mostrarNuevaCategoria, setMostrarNuevaCategoria] = useState(false);
@@ -122,21 +123,6 @@ export default function EditproductoModal({ producto, onClose, context, almacene
                         />
                     </div>
 
-                    {/* Descripción */}
-                    {/* <div className="md:col-span-2">
-                        <label className="block text-sm font-medium text-slate-300">
-                            Descripción
-                        </label>
-                        <textarea
-                            name="descripcion"
-                            value={formData.descripcion}
-                            onChange={handleInputChange}
-                            className="w-full border border-slate-600 rounded-lg p-2 mt-1 bg-slate-800 focus:ring-2 focus:ring-slate-500 focus:outline-none text-slate-100"
-                            rows={3}
-                            placeholder="Descripción del productoo"
-                        />
-                    </div> */}
-
                     {/* Imagen */}
                     <div className="md:col-span-2">
                         <label className="block text-sm font-medium text-slate-300">
@@ -178,7 +164,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
                                 placeholder="Nueva categoría"
                                 value={formData.nombre_categoria}
                                 onChange={handleInputChange}
-                                className="mt-2 w-full border rounded-lg py-2 px-4"
+                                className="w-full border border-slate-600 rounded-lg p-2 mt-1 bg-slate-800 focus:ring-2 focus:ring-slate-500 focus:outline-none text-slate-100"
                             />
                         )}
                     </div>
