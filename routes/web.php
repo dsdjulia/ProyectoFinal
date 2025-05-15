@@ -40,10 +40,11 @@ Route::get('/inventario/producto', [AlmacenController::class ,'getProduct'])->na
 
 //Route::update('/inventario/producto', [AlmacenController::class ,'update'])->name('producto.edit');
 
+Route::get('/pedidos', [DetallesCompraController::class ,'index'])->name('pedidos.index');
+Route::post('/pedidos', [DetallesCompraController::class ,'store'])->name('pedidos.store');
 
 
 Route::get('/dashboard', [InventarioController::class ,'dashboard'])->name('dashboard.index');
-Route::get('/pedidos', [DetallesCompraController::class ,'index'])->name('pedidos.index');
 Route::get('/ventas', [DetallesVentaController::class ,'index'])->name('ventas.index');
 Route::get('/proveedores', [ProveedoresController::class ,'index'])->name('proveedores.index');
 

@@ -83,7 +83,7 @@ class AlmacenController extends Controller
         return $stats;
     }
 
-    public function renderInventario($user, $almacenesIds = null)
+    private function renderInventario($user, $almacenesIds = null)
     {
         $almacenes = $this->obtenerAlmacenesConProductos($user->id, $almacenesIds);
         $stats = $this->calcularStockStats($almacenes);
