@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('codigo');
             $table->string('nombre');
             $table->string('descripcion');
-            $table->boolean('perecedero');
+            $table->boolean('perecedero')->default(false);
             $table->string('imagen')->nullable();
             $table->timestamps();
 
