@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProveedoresController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\AlmacenController;
@@ -43,6 +44,7 @@ Route::get('/producto', [AlmacenController::class ,'getProduct'])->name('product
 Route::get('/dashboard', [InventarioController::class ,'dashboard'])->name('dashboard.index');
 Route::get('/pedidos', [DetallesCompraController::class ,'index'])->name('pedidos.index');
 Route::get('/ventas', [DetallesVentaController::class ,'index'])->name('ventas.index');
+Route::get('/proveedores', [ProveedoresController::class ,'index'])->name('proveedores.index');
 
 
 require __DIR__ . '/auth.php';
