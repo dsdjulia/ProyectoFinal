@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { router } from "@inertiajs/react";
 import { showModificableAlert } from "@/utils/alerts";
@@ -32,38 +32,66 @@ export default function AddModal({
     });
 
     const [mostrarNuevaCategoria, setMostrarNuevaCategoria] = useState(false);
-    const [mostrarFecha, setMostrarFecha] = useState(false);
     const [mostrarNuevoProveedor, setMostrarNuevoProveedor] = useState(false);
+    const [mostrarFecha, setMostrarFecha] = useState(false);
 
-    const handleInputChange = ({ target: { name, value } }) => {
+    useEffect(() => {
+        if (!isOpen) {
+            setFormData({
+                id_categoria: "",
+                codigo: "",
+                nombre: "",
+                descripcion: "",
+                imagen: "",
+                id_almacen: "",
+                precio_unitario: "",
+                cantidad_actual: "",
+                perecedero: false,
+                fecha_caducidad: "",
+                id_proveedor: "",
+                nombre_categoria: "",
+                nombre_proveedor: "",
+                telefono: "",
+                email: "",
+            });
+            setMostrarNuevaCategoria(false);
+            setMostrarNuevoProveedor(false);
+            setMostrarFecha(false);
+        }
+    }, [isOpen]);
+
+    const handleInputChange = ({ target: { name, value, type, checked } }) => {
+        const inputValue = type === "checkbox" ? checked : value;
+
         if (name === "perecedero") {
-            const isPerecedero = value === "true";
-            setFormData((prev) => ({ ...prev, perecedero: isPerecedero }));
-            setMostrarFecha(isPerecedero);
-            return;
+            setMostrarFecha(inputValue);
         }
 
-        setFormData((prev) => ({ ...prev, [name]: value }));
+        setFormData((prev) => ({
+            ...prev,
+            [name]: inputValue,
+        }));
     };
 
     const handleCategoriaChange = ({ target: { value } }) => {
+        setMostrarNuevaCategoria(value === "nueva");
         setFormData((prev) => ({
             ...prev,
-            id_categoria: value === "nueva" ? null : value,
+            id_categoria: value === "nueva" ? "" : value,
         }));
-        setMostrarNuevaCategoria(value === "nueva");
     };
 
     const handleProveedorChange = ({ target: { value } }) => {
+        setMostrarNuevoProveedor(value === "nuevo");
         setFormData((prev) => ({
             ...prev,
-            id_proveedor: value === "nuevo" ? null : value,
+            id_proveedor: value === "nuevo" ? "" : value,
         }));
-        setMostrarNuevoProveedor(value === "nuevo");
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
         router.post(route("producto.patch"), formData, {
             onSuccess: () => {
                 showModificableAlert(
@@ -71,6 +99,8 @@ export default function AddModal({
                     "Se agregó el producto al inventario.",
                     "success"
                 );
+                onAdd && onAdd(formData);
+                onClose();
                 router.visit(route("inventario.index"), {
                     preserveScroll: true,
                 });
@@ -83,7 +113,6 @@ export default function AddModal({
                 );
             },
         });
-        onClose();
     };
 
     return (
@@ -92,233 +121,241 @@ export default function AddModal({
             onClose={onClose}
             className="fixed inset-0 z-50 flex items-center justify-center"
         >
-            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl z-50 relative">
                 <Dialog.Title className="text-lg font-semibold text-gray-800 mb-4">
                     Añadir Nuevo Registro
                 </Dialog.Title>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                    {context === "orders" && (
-                        <>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Producto
-                                </label>
-                                <select
-                                    name="codigo"
-                                    value={formData.codigo}
-                                    onChange={handleInputChange}
-                                    className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
-                                >
-                                    <option value="">
-                                        Seleccionar producto
-                                    </option>
-                                    {productos.map((producto) => (
-                                        <option
-                                            key={producto.id}
-                                            value={producto.id}
-                                        >
-                                            {producto.nombre}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Precio unitario
-                                </label>
-                                <input
-                                    type="text"
-                                    name="precio_unitario"
-                                    value={formData.precio_unitario}
-                                    onChange={handleInputChange}
-                                    className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Cantidad
-                                </label>
-                                <input
-                                    type="text"
-                                    name="cantidad_actual"
-                                    value={formData.cantidad_actual}
-                                    onChange={handleInputChange}
-                                    className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Proveedor
-                                </label>
-                                <select
-                                    name="id_proveedor"
-                                    value={formData.id_proveedor}
-                                    onChange={handleProveedorChange}
-                                    className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
-                                >
-                                    <option value="">
-                                        Seleccionar proveedor
-                                    </option>
-                                    <option value="nuevo">
-                                        Nuevo proveedor
-                                    </option>
-                                    {proveedores.map((proveedor) => (
-                                        <option
-                                            key={proveedor.id}
-                                            value={proveedor.id}
-                                        >
-                                            {proveedor.nombre}
-                                        </option>
-                                    ))}
-                                </select>
-                                {mostrarNuevoProveedor && (
-                                    <div className="mt-4 space-y-2">
-                                        <label className="block text-sm font-medium text-gray-700">
-                                            Nombre del proveedor
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name="nombre_proveedor"
-                                            value={formData.nombre_proveedor}
-                                            onChange={handleInputChange}
-                                            className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
-                                        />
-                                        <label className="block text-sm font-medium text-gray-700">
-                                            Teléfono
-                                        </label>
-                                        <input
-                                            type="tel"
-                                            name="telefono"
-                                            value={formData.telefono}
-                                            onChange={handleInputChange}
-                                            className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
-                                        />
-                                        <label className="block text-sm font-medium text-gray-700">
-                                            Correo Electrónico
-                                        </label>
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            value={formData.email}
-                                            onChange={handleInputChange}
-                                            className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
-                                        />
-                                    </div>
-                                )}
-                            </div>
-                        </>
+                <form
+                    onSubmit={handleSubmit}
+                    className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                >
+                    {/* Código */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                            Código
+                        </label>
+                        <input
+                            type="text"
+                            name="codigo"
+                            value={formData.codigo}
+                            onChange={handleInputChange}
+                            className="w-full border rounded-lg py-2 px-4"
+                        />
+                    </div>
+
+                    {/* Nombre del producto */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                            Producto
+                        </label>
+                        <input
+                            type="text"
+                            name="nombre"
+                            value={formData.nombre}
+                            onChange={handleInputChange}
+                            className="w-full border rounded-lg py-2 px-4"
+                            placeholder="Nombre del producto"
+                        />
+                    </div>
+                    {/* Descripción */}
+                    <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                            Descripción
+                        </label>
+                        <textarea
+                            name="descripcion"
+                            value={formData.descripcion}
+                            onChange={handleInputChange}
+                            className="w-full border rounded-lg py-2 px-4"
+                            rows={3}
+                            placeholder="Descripción del producto"
+                        />
+                    </div>
+
+                    {/* Imagen */}
+                    <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                            Imagen (URL)
+                        </label>
+                        <input
+                            type="text"
+                            name="imagen"
+                            value={formData.imagen}
+                            onChange={handleInputChange}
+                            className="w-full border rounded-lg py-2 px-4"
+                            placeholder="https://example.com/imagen.jpg"
+                        />
+                    </div>
+
+                    {/* Categoría */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                            Categoría
+                        </label>
+                        <select
+                            name="id_categoria"
+                            value={formData.id_categoria}
+                            onChange={handleCategoriaChange}
+                            className="w-full border rounded-lg py-2 px-4"
+                        >
+                            <option value="">Seleccionar categoría</option>
+                            <option value="nueva">Nueva categoría</option>
+                            {categorias.map((c) => (
+                                <option key={c.id} value={c.id}>
+                                    {c.nombre}
+                                </option>
+                            ))}
+                        </select>
+                        {mostrarNuevaCategoria && (
+                            <input
+                                type="text"
+                                name="nombre_categoria"
+                                placeholder="Nueva categoría"
+                                value={formData.nombre_categoria}
+                                onChange={handleInputChange}
+                                className="mt-2 w-full border rounded-lg py-2 px-4"
+                            />
+                        )}
+                    </div>
+
+                    {/* Almacén */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                            Almacén
+                        </label>
+                        <select
+                            name="id_almacen"
+                            value={formData.id_almacen}
+                            onChange={handleInputChange}
+                            className="w-full border rounded-lg py-2 px-4"
+                        >
+                            <option value="">Seleccionar almacén</option>
+                            {almacenes.map((a) => (
+                                <option key={a.id} value={a.id}>
+                                    {a.nombre}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Precio */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                            Precio unitario
+                        </label>
+                        <input
+                            type="number"
+                            name="precio_unitario"
+                            step="0.01"
+                            value={formData.precio_unitario}
+                            onChange={handleInputChange}
+                            className="w-full border rounded-lg py-2 px-4"
+                        />
+                    </div>
+
+                    {/* Cantidad */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                            Cantidad
+                        </label>
+                        <input
+                            type="number"
+                            name="cantidad_actual"
+                            value={formData.cantidad_actual}
+                            onChange={handleInputChange}
+                            className="w-full border rounded-lg py-2 px-4"
+                        />
+                    </div>
+
+                    {/* Perecedero */}
+                    <div className="col-span-1 md:col-span-2 flex items-center gap-2">
+                        <input
+                            type="checkbox"
+                            name="perecedero"
+                            checked={formData.perecedero}
+                            onChange={handleInputChange}
+                        />
+                        <label className="text-sm text-gray-700">
+                            ¿Producto perecedero?
+                        </label>
+                    </div>
+
+                    {/* Fecha de caducidad */}
+                    {formData.perecedero && (
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">
+                                Fecha de caducidad
+                            </label>
+                            <input
+                                type="date"
+                                name="fecha_caducidad"
+                                value={formData.fecha_caducidad}
+                                onChange={handleInputChange}
+                                className="w-full border rounded-lg py-2 px-4"
+                            />
+                        </div>
                     )}
 
-                    {context === "stock" && (
-                        <>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Nombre
-                                </label>
-                                <input
-                                    type="text"
-                                    name="nombre"
-                                    value={formData.nombre}
-                                    onChange={handleInputChange}
-                                    className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Descripción
-                                </label>
-                                <input
-                                    type="text"
-                                    name="descripcion"
-                                    value={formData.descripcion}
-                                    onChange={handleInputChange}
-                                    className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Almacén
-                                </label>
-                                <select
-                                    name="id_almacen"
-                                    value={formData.id_almacen}
-                                    onChange={handleInputChange}
-                                    className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
-                                >
-                                    <option value="">
-                                        Seleccionar almacén
-                                    </option>
-                                    {almacenes.map((almacen) => (
-                                        <option
-                                            key={almacen.id}
-                                            value={almacen.id}
-                                        >
-                                            {almacen.nombre}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Precio unitario
-                                </label>
-                                <input
-                                    type="number"
-                                    name="precio_unitario"
-                                    value={formData.precio_unitario}
-                                    onChange={handleInputChange}
-                                    className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Cantidad
-                                </label>
-                                <input
-                                    type="number"
-                                    name="cantidad_actual"
-                                    value={formData.cantidad_actual}
-                                    onChange={handleInputChange}
-                                    className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    ¿Perecedero?
-                                </label>
-                                <select
-                                    name="perecedero"
-                                    value={formData.perecedero.toString()}
-                                    onChange={handleInputChange}
-                                    className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
-                                >
-                                    <option value="false">No</option>
-                                    <option value="true">Sí</option>
-                                </select>
-                            </div>
-                            {mostrarFecha && (
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        Fecha de Caducidad
-                                    </label>
-                                    <input
-                                        type="date"
-                                        name="fecha_caducidad"
-                                        value={formData.fecha_caducidad}
-                                        onChange={handleInputChange}
-                                        className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-slate-500"
-                                    />
-                                </div>
-                            )}
-                        </>
+                    {/* Proveedor */}
+                    <div className="md:col-span-1">
+                        <label className="block text-sm font-medium text-gray-700">
+                            Proveedor
+                        </label>
+                        <select
+                            name="id_proveedor"
+                            value={formData.id_proveedor}
+                            onChange={handleProveedorChange}
+                            className="w-full border rounded-lg py-2 px-4"
+                        >
+                            <option value="">Seleccionar proveedor</option>
+                            <option value="nuevo">Nuevo proveedor</option>
+                            {proveedores.map((p) => (
+                                <option key={p.id} value={p.id}>
+                                    {p.nombre}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {mostrarNuevoProveedor && (
+                        <div className="md:col-span-2 space-y-2">
+                            <input
+                                type="text"
+                                name="nombre_proveedor"
+                                placeholder="Nombre del proveedor"
+                                value={formData.nombre_proveedor}
+                                onChange={handleInputChange}
+                                className="w-full border rounded-lg py-2 px-4"
+                            />
+                            <input
+                                type="tel"
+                                name="telefono"
+                                placeholder="Teléfono"
+                                value={formData.telefono}
+                                onChange={handleInputChange}
+                                className="w-full border rounded-lg py-2 px-4"
+                            />
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Correo electrónico"
+                                value={formData.email}
+                                onChange={handleInputChange}
+                                className="w-full border rounded-lg py-2 px-4"
+                            />
+                        </div>
                     )}
 
-                    <button
-                        type="submit"
-                        className="bg-slate-500 text-white px-4 py-2 rounded-md font-semibold hover:bg-slate-600"
-                    >
-                        Guardar
-                    </button>
+                    {/* Botón */}
+                    <div className="md:col-span-2 text-right mt-4">
+                        <button
+                            type="submit"
+                            className="bg-slate-600 hover:bg-slate-700 text-white font-semibold rounded-lg py-2 px-4"
+                        >
+                            Guardar
+                        </button>
+                    </div>
                 </form>
             </div>
         </Dialog>

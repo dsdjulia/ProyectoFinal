@@ -10,7 +10,8 @@ export default function VentasTable({ props }) {
     );
 
     return (
-        <div className="p-6 bg-white rounded-lg shadow-lg">
+        <div className="w-full flex flex-col align-middle justify-start p-12 pt-0npm r pb-34 h-full">
+            <div className="bg-white rounded-lg overflow-hidden shadow-lg mt-4 p-10">
             <h2 className="text-xl font-semibold text-gray-700 mb-4">Ventas Realizadas</h2>
 
             <div className="flex justify-between items-center mb-6">
@@ -51,6 +52,7 @@ export default function VentasTable({ props }) {
             ) : (
                 <div className="text-center py-8 text-gray-400">No se encontraron ventas</div>
             )}
+        </div>
         </div>
     );
 }
