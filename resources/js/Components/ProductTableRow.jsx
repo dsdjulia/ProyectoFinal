@@ -54,7 +54,7 @@ export default function ProductTableRow({
 
                 {/* Cantidad */}
                 <div className="text-gray-700 text-center">
-                    {product.cantidad}
+                    {product.cantidad_actual}
                 </div>
 
                 {/* Estado o almacén */}
@@ -68,7 +68,7 @@ export default function ProductTableRow({
 
                 {/* Fecha */}
                 <div className="text-gray-700 text-center">
-                    {product.fecha_entrada}
+                    {product.fecha_entrada ?? product.fecha_compra}
                 </div>
 
                 {/* Acciones */}

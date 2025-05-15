@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/react";
 import { useState } from "react";
 
 export default function CantidadModal({ isOpen, onClose, onConfirm, producto, tipo }) {
@@ -5,14 +6,30 @@ export default function CantidadModal({ isOpen, onClose, onConfirm, producto, ti
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const num = parseInt(cantidad, 10);
-        if (!isNaN(num) && num > 0) {
-            onConfirm(num);
-            setCantidad("");
-            onClose();
-        } else {
-            alert("Ingresa una cantidad válida.");
-        }
+
+        router.post(route("proveedores.index"), producto, {
+            onSuccess: () => {
+                showModificableAlert(
+                    "Pedido recibido",
+                    "Se agregó el producto al inventario.",
+                    "success"
+                );
+                onAdd && onAdd(formData);
+                onClose();
+                router.visit(route("inventario.index"), {
+                    preserveScroll: true,
+                });
+            },
+            onError: (errors) => {
+                showModificableAlert(
+                    "Error al añadir el producto",
+                    `Error: ${JSON.stringify(errors)}`,
+                    "error"
+                );
+            },
+        });
+
+
     };
 
     if (!isOpen) return null;
@@ -54,9 +71,9 @@ export default function CantidadModal({ isOpen, onClose, onConfirm, producto, ti
                         </button>
                         <button
                             type="submit"
-                            className={`px-4 py-2 rounded-md text-white font-semibold bg-${color}-500 hover:bg-${color}-600`}
+                            className={`px-4 py-2 text-gray-600 hover:text-gray-800`}
                         >
-                            {botonTexto}
+                            Confirmar recepcion
                         </button>
                     </div>
                 </form>
