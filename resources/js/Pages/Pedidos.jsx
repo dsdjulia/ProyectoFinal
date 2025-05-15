@@ -17,7 +17,7 @@ export default function Index() {
                     <Sidebar active={"pedidos"}/>
                 </div>
                 <AuthenticatedLayout>
-                    <div className=" overflow-y-auto bg-slate-100">
+                    <div className=" overflow-y-auto bg-slate-100 h-screen">
                         <OrdenesCompra props={props} />
                     </div>
                     <Footer/>

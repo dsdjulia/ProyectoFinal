@@ -16,7 +16,7 @@ export default function Index() {
                     <Sidebar active={"inventario"}/>
                 </div>
                 <AuthenticatedLayout>
-                    <div className=" overflow-y-auto bg-slate-100 h-screen">
+                    <div className=" overflow-y-auto bg-slate-100">
                         <InventarioTabla props={props} />
                     </div>
                 <Footer/>
