@@ -1,15 +1,15 @@
 <?php
 
-use App\Http\Controllers\ProveedoresController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\AlmacenController;
 use App\Http\Controllers\Web\ProfileController;
-use App\Http\Controllers\Web\ProductoController;
 
+use App\Http\Controllers\Web\ProductoController;
 use App\Http\Controllers\Web\InventarioController;
-use App\Http\Controllers\Web\DetallesCompraController;
+use App\Http\Controllers\Web\ProveedoresController;
 use App\Http\Controllers\Web\DetallesVentaController;
+use App\Http\Controllers\Web\DetallesCompraController;
 
 
 // EDIT PROFILE

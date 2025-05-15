@@ -123,9 +123,23 @@ export default function AddModal({
         >
             <div className="fixed inset-0 bg-black bg-opacity-25" />
             <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl z-50 relative">
+
+                {/* Botón de cerrar */}
+                <button
+                    type="button"
+                    onClick={onClose}
+                    className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+                    aria-label="Cerrar"
+                >
+                    <span className="material-icons text-slate-500 text-2xl">
+                                close
+                            </span>
+                </button>
+
                 <Dialog.Title className="text-lg font-semibold text-gray-800 mb-4">
                     Añadir Nuevo Registro
                 </Dialog.Title>
+
                 <form
                     onSubmit={handleSubmit}
                     className="grid grid-cols-1 md:grid-cols-2 gap-4"
@@ -144,7 +158,7 @@ export default function AddModal({
                         />
                     </div>
 
-                    {/* Nombre del producto */}
+                    {/* Nombre */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700">
                             Producto
@@ -158,6 +172,7 @@ export default function AddModal({
                             placeholder="Nombre del producto"
                         />
                     </div>
+
                     {/* Descripción */}
                     <div className="md:col-span-2">
                         <label className="block text-sm font-medium text-gray-700">
@@ -318,6 +333,7 @@ export default function AddModal({
                         </select>
                     </div>
 
+                    {/* Nuevo proveedor */}
                     {mostrarNuevoProveedor && (
                         <div className="md:col-span-2 space-y-2">
                             <input
