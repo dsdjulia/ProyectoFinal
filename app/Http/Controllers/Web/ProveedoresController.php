@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Web;
 use Inertia\Inertia;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
+use App\Models\DetalleCompra;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+
 
 class ProveedoresController extends Controller
 {
@@ -49,13 +53,5 @@ class ProveedoresController extends Controller
         Proveedor::where('id',$datos['id_proveedor'])->first()->delete();
     }
 
-
-    public function index()
-{
-    $proveedores = Proveedor::all();
-    return Inertia::render('Proveedores/Index', [
-        'proveedores' => $proveedores
-    ]);
-}
 
 }
