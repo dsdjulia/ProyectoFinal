@@ -7,10 +7,11 @@ import DoughnutChart from "./DoughnutChart";
 import { router } from "@inertiajs/react";
 
 export default function InventarioTabla({ props }) {
-    const [almacenes, setAlmacenes] = useState(props.data);
-    const [products, setProducts] = useState(props.all_productos);
-    const [categorias, setCategorias] = useState(props.categorias);
-    const [proveedores, setProveedores] = useState(props.all_proveedores);
+    const [almacenes, setAlmacenes] = useState(props.data ?? []);
+    const [products, setProducts] = useState(props.all_productos ?? []);
+    const [categorias, setCategorias] = useState(props.categorias ?? []);
+    const [proveedores, setProveedores] = useState(props.all_proveedores ?? []);
+
 
     const [searchTerm, setSearchTerm] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
