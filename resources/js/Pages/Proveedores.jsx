@@ -16,8 +16,8 @@ export default function Index() {
                     <Sidebar active={"proveedores"}/>
                 </div>
                 <AuthenticatedLayout>
-                    <div className=" overflow-y-auto bg-slate-100">
-                        <ConcactoProveedores props={props} />
+                    <div className=" overflow-y-auto bg-slate-100 h-screen">
+                        <ConcactoProveedores proveedores={props.proveedores} />
                     </div>
                     <Footer/>
                 </AuthenticatedLayout>
