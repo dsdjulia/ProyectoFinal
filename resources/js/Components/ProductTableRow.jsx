@@ -17,6 +17,7 @@ export default function ProductTableRow({
 }) {
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+    console.log(product);
 
     const handleEditSave = (updatedData) => {
         if (onUpdate) {
@@ -53,7 +54,7 @@ export default function ProductTableRow({
 
                 {/* Cantidad */}
                 <div className="text-gray-700 text-center">
-                    {product.cantidad_actual}
+                    {product.cantidad}
                 </div>
 
                 {/* Estado o almacén */}

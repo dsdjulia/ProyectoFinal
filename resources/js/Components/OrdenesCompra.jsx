@@ -16,7 +16,7 @@ export default function OrdenesCompra({ props }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [selectedPedido, setselectedPedido] = useState(null);
 
     const [isCantidadModalOpen, setCantidadModalOpen] = useState(false);
     const [tipoOperacion, setTipoOperacion] = useState(""); // "venta" o "recepcion"
@@ -31,21 +31,21 @@ export default function OrdenesCompra({ props }) {
     };
 
     const handleDeleteProduct = (product) => {
-        setSelectedProduct(product);
+        setselectedPedido(product);
         setIsDeleteModalOpen(true);
     };
 
-    const handleCantidadConfirm = (cantidad) => {
+    const handleConfirm = (cantidad) => {
         console.log(
             `Cantidad ${tipoOperacion}:`,
             cantidad,
             "de",
-            selectedProduct?.nombre
+            selectedPedido?.nombre
         );
 
         // Aquí podrías usar router.post o router.put para actualizar backend:
         router.post("/productos/actualizar-stock", {
-            producto_id: selectedProduct.id,
+            producto_id: selectedPedido.id,
             cantidad,
             tipo: tipoOperacion,
         });
@@ -112,21 +112,21 @@ export default function OrdenesCompra({ props }) {
                 </div>
 
                 <div className="grid grid-cols-1 px-4 pb-4">
-                    {products
-                        .filter((product) =>
-                            product.nombre
+                    {compras
+                        .filter((compra) =>
+                            compra.nombre
                                 .toLowerCase()
                                 .includes(searchTerm.toLowerCase())
                         )
-                        .map((product, index) => (
+                        .map((compra, index) => (
                             <ProductTableRow
                                 key={index}
-                                product={product}
+                                product={compra}
                                 context="orders"
                                 almacenes={almacenes}
-                                onDelete={() => handleDeleteProduct(product)}
+                                onDelete={() => handleDeleteProduct(compra)}
                                 onCantidadClick={(tipo) => {
-                                    setSelectedProduct(product);
+                                    setselectedPedido(compra);
                                     setTipoOperacion(tipo); // "recepcion"
                                     setCantidadModalOpen(true);
                                 }}
@@ -144,10 +144,10 @@ export default function OrdenesCompra({ props }) {
                     proveedores={proveedores}
                 />
 
-                {isDeleteModalOpen && selectedProduct && (
+                {isDeleteModalOpen && selectedPedido && (
                     <DeleteProductModal
-                        product={selectedProduct}
-                        totalAmount={selectedProduct.existencias}
+                        product={selectedPedido}
+                        totalAmount={selectedPedido.existencias}
                         onClose={() => setIsDeleteModalOpen(false)}
                     />
                 )}
@@ -155,8 +155,8 @@ export default function OrdenesCompra({ props }) {
                 <CantidadModal
                     isOpen={isCantidadModalOpen}
                     onClose={() => setCantidadModalOpen(false)}
-                    onConfirm={handleCantidadConfirm}
-                    producto={selectedProduct}
+                    onConfirm={handleConfirm}
+                    producto={selectedPedido}
                     tipo={tipoOperacion}
                 />
                 <AddAlmacenModal
