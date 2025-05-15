@@ -112,7 +112,7 @@ class DetallesCompraController extends Controller
         DetalleCompra::create([
             'id_producto' => $producto->id,
             'id_compra' => $compra->id,
-            'cantidad' => $datos['cantidad_actual'],
+            'cantidad_actual' => $datos['cantidad_actual'],
             'precio_unitario' => $datos['precio_unitario'],
             'estado' => false,
         ]);
