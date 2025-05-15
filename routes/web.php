@@ -28,7 +28,6 @@ Route::get('/', function () {
 
 // CRUD DE ALMACENES
 Route::get('/inventario', [AlmacenController::class ,'index'])->name('inventario.index');
-/* Route::get('/dashboard', [AlmacenController::class ,'index'])->name('dashboard.index'); */
 Route::delete('/inventario', [AlmacenController::class ,'delete'])->name('inventario.delete');
 Route::post('/inventario', [AlmacenController::class ,'store'])->name('inventario.store');
 
@@ -37,8 +36,9 @@ Route::post('/inventario', [AlmacenController::class ,'store'])->name('inventari
 Route::delete('/inventario/producto', [ProductoController::class ,'delete'])->name('producto.delete');
 Route::post('/inventario/producto', [ProductoController::class ,'store'])->name('producto.store');
 Route::patch('/inventario/producto', [ProductoController::class ,'patch'])->name('producto.patch');
+Route::update('/inventario/producto', [AlmacenController::class ,'update'])->name('producto.edit');
+Route::get('/inventario/producto', [AlmacenController::class ,'getProduct'])->name('producto.show');
 
-Route::get('/producto', [AlmacenController::class ,'getProduct'])->name('producto.show');
 
 
 Route::get('/dashboard', [InventarioController::class ,'dashboard'])->name('dashboard.index');

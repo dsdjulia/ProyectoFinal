@@ -44,4 +44,18 @@ class Producto extends Model
     {
         return $this->hasMany(DetalleCompra::class, 'id_producto', 'id');
     }
+
+    public function proveedores()
+    {
+        return $this->hasManyThrough(
+            Proveedor::class,
+            DetalleCompra::class,
+            'id_producto', // Foreign key en DetalleCompra
+            'id',          // Foreign key en Proveedor (relacionada desde Compra)
+            'id',          // Local key en Producto
+            'id_compra'    // Local key en DetalleCompra (relacionada con Compra)
+        )->join('compras', 'compras.id', '=', 'detalle_compras.id_compra')
+            ->select('proveedores.*')
+            ->distinct();
+    }   
 }

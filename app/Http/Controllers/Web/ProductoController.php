@@ -112,17 +112,20 @@ class ProductoController extends Controller
 
     public function patch (Request $request){
 
-        $validated = $request ->validate([
+        $user = Auth::user();
+        $datos = $request ->validate([
             'id_almacen' => 'required|integer|exists:almacenes,id',
             'id_producto' => 'required|integer|exists:productos,id',
             'cantidad_actual' => 'required|integer'
         ]);
 
-        $inventario = Inventario::where('id_producto', $validated['id_producto'])
-            ->where('id_almacen', $validated['id_almacen'])
+        $almacen = Almacen::where('id',$datos['id_almacen']);
+
+        $inventario = Inventario::where('id_producto', $datos['id_producto'])
+            ->where('id_almacen', $almacen->id)
             ->first();
 
-        $inventario->cantidad_actual = $validated['cantidad_actual'];
+        $inventario->cantidad_actual = $datos['cantidad_actual'];
         $inventario->save();
 
         return redirect()->route('inventario.index');

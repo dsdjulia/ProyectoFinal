@@ -20,11 +20,11 @@ class DetalleCompra extends Model
     ];
 
     public function producto(){
-        return $this->belongsTo(Producto::class, 'id_producto', 'id');
+        return $this->belongsTo(Producto::class, 'id_producto');
     }
 
     public function compra(){
-        return $this->belongsTo(Compra::class, 'id_compra', 'id');
+        return $this->belongsTo(Compra::class, 'id_compra');
     }
 
     public function getSubtotalAttribute()

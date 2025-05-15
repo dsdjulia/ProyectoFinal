@@ -141,8 +141,6 @@ class InventarioController extends Controller
         
     }
     
-
-    
     public function calcularStockStats($almacenes)
     {
         $stats = [

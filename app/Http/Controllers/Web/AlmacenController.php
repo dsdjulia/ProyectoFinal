@@ -42,20 +42,7 @@ class AlmacenController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->validate([
-            'id' => 'required|exists:almacenes,id',
-            'nombre' => 'required|string|min:4|max:255',
-            'direccion' => 'required|string|min:4|max:255',
-        ]);
-
-        $almacen = $this->findUserAlmacen($data['id']);
-
-        $almacen->update([
-            'nombre' => $data['nombre'],
-            'direccion' => $data['direccion'],
-        ]);
-
-        return redirect()->route('inventario.index');
+        
     }
 
     public function getProduct()
@@ -135,17 +122,36 @@ class AlmacenController extends Controller
             $productos = $almacen->productos;
 
             $productosData = $productos->map(function ($producto) use ($almacen) {
+                // Obtener proveedores únicos para el producto
+                $proveedores = DetalleCompra::with('compra.proveedor')
+                    ->where('id_producto', $producto->id)
+                    ->get()
+                    ->pluck('compra.proveedor')
+                    ->filter()
+                    ->unique('id')
+                    ->values()
+                    ->map(function ($proveedor) {
+                        return [
+                            'id' => $proveedor->id,
+                            'nombre' => $proveedor->nombre,
+                            'telefono' => $proveedor->telefono,
+                            'email' => $proveedor->email,
+                        ];
+                    });
+
                 return [
                     'id' => $producto->id,
                     'codigo' => $producto->codigo,
                     'nombre' => $producto->nombre,
+                    'imagen' => $producto->imagen,
+                    'categoria' => $producto->categoria->nombre,
+                    'almacen_id' => $almacen->id,
+                    'almacen_nombre' => $almacen->nombre,
                     'precio_unitario' => $producto->pivot->precio_unitario,
                     'cantidad_actual' => $producto->pivot->cantidad_actual,
                     'fecha_entrada' => $producto->pivot->fecha_entrada,
                     'fecha_salida' => $producto->pivot->fecha_salida,
-                    'imagen' => $producto->imagen,
-                    'almacen_id' => $almacen->id,
-                    'almacen_nombre' => $almacen->nombre,
+                    'proveedores' => $proveedores,
                 ];
             })->toArray();
 
