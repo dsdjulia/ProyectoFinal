@@ -31,14 +31,16 @@ class DetallesCompraController extends Controller
 
         $datos = $request->validate([
             //producto que pides
+            'id_categoria' => 'nullable|integer',
             'codigo' => 'required|string',
             'nombre' => 'required|string',
             'descripcion' => 'nullable|string',
+            'perecedero' => 'nullable|boolean',
             'imagen' => 'nullable|string',
 
             //Inventario
             'precio_unitario' => 'required|numeric|min:0',
-            'unidades' => 'required|integer|min:1',
+            'cantidad_actual' => 'required|integer|min:1',
             'id_almacen' => 'required|exists:almacenes,id',
 
             //Proveedor
@@ -47,27 +49,48 @@ class DetallesCompraController extends Controller
             'telefono' => 'nullable|string',
             'email' => 'nullable|email',
 
-            //datos para la categoria
-            'id_categoria' => '',
+            //datos para crear la categoria
             'nombre_categoria' => 'nullable|string',
-            'perecedero' => 'nullable|boolean'
         ]);
 
-        $producto = Producto::where('codigo', $datos['codigo'])->first();
+        $categoria = Categoria::where('id_user', $user->id)
+            ->where(function ($query) use ($datos) {
+                $query->where('nombre', $datos['nombre_categoria'])
+                    ->orWhere('id', $datos['id_categoria']);
+            })
+            ->first();
 
-
-        $proveedor = null;
-
-        if ($request->filled('id_proveedor')) {
-            $proveedor = Proveedor::find($request['id_proveedor']);
-        } else {
-            $proveedor = Proveedor::where('nombre', $request->input('nombre_proveedor'))
-                ->where('email', $request->input('email'))
-                ->where('telefono', $request->input('telefono'))
-                ->first();
+        if(!$categoria){
+            $categoria = Categoria::create([
+                'id_user'=>$user->id,
+                'nombre'=>$datos['nombre_categoria'],
+            ]);
         }
 
-        // Si no existe, lo crea
+        $producto = Producto::where('codigo',$datos['codigo'])
+            ->where('id_categoria',$categoria['id'])
+            ->where('nombre',$datos['nombre'])
+            ->where('descripcion',$datos['descripcion'])
+            ->where('imagen',$datos['imagen'])
+            ->where('perecedero',$datos['perecedero'])
+            ->first();
+            
+
+        if(!$producto){
+            $producto = Producto::create([
+                'id_categoria' => $categoria['id'],
+                'codigo' => $datos['codigo'],
+                'nombre' =>  $datos['nombre'],
+                'descripcion' =>  $datos['descripcion'],
+                'perecedero' =>$datos['perecedero'],
+                'imagen' =>  $datos['imagen']
+            ]);
+        }
+
+        $proveedor = null;
+        if ($request->filled('id_proveedor')) {
+            $proveedor = Proveedor::find($request['id_proveedor']);
+        }
         if (!$proveedor) {
             $proveedor = Proveedor::create([
                 'nombre' => $request->input('nombre_proveedor'),
@@ -76,7 +99,9 @@ class DetallesCompraController extends Controller
             ]);
         }
 
-        $almacen = Almacen::where('id_user', $user->id)->first();
+        $almacen = Almacen::where('id_user', $user->id)
+        ->where('id',$datos['id_almacen'])
+        ->first();
 
         $compra = Compra::create([
             'id_user' => $user->id,
@@ -87,9 +112,9 @@ class DetallesCompraController extends Controller
         DetalleCompra::create([
             'id_producto' => $producto->id,
             'id_compra' => $compra->id,
-            'cantidad' => $datos['unidades'],
+            'cantidad' => $datos['cantidad_actual'],
             'precio_unitario' => $datos['precio_unitario'],
-            'estado' => true,
+            'estado' => false,
         ]);
 
         $inventario = Inventario::where('id_producto', $producto->id)
@@ -97,7 +122,7 @@ class DetallesCompraController extends Controller
             ->first();
 
         if ($inventario) {
-            $inventario->cantidad_actual += $datos['unidades'];
+            $inventario->cantidad_actual += $datos['cantidad_actual'];
             $inventario->fecha_entrada = now();
             $inventario->save();
         } else {
@@ -105,7 +130,7 @@ class DetallesCompraController extends Controller
                 'id_producto' => $producto->id,
                 'id_almacen' => $almacen->id,
                 'precio_unitario' => $datos['precio_unitario'],
-                'cantidad_actual' => $datos['unidades'],
+                'cantidad_actual' => $datos['cantidad_actual'],
                 'fecha_entrada' => now(),
                 'fecha_salida' => null,
             ]);
@@ -114,54 +139,16 @@ class DetallesCompraController extends Controller
         return $this->renderInventario($user);
     }
 
-    public function calcularStockStats($almacenes)
-    {
-        $stats = [
-            'disponible' => 0,
-            'lowStock' => 0,
-            'agotado' => 0,
-        ];
+    
 
-        foreach ($almacenes as $almacen) {
-            foreach ($almacen['productos'] as $producto) {
-                $cantidad = $producto['cantidad_actual'];
-
-                if ($cantidad === 0) {
-                    $stats['agotado']++;
-                } elseif ($cantidad < 10) {
-                    $stats['lowStock']++;
-                } else {
-                    $stats['disponible']++;
-                }
-            }
-        }
-
-        return $stats;
-    }
 
     private function renderInventario($user, $almacenesIds = null){
-        // Cargar los detalles de compras con sus relaciones
+        // Cargar los detalles de compras con sus relaciones para la lista general de proveedores
         $detallesComprasRaw = DetalleCompra::with(['producto', 'compra.proveedor'])
             ->whereHas('compra', function ($query) use ($user) {
                 $query->where('id_user', $user->id);
             })
             ->get();
-
-        // Agrupar proveedores por producto_id
-        $proveedoresPorProducto = [];
-        foreach ($detallesComprasRaw as $detalle) {
-            $productoId = $detalle->id_producto;
-            $proveedor = optional($detalle->compra->proveedor);
-
-            if ($proveedor && $proveedor->id) {
-                $proveedoresPorProducto[$productoId][$proveedor->id] = [
-                    'id' => $proveedor->id,
-                    'nombre' => $proveedor->nombre,
-                    'telefono' => $proveedor->telefono,
-                    'email' => $proveedor->email,
-                ];
-            }
-        }
 
         $almacenesQuery = Almacen::with(['productos' => function ($query) {
             $query->withPivot('id_almacen', 'cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
@@ -170,7 +157,7 @@ class DetallesCompraController extends Controller
 
         $allProductos = [];
 
-        $almacenes = $almacenesQuery->get()->map(function ($almacen) use (&$allProductos, $proveedoresPorProducto) {
+        $almacenes = $almacenesQuery->get()->map(function ($almacen) use (&$allProductos, $user) {
             $productos = $almacen->productos;
 
             $precioTotal = $productos->sum(fn($producto) =>
@@ -181,7 +168,17 @@ class DetallesCompraController extends Controller
                 $producto->pivot->cantidad_actual
             );
 
-            $productosData = $productos->map(function ($producto) use ($almacen, $proveedoresPorProducto) {
+            $productosData = $productos->map(function ($producto) use ($almacen, $user) {
+                // Aquí usamos el método para obtener proveedores por producto
+                $proveedores = $producto->proveedores($user->id)->map(function ($p) {
+                    return [
+                        'id' => $p->id,
+                        'nombre' => $p->nombre,
+                        'telefono' => $p->telefono,
+                        'email' => $p->email,
+                    ];
+                })->values();
+
                 return [
                     'id' => $producto->id,
                     'codigo' => $producto->codigo,
@@ -193,7 +190,7 @@ class DetallesCompraController extends Controller
                     'imagen' => $producto->imagen,
                     'almacen_id' => $almacen->id,
                     'almacen_nombre' => $almacen->nombre,
-                    'proveedores' => array_values($proveedoresPorProducto[$producto->id] ?? []),
+                    'proveedores' => $proveedores->toArray(),
                 ];
             })->toArray();
 
@@ -210,14 +207,14 @@ class DetallesCompraController extends Controller
             ];
         });
 
-        $stats = $this->calcularStockStats($almacenes);
-
+        // Lista general de proveedores únicos (sin repetir)
         $all_proveedores = $detallesComprasRaw
             ->pluck('compra.proveedor')
             ->filter()
             ->unique('id')
             ->values();
 
+        // Mapear detalles de compras y ventas (igual que antes)
         $detallesCompras = $detallesComprasRaw->map(function ($detalle) {
             return [
                 'cantidad' => $detalle->cantidad,
@@ -261,13 +258,6 @@ class DetallesCompraController extends Controller
         return Inertia::render('Pedidos', [
             'status' => true,
             'message' => 'Almacenes encontrados',
-            // 'count' => $almacenes->count(),
-            // 'total_productos' => $almacenes->sum('productos_count'),
-            // 'total_unidades' => $almacenes->sum('cantidad_total'),
-            // 'total_precio' => $almacenes->sum('precio_total'),
-            // 'disponible' => $stats['disponible'],
-            // 'lowStock' => $stats['lowStock'],
-            // 'agotado' => $stats['agotado'],
             'data' => $almacenes,
             'all_productos' => $allProductos,
             'all_almacenes' => $allAlmacenes,
