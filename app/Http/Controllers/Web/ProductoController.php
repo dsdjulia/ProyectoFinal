@@ -119,7 +119,9 @@ class ProductoController extends Controller
             'cantidad_actual' => 'required|integer'
         ]);
 
-        $almacen = Almacen::where('id',$datos['id_almacen']);
+        $almacen = Almacen::where('id',$datos['id_almacen'])
+            ->where('id_user',$user->id)
+            ->first();
 
         $inventario = Inventario::where('id_producto', $datos['id_producto'])
             ->where('id_almacen', $almacen->id)

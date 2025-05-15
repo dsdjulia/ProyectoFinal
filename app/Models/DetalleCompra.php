@@ -14,7 +14,7 @@ class DetalleCompra extends Model
     protected $fillable = [
         'id_producto',
         'id_compra',
-        'cantidad',
+        'cantidad_actual',
         'precio_unitario',
         'estado',
     ];
