@@ -117,7 +117,17 @@ class DetallesCompraController extends Controller
             'estado' => false,
         ]);
 
-        $inventario = Inventario::where('id_producto', $producto->id)
+        return $this->renderInventario($user);
+    }
+
+    public function addInventario(Request $request){
+        $user = Auth::user();
+
+        $datos = $request->validate([
+            
+        ]);
+
+        $inventario = Inventario::where('id_producto', $datos['precio_unitario'])
             ->where('precio_unitario', $datos['precio_unitario'])
             ->first();
 
@@ -125,21 +135,22 @@ class DetallesCompraController extends Controller
             $inventario->cantidad_actual += $datos['cantidad_actual'];
             $inventario->fecha_entrada = now();
             $inventario->save();
-        } else {
-            Inventario::create([
-                'id_producto' => $producto->id,
-                'id_almacen' => $almacen->id,
-                'precio_unitario' => $datos['precio_unitario'],
-                'cantidad_actual' => $datos['cantidad_actual'],
-                'fecha_entrada' => now(),
-                'fecha_salida' => null,
-            ]);
         }
 
-        return $this->renderInventario($user);
-    }
+        $inventario = Inventario::create([
+            'id_producto',
+            'id_almacen',
+            'precio_unitario',
+            'cantidad_actual',
+            'fecha_entrada',
+            'fecha_salida',
+            'fecha_vencimiento',
+        ]);
 
-    
+        return $this->renderInventario($user);
+
+
+    }
 
 
     private function renderInventario($user, $almacenesIds = null){
