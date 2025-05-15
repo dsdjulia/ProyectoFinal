@@ -126,10 +126,10 @@ class DetallesCompraController extends Controller
 
         $datos = $request->validate([
             //Producto para buscar inventario
-            'id_producto' ,
-            'precio_unitario' ,
-            'codigo' ,
-            'detalle_id'
+            'id_producto' => 'required|numeric' ,
+            'precio_unitario' => 'required|numeric' ,
+            'codigo' => 'required|string',
+            'detalle_id' => 'required|numeric'
         ]);
 
         $detalleCompra = DetalleCompra::where('id',$datos['detalle_id'])
