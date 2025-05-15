@@ -24,7 +24,7 @@ export function Sidebar({ active }) {
     { id: "pedidos", icon: "shopping_cart", label: "Pedidos", path: "pedidos.index" },
     { id: "ventas", icon: "point_of_sale", label: "Ventas", path: "ventas.index" },
     { id: "detalleProducto", icon: "info", label: "Detalle de Producto", path: "producto.show" },
-    { id: "contactoProveedores", icon: "contacts", label: "Contacto Proveedores", path: "proveedores.index" },
+    { id: "contactoProveedores", icon: "contacts", label: "Contacto proveedores", path: "proveedores.index" },
   ];
 
   const handleNavigation = (path) => {
