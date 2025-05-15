@@ -137,7 +137,7 @@ class DetallesCompraController extends Controller
             'cantidad_actual' =>'required|numeric'
         ]);
 
-        $detalleCompra = DetalleCompra::where('id',$datos['id_producto'])
+        $detalleCompra = DetalleCompra::where('id',$datos['detalle_id'])
             ->first();
         
         $detalleCompra->estado = true;
