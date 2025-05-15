@@ -47,7 +47,7 @@ export default function AddModal({
                 precio_unitario: "",
                 cantidad_actual: "",
                 perecedero: false,
-                fecha_caducidad: "",
+                fecha_vencimiento: "",
                 id_proveedor: "",
                 nombre_categoria: "",
                 nombre_proveedor: "",
