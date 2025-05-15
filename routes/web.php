@@ -2,13 +2,14 @@
 
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProveedoresController;
 use App\Http\Controllers\Web\AlmacenController;
 use App\Http\Controllers\Web\ProfileController;
-use App\Http\Controllers\Web\ProductoController;
 
+use App\Http\Controllers\Web\ProductoController;
 use App\Http\Controllers\Web\InventarioController;
-use App\Http\Controllers\Web\DetallesCompraController;
 use App\Http\Controllers\Web\DetallesVentaController;
+use App\Http\Controllers\Web\DetallesCompraController;
 
 
 // EDIT PROFILE
@@ -43,6 +44,7 @@ Route::get('/producto', [AlmacenController::class ,'getProduct'])->name('product
 Route::get('/dashboard', [InventarioController::class ,'dashboard'])->name('dashboard.index');
 Route::get('/pedidos', [DetallesCompraController::class ,'index'])->name('pedidos.index');
 Route::get('/ventas', [DetallesVentaController::class ,'index'])->name('ventas.index');
+Route::get('/proveedores', [ProveedoresController::class, 'index'])->name('proveedores.index');
 
 
 require __DIR__ . '/auth.php';

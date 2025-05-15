@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
 
@@ -31,4 +32,14 @@ class ProveedoresController extends Controller
 
         Proveedor::where('id',$datos['id_proveedor'])->first()->delete();
     }
+
+
+    public function index()
+{
+    $proveedores = Proveedor::all();
+    return Inertia::render('Proveedores/Index', [
+        'proveedores' => $proveedores
+    ]);
+}
+
 }
