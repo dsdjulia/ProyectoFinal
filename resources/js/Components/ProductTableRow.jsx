@@ -60,7 +60,7 @@ export default function ProductTableRow({
                 {/* Estado o almacén */}
                 <div className="text-gray-700 text-center">
                     {context === "orders" ? (
-                        <Chip status={product.estado || "false"} />
+                        <Chip status={!!product.estado}/>
                     ) : (
                         <span>{product.almacen_nombre || "Sin asignar"}</span>
                     )}

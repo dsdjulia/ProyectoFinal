@@ -151,17 +151,18 @@ class DetallesCompraController extends Controller
             $inventario->cantidad_actual += $datos['cantidad_actual'];
             $inventario->fecha_entrada = now();
             $inventario->save();
+        }else{
+            $inventario = Inventario::create([
+                'id_producto' => $datos['id_producto'],
+                'id_almacen'=> $datos['id_almacen'],
+                'precio_unitario' => $datos['precio_unitario'],
+                'cantidad_actual' => $datos['cantidad_actual'],
+                'fecha_entrada' => now(),
+                'fecha_salida' => null,
+                'fecha_vencimiento' => $datos['fecha_vencimiento'] ? $datos['fecha_vencimiento'] : null,
+            ]);
         }
 
-        $inventario = Inventario::create([
-            'id_producto' => $datos['id_producto'],
-            'id_almacen'=> $datos['id_almacen'],
-            'precio_unitario' => $datos['precio_unitario'],
-            'cantidad_actual' => $datos['cantidad_actual'],
-            'fecha_entrada' => now(),
-            'fecha_salida' => null,
-            'fecha_vencimiento' => $datos['fecha_vencimiento'] ? $datos['fecha_vencimiento'] : null,
-        ]);
 
         return $this->renderInventario($user);
 
