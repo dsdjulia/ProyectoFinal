@@ -92,11 +92,11 @@ export default function AddModal({
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        router.post(route("producto.patch"), formData, {
+        router.post(route("pedidos.store"), formData, {
             onSuccess: () => {
                 showModificableAlert(
-                    "Producto añadido",
-                    "Se agregó el producto al inventario.",
+                    "Pedido añadido",
+                    "Se agregó el pedido correctamente.",
                     "success"
                 );
                 onAdd && onAdd(formData);
