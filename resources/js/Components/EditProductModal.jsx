@@ -1,12 +1,14 @@
 import { showModificableAlert } from "@/utils/alerts";
 import { useState } from "react";
 import { Inertia } from "@inertiajs/inertia";
+import { router } from "@inertiajs/react";
 
 export default function EditproductoModal({ producto, onClose, context, almacenes = [], categorias = [], proveedores}) {
 
     const [formData, setFormData] = useState({
         codigo: producto.codigo,
         nombre: producto.nombre,
+        descripcion: producto.descripcion,
         imagen: producto.producto_imagen,
         id_categoria: producto.id_categoria,
         nombre_categoria: producto.nombre_categoria,
@@ -17,7 +19,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
         fecha_vencimiento: producto.fecha_vencimiento,
         id_proveedor: producto.id_proveedor,
         nombre_proveedor: producto.proveedor,
-        detalle_id: producto.detalle_id,
+        id_detalle: producto.id_detalle,
 
         status: context === "orders" ? producto.status : undefined,
         almacen: context === "stock" ? producto.almacen_nombre : undefined,
@@ -75,13 +77,16 @@ export default function EditproductoModal({ producto, onClose, context, almacene
     };
 
     const handleSubmit = () => {
-        Inertia.patch(`api/productos/${producto.id}`, formData, {
+        router.patch(route('pedidos.patchInventario'), formData, {
             onSuccess: () => {
-                showModificableAlert('productoo actualizado', `${producto.nombre} actualizado.`, 'success');
+                showModificableAlert('Pedido actualizado', `${producto.nombre} actualizado.`, 'success');
                 onClose();
+                router.visit(route("pedidos.index"), {
+                    preserveScroll: true,
+                });
             },
             onError: (error) =>
-                showModificableAlert('Error al actualizar el productoo', `Error: ${error}`, 'error'),
+                showModificableAlert('Error al actualizar el producto', `Error: ${JSON.stringify(error)}`, 'error'),
         });
     };
 
@@ -102,7 +107,6 @@ export default function EditproductoModal({ producto, onClose, context, almacene
                             type="text"
                             name="codigo"
                             value={formData.codigo}
-                            readOnly
                             onChange={handleInputChange}
                             className="w-full border border-slate-600 rounded-lg p-2 mt-1 bg-slate-800 focus:ring-2 focus:ring-slate-500 focus:outline-none text-slate-100"
                         />
@@ -117,9 +121,23 @@ export default function EditproductoModal({ producto, onClose, context, almacene
                             type="text"
                             name="nombre"
                             value={formData.nombre}
-                            readOnly
+                            onChange={handleInputChange}
                             className="w-full border border-slate-600 rounded-lg p-2 mt-1 bg-slate-800 focus:ring-2 focus:ring-slate-500 focus:outline-none text-slate-100"
-                            placeholder="Nombre del producto"
+                        />
+                    </div>
+
+                    {/* Descripción */}
+                    <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-slate-300">
+                            Descripción
+                        </label>
+                        <textarea
+                            name="descripcion"
+                            value={formData.descripcion}
+                            onChange={handleInputChange}
+                            className="w-full border border-slate-600 rounded-lg p-2 mt-1 bg-slate-800 focus:ring-2 focus:ring-slate-500 focus:outline-none text-slate-100"
+                            rows={3}
+                            placeholder="Descripción del producto"
                         />
                     </div>
 
@@ -239,7 +257,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
                             </label>
                             <input
                                 type="date"
-                                name="fecha_caducidad"
+                                name="fecha_vencimiento"
                                 value={formData.fecha_vencimiento}
                                 onChange={handleInputChange}
                                 className="w-full border border-slate-600 rounded-lg p-2 mt-1 bg-slate-800 focus:ring-2 focus:ring-slate-500 focus:outline-none text-slate-100"

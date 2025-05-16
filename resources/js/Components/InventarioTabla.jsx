@@ -201,7 +201,7 @@ export default function InventarioTabla({ props }) {
                         .map((product, index) => (
                             <ProductTableRow
                                 key={index}
-                                product={selectedProduct}
+                                product={product}
                                 context="stock"
                                 props={props}
                                 almacenes={almacenes}
