@@ -13,6 +13,8 @@ export default function CantidadModal({ isOpen, onClose, producto, tipo }) {
             cantidad: cantidad,
         };
 
+        console.log(producto);
+
         router.post(route("pedidos.addInventario"), datos, {
             onSuccess: () => {
                 showModificableAlert(
@@ -42,6 +44,13 @@ export default function CantidadModal({ isOpen, onClose, producto, tipo }) {
     const titulo = esVenta ? "¿Cuántas unidades has vendido?" : "¿Has recibido el pedido?";
     const botonTexto = esVenta ? "Registrar venta" : "Registrar recepción";
     const botonColor = esVenta ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700";
+
+    if (producto.estado) {
+        showModificableAlert('Pedido ya recibido', `El producto ${producto.nombre} ya ha sido marcado como recibido.`, 'error');
+        onClose();
+        return;
+    }
+
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
