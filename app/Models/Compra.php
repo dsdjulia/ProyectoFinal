@@ -17,7 +17,7 @@ class Compra extends Model
         'fecha_compra',
     ];
 
-    public function detalles(){
+    public function detalleCompras(){
         return $this->hasMany(DetalleCompra::class, 'id_compra', 'id');
     }
 
