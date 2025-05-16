@@ -39,10 +39,10 @@ Route::patch('/inventario/producto', [ProductoController::class ,'patch'])->name
 Route::get('/inventario/producto', [AlmacenController::class ,'getProduct'])->name('producto.show');
 
 //Route::update('/inventario/producto', [AlmacenController::class ,'update'])->name('producto.edit');
-
 Route::get('/pedidos', [DetallesCompraController::class ,'index'])->name('pedidos.index');
 Route::post('/pedidos', [DetallesCompraController::class ,'store'])->name('pedidos.store');
 Route::post('/pedidos/add', [DetallesCompraController::class ,'addInventario'])->name('pedidos.addInventario');
+Route::patch('/pedidos/patch', [DetallesCompraController::class ,'addInventario'])->name('pedidos.addInventario');
 
 
 Route::get('/dashboard', [InventarioController::class ,'dashboard'])->name('dashboard.index');

@@ -52,6 +52,72 @@ class DetallesCompraController extends Controller
             //datos para crear la categoria
             'nombre_categoria' => 'nullable|string',
         ]);
+
+
+            // 1. Buscar o crear la categoría
+        $categoria = Categoria::where('id_user', $user->id)
+            ->where(function ($query) use ($datos) {
+                $query->where('nombre', $datos['nombre_categoria'])
+                    ->orWhere('id', $datos['id_categoria']);
+            })
+            ->first();
+
+        if (!$categoria) {
+            $categoria = Categoria::create([
+                'id_user' => $user->id,
+                'nombre' => $datos['nombre_categoria'],
+            ]);
+        }
+
+        // 2. Buscar o crear producto
+        $producto = Producto::updateOrCreate(
+            [
+                'codigo' => $datos['codigo'],
+                'id_categoria' => $categoria->id,
+            ],
+            [
+                'nombre' => $datos['nombre'],
+                'descripcion' => $datos['descripcion'],
+                'perecedero' => $datos['perecedero'],
+                'imagen' => $datos['imagen']
+            ]
+        );
+
+        // 3. Buscar o crear proveedor
+        $proveedor = null;
+
+        if ($datos['id_proveedor']) {
+            $proveedor = Proveedor::find($datos['id_proveedor']);
+        }
+
+        if (!$proveedor && ($datos['nombre_proveedor'] || $datos['email'])) {
+            $proveedor = Proveedor::create([
+                'nombre' => $datos['nombre_proveedor'],
+                'email' => $datos['email'],
+                'telefono' => $datos['telefono'],
+            ]);
+        }
+
+        // 4. Actualizar compra si el proveedor cambió
+        $detalle = DetalleCompra::with('compra')->find($datos['detalle_id']);
+
+        if ($proveedor && $detalle->compra->id_proveedor !== $proveedor->id) {
+            $detalle->compra->id_proveedor = $proveedor->id;
+            $detalle->compra->save();
+        }
+
+        // 5. Actualizar detalle de compra
+        $detalle->update([
+            'id_producto' => $producto->id,
+            'id_almacen' => $datos['id_almacen'],
+            'cantidad_actual' => $datos['cantidad_actual'],
+            'precio_unitario' => $datos['precio_unitario'],
+            'fecha_vencimiento' => $datos['fecha_vencimiento'],
+        ]);
+
+        return $this->renderInventario($user);
+
+
         
     }
 
