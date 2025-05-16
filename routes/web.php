@@ -43,7 +43,7 @@ Route::get('/pedidos', [DetallesCompraController::class ,'index'])->name('pedido
 Route::post('/pedidos', [DetallesCompraController::class ,'store'])->name('pedidos.store');
 Route::post('/pedidos/add', [DetallesCompraController::class ,'addInventario'])->name('pedidos.addInventario');
 
-Route::patch('/pedidos/patch', [DetallesCompraController::class ,'patchInventario'])->name('pedidos.patchInventario');
+Route::patch('/pedidos/patch', [DetallesCompraController::class ,'patch'])->name('pedidos.patchInventario');
 
 
 Route::get('/dashboard', [InventarioController::class ,'dashboard'])->name('dashboard.index');
