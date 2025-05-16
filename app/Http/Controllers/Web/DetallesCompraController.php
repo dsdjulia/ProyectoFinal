@@ -28,7 +28,7 @@ class DetallesCompraController extends Controller
     public function patch(Request $request){
         $user = Auth::user();
         $datos = $request->validate([
-            'detalle_id' => 'required|integer|exists:detalle_compras,id',
+            'id_detalle' => 'required|integer|exists:detalle_compras,id',
             //producto que pides
             'id_categoria' => 'nullable|integer',
             'codigo' => 'required|string',
@@ -99,7 +99,7 @@ class DetallesCompraController extends Controller
         }
 
         // 4. Actualizar compra si el proveedor cambió
-        $detalle = DetalleCompra::with('compra')->find($datos['detalle_id']);
+        $detalle = DetalleCompra::with('compra')->find($datos['id_detalle']);
 
         if ($proveedor && $detalle->compra->id_proveedor !== $proveedor->id) {
             $detalle->compra->id_proveedor = $proveedor->id;
