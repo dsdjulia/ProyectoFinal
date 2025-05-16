@@ -21,7 +21,84 @@ class DetallesVentaController extends Controller
 
     public function index(){
         $user = Auth::user();
+        return $this->renderInventario($user);
+    }
 
+    public function store(Request $request){
+        $user = Auth::user();
+
+        $datos = $request->validate([
+            // Cliente
+            'nombre_cliente' => 'required|string|min:1',
+            'identificacion_cliente' => 'required|string|min:1',
+            'telefono_cliente' => 'required|string|min:1',
+            'email_cliente' => 'required|email',
+            'direccion_cliente' => 'required|string|min:1',
+            'tipo_comprador' => 'required|in:particular,empresa',
+
+            // Producto
+            'codigo' => 'required|string|min:1',
+            'nombre' => 'required|string|min:1',
+            'precio_unitario' => 'required|numeric|min:1',
+            'id_almacen' => 'required|exists:almacenes,id',
+
+            // Detalles de venta
+            'cantidad_vendida' => 'required|integer|min:1'
+        ]);
+
+        $producto = Producto::where('codigo', $datos['codigo'])
+            ->where('nombre', $datos['nombre'])
+            ->firstOrFail();
+
+        $almacen = Almacen::where('id_user', $user->id)
+            ->where('id', $datos['id_almacen'])
+            ->firstOrFail();
+
+        // Buscar o crear el comprador
+        $comprador = Comprador::firstOrCreate(
+            ['identificacion' => $datos['identificacion_cliente']],
+            [
+                'nombre' => $datos['nombre_cliente'],
+                'telefono' => $datos['telefono_cliente'],
+                'email' => $datos['email_cliente'],
+                'direccion' => $datos['direccion_cliente'],
+                'tipo_comprador' => $datos['tipo_comprador'],
+            ]
+        );
+
+        // Buscar inventario suficiente
+        $inventario = Inventario::where('id_producto', $producto->id)
+            ->where('id_almacen', $almacen->id)
+            ->where('cantidad_actual', '>=', $datos['cantidad_vendida'])
+            ->orderByDesc('fecha_entrada')
+            ->first();
+
+        if (!$inventario) {
+            return redirect()->back()->withErrors('No hay suficiente stock disponible para este producto.');
+        }
+
+        $margen = 0.25;
+        $precioVenta = round($inventario->precio_unitario * (1 + $margen), 2);
+
+        $venta = Venta::create([
+            'id_user' => $user->id,
+            'id_comprador' => $comprador->id,
+            'fecha_venta' => now(),
+        ]);
+
+        DetalleVenta::create([
+            'id_producto' => $producto->id,
+            'id_venta' => $venta->id,
+            'cantidad' => $datos['cantidad_vendida'],
+            'precio_unitario' => $precioVenta,
+        ]);
+
+        $inventario->decrement('cantidad_actual', $datos['cantidad_vendida']);
+
+        return $this->renderInventario($user);
+    }
+
+    public function renderInventario($user){
         $almacenesQuery = Almacen::with(['productos' => function ($query) {
             $query->withPivot('id_almacen','cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
         }])
@@ -69,40 +146,15 @@ class DetallesVentaController extends Controller
             ];
         });
 
-        $stats = $this->calcularStockStats($almacenes);
-
-        $detallesComprasRaw = DetalleCompra::with(['producto', 'compra.proveedor'])
-            ->whereHas('compra', function ($query) use ($user){
+        $detallesVentasRaw = DetalleVenta::with(['producto', 'venta.comprador'])
+            ->whereHas('venta', function ($query) use ($user) {
                 $query->where('id_user', $user->id);
             })
             ->get();
 
-        $all_proveedores = $detallesComprasRaw
-            ->pluck('compra.proveedor')
-            ->filter()
-            ->unique('id')
-            ->values();
-
-        $detallesCompras = $detallesComprasRaw->map(function ($detalle) {
+        $detallesVentas = $detallesVentasRaw->map(function ($detalle) {
             return [
-                'producto_id' => $detalle->id_producto,
-                'codigo' => $detalle->producto->codigo,
-                'nombre' => $detalle->producto->nombre,
-                'precio_unitario' => $detalle->precio_unitario,
-                'cantidad' => $detalle->cantidad,
-                'estado' => $detalle->estado,
-                'fecha_compra' => optional($detalle->compra)->fecha_compra,
-                'proveedor' => optional($detalle->compra->proveedor)->nombre,
-            ];
-        });
-
-        $detallesVentas = DetalleVenta::with(['producto', 'venta.comprador'])
-            ->whereHas('venta', function ($query) use ($user){
-                $query->where('id_user',$user->id);
-            })
-            ->get()
-            ->map(function ($detalle) {
-            return [
+                'id_detalle' => $detalle->id,
                 'producto_id' => $detalle->id_producto,
                 'codigo' => $detalle->producto->codigo,
                 'nombre' => $detalle->producto->nombre,
@@ -113,6 +165,12 @@ class DetallesVentaController extends Controller
             ];
         });
 
+        $allClientes = $detallesVentasRaw
+            ->pluck('venta.comprador') 
+            ->filter() 
+            ->unique('id') 
+            ->values();
+
         $allAlmacenes = Almacen::with(['productos' => function ($query) {
             $query->withPivot('id_almacen','cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
         }])
@@ -120,112 +178,16 @@ class DetallesVentaController extends Controller
 
         $categorias = Categoria::where('id_user', $user->id)->with('productos')->get();
 
-
         return Inertia::render('Ventas', props: [
             'status' => true,
             'message' => 'Almacenes encontrados',
             'count' => $almacenes->count(),
-            'total_productos' => $almacenes->sum('productos_count'),
-            'total_unidades' => $almacenes->sum('cantidad_total'),
-            'total_precio' => $almacenes->sum('precio_total'),
-            'disponible' => $stats['disponible'],
-            'lowStock' => $stats['lowStock'],
-            'agotado' => $stats['agotado'],
             'data' => $almacenes,
+            'all_clientes' => $allClientes,
             'all_productos' => $allProductos,
             'all_almacenes' => $allAlmacenes,
-            'all_proveedores' =>$all_proveedores,
-            'detalles_compras' => $detallesCompras,
             'detalles_ventas' => $detallesVentas,
             'categorias' => $categorias,
-
         ]);
     }
-
-    public function store(Request $request){
-        $user = Auth::user();
-
-        $datos = $request->validate([
-            // cliente
-            'nombre',
-            'identificacion',
-            'telefono' => 'required|string|min:1',
-            'email' => 'required|email',
-            //producto
-            'codigo' => 'required|string|min:1',
-            //detalles
-            'cantidad' => 'required|integer',
-
-        ]);
-
-        $producto = Producto::where('codigo',$datos['codigo'])->first();
-        $almacen = Almacen::where('id_user',$user->id)->first();
-
-        // Buscar o crear el comprador
-        $comprador = Comprador::firstOrCreate([
-            'telefono' => $datos['telefono'],
-            'email' => $datos['email'],
-        ]);
-        
-        //Busqueda de inventario
-        $inventario = Inventario::where('id_producto', $producto->id)
-            ->where('id_almacen', $almacen->id)
-            ->where('cantidad_actual', '>=', $datos['cantidad'])
-            ->orderByDesc('fecha_entrada')
-            ->first();
-
-        if (!$inventario) {
-            return redirect()->back()->withErrors('No hay suficiente stock disponible para este producto.');
-        }
-
-        $margen = 0.25;
-        $precioVenta = round($inventario->precio_unitario * (1 + $margen), 2);
-
-        $venta = Venta::create([
-            'id_user'=> $user->id,
-            'id_comprador'=> $comprador->id,
-            'fecha_venta'=> now(),
-        ]);
-
-        DetalleVenta::create([
-            'id_producto' => $producto->id,
-            'id_venta' =>$venta->id,
-            'cantidad' => $datos['cantidad'],
-            'precio_unitario' => $precioVenta
-        ]);
-
-        $inventario->cantidad_actual -= $datos['cantidad'];
-        $inventario->save();
-
-        return redirect()->route('inventario.index');
-
-    }
-
-    public function calcularStockStats($almacenes)
-    {
-        $stats = [
-            'disponible' => 0,
-            'lowStock' => 0,
-            'agotado' => 0,
-        ];
-
-        if($almacenes){
-            foreach ($almacenes as $almacen) {
-                foreach ($almacen['productos'] as $producto) {
-                    $cantidad = $producto['cantidad_actual'];
-
-                    if ($cantidad === 0) {
-                        $stats['agotado']++;
-                    } elseif ($cantidad < 10) {
-                        $stats['lowStock']++;
-                    } else {
-                        $stats['disponible']++;
-                    }
-                }
-            }
-        }
-
-        return $stats;
-    }
-
 }
