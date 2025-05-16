@@ -9,14 +9,14 @@ export default function EditproductoModal({ producto, onClose, context, almacene
         codigo: producto.codigo,
         nombre: producto.nombre,
         imagen: producto.imagen,
-        id_almacen: producto.almacen_id,
+        id_almacen: producto.id_almacen,
         precio_unitario: producto.precio_unitario,
         cantidad_actual: producto.cantidad_actual,
         perecedero: false,
-        fecha_caducidad: "",
+        fecha_vencimiento: producto.fecha_vencimiento,
         id_proveedor: "",
         nombre_categoria: "",
-        nombre_proveedor: "",
+        nombre_proveedor: producto.proveedor,
 
 
         status: context === "orders" ? producto.status : undefined,
@@ -88,7 +88,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
     return (
         <div className="fixed inset-0 bg-slate-800 bg-opacity-30 flex items-center justify-center z-50">
             <div className="bg-slate-700 text-white rounded-sm shadow-md shadow-slate-400 p-8 w-[60vw]">
-                <h2 className="text-2xl font-bold mb-6 text-slate-100">Editar productoo</h2>
+                <h2 className="text-2xl font-bold mb-6 text-slate-100">Editar producto</h2>
                 <form
                     onSubmit={handleSubmit}
                     className="space-y-5"

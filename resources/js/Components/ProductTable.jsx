@@ -20,7 +20,7 @@ export default function ProductTable({props}) {
     const [categorias, setCategorias] = useState(props.categorias);
     const [proveedores, setProveedores] = useState(props.all_proveedores);
 
-    console.log(props.data);
+    console.log(props);
 
     const handleAddProduct = (newProduct) => {
         setProducts([...products, newProduct]);

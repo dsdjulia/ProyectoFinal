@@ -10,7 +10,7 @@ export default function ProductTableRow({
     context,
     almacenes = [],
     onUpdate,
-    categorias = [],
+    categorias,
     proveedores = [],
     onDelete,
     onCantidadClick, // ✅ nuevo prop para abrir modal de cantidad
@@ -18,6 +18,7 @@ export default function ProductTableRow({
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
     console.log(product);
+    console.log(categorias);
 
     const handleEditSave = (updatedData) => {
         if (onUpdate) {

@@ -21,6 +21,8 @@ export default function OrdenesCompra({ props }) {
     const [isCantidadModalOpen, setCantidadModalOpen] = useState(false);
     const [tipoOperacion, setTipoOperacion] = useState(""); // "venta" o "recepcion"
 
+    console.log(props);
+
     const handleAddProduct = (newProduct) => {
         setProducts([...products, newProduct]);
     };
@@ -122,6 +124,7 @@ export default function OrdenesCompra({ props }) {
                             <ProductTableRow
                                 key={index}
                                 product={compra}
+                                categorias={categorias}
                                 context="orders"
                                 almacenes={almacenes}
                                 onDelete={() => handleDeleteProduct(compra)}
