@@ -90,6 +90,12 @@ export default function EditproductoModal({ producto, onClose, context, almacene
         });
     };
 
+        if (producto.estado) {
+        showModificableAlert('Pedido ya recibido', `No se puede editar un producto ya recibido`, 'error');
+        onClose();
+        return;
+    }
+
     return (
         <div className="fixed inset-0 bg-slate-800 bg-opacity-30 flex items-center justify-center z-50">
             <div className="bg-slate-700 text-white rounded-sm shadow-md shadow-slate-400 p-8 w-[60vw]">
