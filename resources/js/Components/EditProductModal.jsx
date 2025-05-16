@@ -2,22 +2,21 @@ import { showModificableAlert } from "@/utils/alerts";
 import { useState } from "react";
 import { Inertia } from "@inertiajs/inertia";
 
-export default function EditproductoModal({ producto, onClose, context, almacenes = [], categorias = [], proveedores = []}) {
+export default function EditproductoModal({ producto, onClose, context, almacenes = [], categorias = [], proveedores}) {
 
     const [formData, setFormData] = useState({
-        id_categoria: "",
         codigo: producto.codigo,
         nombre: producto.nombre,
-        imagen: producto.imagen,
+        imagen: producto.producto_imagen,
+        id_categoria: producto.id_categoria,
+        nombre_categoria: producto.nombre_categoria,
         id_almacen: producto.id_almacen,
         precio_unitario: producto.precio_unitario,
         cantidad_actual: producto.cantidad_actual,
         perecedero: producto.fecha_vencimiento ? true : false,
         fecha_vencimiento: producto.fecha_vencimiento,
-        id_proveedor: "",
-        nombre_categoria: "",
+        id_proveedor: producto.id_proveedor,
         nombre_proveedor: producto.proveedor,
-
 
         status: context === "orders" ? producto.status : undefined,
         almacen: context === "stock" ? producto.almacen_nombre : undefined,
@@ -75,7 +74,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
     };
 
     const handleSubmit = () => {
-        Inertia.patch(`api/productoos/${producto.id}`, formData, {
+        Inertia.patch(`api/productos/${producto.id}`, formData, {
             onSuccess: () => {
                 showModificableAlert('productoo actualizado', `${producto.nombre} actualizado.`, 'success');
                 onClose();
@@ -149,7 +148,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
                             onChange={handleCategoriaChange}
                             className="w-full border border-slate-600 rounded-lg p-2 mt-1 bg-slate-800 focus:ring-2 focus:ring-slate-500 focus:outline-none text-slate-100"
                         >
-                            <option value="">Seleccionar categoría</option>
+                            <option value={formData.id_categoria}>{formData.nombre_categoria}</option>
                             <option value="nueva">Nueva categoría</option>
                             {categorias.map((categoria) => (
                                 <option key={categoria.id} value={categoria.id}>
@@ -240,7 +239,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
                             <input
                                 type="date"
                                 name="fecha_caducidad"
-                                value={formData.fecha_caducidad}
+                                value={formData.fecha_vencimiento}
                                 onChange={handleInputChange}
                                 className="w-full border border-slate-600 rounded-lg p-2 mt-1 bg-slate-800 focus:ring-2 focus:ring-slate-500 focus:outline-none text-slate-100"
                             />

@@ -127,6 +127,7 @@ export default function OrdenesCompra({ props }) {
                                 categorias={categorias}
                                 context="orders"
                                 almacenes={almacenes}
+                                proveedores={proveedores}
                                 onDelete={() => handleDeleteProduct(compra)}
                                 onCantidadClick={(tipo) => {
                                     setselectedPedido(compra);
