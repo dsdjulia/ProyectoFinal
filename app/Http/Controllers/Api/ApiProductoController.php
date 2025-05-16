@@ -73,7 +73,7 @@ class ApiProductoController extends Controller
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'descripcion' => 'required|string',
-            'precio_unitario' => 'required|float',
+            'precio_unitario' => 'required|numeric',
             'id' => 'required|integer',
         ]);
 

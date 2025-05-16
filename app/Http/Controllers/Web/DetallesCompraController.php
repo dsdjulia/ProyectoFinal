@@ -113,10 +113,10 @@ class DetallesCompraController extends Controller
             'cantidad_actual' => $datos['cantidad_actual'],
             'precio_unitario' => $datos['precio_unitario'],
             'fecha_vencimiento' => $datos['fecha_vencimiento'],
+            'estado' => false
         ]);
 
         return $this->renderInventario($user);
-
 
         
     }
@@ -352,6 +352,7 @@ class DetallesCompraController extends Controller
                 'id_producto' => $detalle->id_producto,
                 'codigo' => $detalle->producto->codigo,
                 'nombre' => $detalle->producto->nombre,
+                'descripcion' => $detalle->producto->descripcion,
                 'producto_imagen' => $detalle->producto->imagen,
 
                 'id_proveedor' => optional($detalle->compra->proveedor)->id,
