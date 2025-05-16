@@ -25,6 +25,36 @@ class DetallesCompraController extends Controller
 
     }
 
+    public function patch(Request $request){
+        $user = Auth::user();
+        $datos = $request->validate([
+            'detalle_id' => 'required|integer|exists:detalle_compras,id',
+            //producto que pides
+            'id_categoria' => 'nullable|integer',
+            'codigo' => 'required|string',
+            'nombre' => 'required|string',
+            'descripcion' => 'nullable|string',
+            'perecedero' => 'nullable|boolean',
+            'imagen' => 'nullable|string',
+
+            //Inventario
+            'precio_unitario' => 'required|numeric|min:0',
+            'cantidad_actual' => 'required|integer|min:1',
+            'id_almacen' => 'required|exists:almacenes,id',
+            'fecha_vencimiento' => 'nullable|date',
+
+            //Proveedor
+            'id_proveedor' => 'nullable',
+            'nombre_proveedor' => 'nullable|string',
+            'telefono' => 'nullable|string',
+            'email' => 'nullable|email',
+
+            //datos para crear la categoria
+            'nombre_categoria' => 'nullable|string',
+        ]);
+        
+    }
+
     public function store(Request $request)
     {
         $user = Auth::user();
@@ -162,11 +192,7 @@ class DetallesCompraController extends Controller
                 'fecha_vencimiento' => $datos['fecha_vencimiento'] ? $datos['fecha_vencimiento'] : null,
             ]);
         }
-
-
         return $this->renderInventario($user);
-
-
     }
 
 
@@ -251,21 +277,27 @@ class DetallesCompraController extends Controller
         // Mapear detalles de compras y ventas (igual que antes)
         $detallesCompras = $detallesComprasRaw->map(function ($detalle) {
             return [
-                'fecha_vencimiento'=> $detalle->fecha_vencimiento,
                 'id_almacen' => $detalle->almacen->id,
-                'detalle_id' => $detalle->id,
-                'cantidad_actual' => $detalle->cantidad_actual,
-                'codigo' => $detalle->producto->codigo,
-                'estado' => $detalle->estado,
-                'fecha_compra' => optional($detalle->compra)->fecha_compra,
-                'nombre' => $detalle->producto->nombre,
+                'nombre_almacen' => $detalle->almacen->nombre,
+
                 'id_categoria' => $detalle->producto->id_categoria,
                 'nombre_categoria' => $detalle->producto->categoria->nombre,
+
                 'id_producto' => $detalle->id_producto,
-                'precio_unitario' => $detalle->precio_unitario,
-                'proveedor' => optional($detalle->compra->proveedor)->nombre,
-                'id_proveedor' => optional($detalle->compra->proveedor)->id,
+                'codigo' => $detalle->producto->codigo,
+                'nombre' => $detalle->producto->nombre,
                 'producto_imagen' => $detalle->producto->imagen,
+
+                'id_proveedor' => optional($detalle->compra->proveedor)->id,
+                'proveedor' => optional($detalle->compra->proveedor)->nombre,
+                
+                
+                'id_detalle' => $detalle->id,
+                'fecha_vencimiento'=> $detalle->fecha_vencimiento,
+                'cantidad_actual' => $detalle->cantidad_actual,
+                'estado' => $detalle->estado,
+                'fecha_compra' => optional($detalle->compra)->fecha_compra,
+                'precio_unitario' => $detalle->precio_unitario,
 
             ];
         });
