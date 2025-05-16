@@ -228,12 +228,12 @@ class DetallesCompraController extends Controller
             'id_almacen' => 'required|numeric',
             'precio_unitario' => 'required|numeric' ,
             'codigo' => 'required|string',
-            'detalle_id' => 'required|numeric',
+            'id_detalle' => 'required|numeric',
             'fecha_vencimiento' => 'nullable|date',
             'cantidad_actual' =>'required|numeric'
         ]);
 
-        $detalleCompra = DetalleCompra::where('id',$datos['detalle_id'])
+        $detalleCompra = DetalleCompra::where('id',$datos['id_detalle'])
             ->first();
         
         $detalleCompra->estado = true;
