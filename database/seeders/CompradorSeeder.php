@@ -20,7 +20,7 @@ class CompradorSeeder extends Seeder
                 'telefono'         => '600123456',
                 'email'            => 'ana.garcia@example.com',
                 'direccion'        => 'Calle Mayor 10, Madrid',
-                'tipo_comprador'   => 'minorista',
+                'tipo_comprador'   => 'particular',
             ],
             [
                 'nombre'           => 'Carlos Ruiz',
@@ -28,7 +28,7 @@ class CompradorSeeder extends Seeder
                 'telefono'         => '600654321',
                 'email'            => 'carlos.ruiz@example.com',
                 'direccion'        => 'Calle Luna 5, Barcelona',
-                'tipo_comprador'   => 'minorista',
+                'tipo_comprador'   => 'particular',
             ],
             [
                 'nombre'           => 'Corporación XYZ S.L.',
