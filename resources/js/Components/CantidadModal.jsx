@@ -5,39 +5,6 @@ import { useState } from "react";
 export default function CantidadModal({ isOpen, onClose, producto, tipo }) {
     const [cantidad, setCantidad] = useState("");
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        const datos = {
-            ...producto,
-            cantidad: cantidad,
-        };
-
-        console.log(producto);
-
-        router.post(route("pedidos.addInventario"), datos, {
-            onSuccess: () => {
-                showModificableAlert(
-                    "Pedido registrado",
-                    "Se actualizó correctamente el inventario.",
-                    "success"
-                );
-                setCantidad("");
-                onClose();
-                router.visit(route("inventario.index"), {
-                    preserveScroll: true,
-                });
-            },
-            onError: (errors) => {
-                showModificableAlert(
-                    "Error al registrar",
-                    `Detalles: ${JSON.stringify(errors)}`,
-                    "error"
-                );
-            },
-        });
-    };
-
     if (!isOpen) return null;
 
     const esVenta = tipo === "venta";
@@ -50,6 +17,81 @@ export default function CantidadModal({ isOpen, onClose, producto, tipo }) {
         onClose();
         return;
     }
+
+    const [formData, setFormData] = useState({        
+        codigo: "",
+        nombre: "",
+        precio_unitario: "",
+        cantidad_vendida: "",
+        id_almacen: "",
+
+        nombre_cliente: "",
+        identificacion_cliente: "",
+        telefono_cliente: "",
+        email_cliente: "",
+        direccion_cliente: "",
+        tipo_comprador: "",
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const datos = {
+            ...producto,
+            cantidad: cantidad,
+        };
+
+        console.log(producto);
+
+        if (esVenta){
+
+            router.post(route("ventas.store"), formData, {
+                onSuccess: () => {
+                    showModificableAlert(
+                        "Producto vendido",
+                        `El producto "${producto.nombre}" se ha marcado como vendido"`,
+                        "success"
+                    );
+                    setCantidad("");
+                    onClose();
+                    router.visit(route("ventas.index"), {
+                        preserveScroll: true,
+                    });
+                },
+                onError: (errors) => {
+                    showModificableAlert(
+                        "Error al vender el producto",
+                        `Detalles: ${JSON.stringify(errors)}`,
+                        "error"
+                    );
+                },
+            });
+
+        } else {
+            router.post(route("pedidos.addInventario"), datos, {
+                onSuccess: () => {
+                    showModificableAlert(
+                        "Pedido registrado",
+                        "Se actualizó correctamente el inventario.",
+                        "success"
+                    );
+                    setCantidad("");
+                    onClose();
+                    router.visit(route("inventario.index"), {
+                        preserveScroll: true,
+                    });
+                },
+                onError: (errors) => {
+                    showModificableAlert(
+                        "Error al registrar",
+                        `Detalles: ${JSON.stringify(errors)}`,
+                        "error"
+                    );
+                },
+            });
+        }
+
+    };
 
 
     return (
