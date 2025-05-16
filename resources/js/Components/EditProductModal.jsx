@@ -17,6 +17,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
         fecha_vencimiento: producto.fecha_vencimiento,
         id_proveedor: producto.id_proveedor,
         nombre_proveedor: producto.proveedor,
+        detalle_id: producto.detalle_id,
 
         status: context === "orders" ? producto.status : undefined,
         almacen: context === "stock" ? producto.almacen_nombre : undefined,
