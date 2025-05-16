@@ -9,7 +9,6 @@ import AddAlmacenModal from "./AddAlmacenModal";
 import { router } from "@inertiajs/react";
 
 export default function InventarioTabla({ props }) {
-    console.log(props);
     const [almacenes, setAlmacenes] = useState(props.data ?? []);
     const [products, setProducts] = useState(props.all_productos ?? []);
     const [categorias, setCategorias] = useState(props.categorias ?? []);
@@ -25,6 +24,8 @@ export default function InventarioTabla({ props }) {
 
     const [isCantidadModalOpen, setCantidadModalOpen] = useState(false);
     const [tipoOperacion, setTipoOperacion] = useState("");
+
+    console.log(props);
 
     const handleAddProduct = (newProduct) => {
         setProducts([...products, newProduct]);
@@ -200,8 +201,9 @@ export default function InventarioTabla({ props }) {
                         .map((product, index) => (
                             <ProductTableRow
                                 key={index}
-                                product={product}
+                                product={selectedProduct}
                                 context="stock"
+                                props={props}
                                 almacenes={almacenes}
                                 categorias={categorias}
                                 onDelete={() => handleDeleteProduct(product)}

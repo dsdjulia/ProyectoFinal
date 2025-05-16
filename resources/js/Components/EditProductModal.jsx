@@ -12,7 +12,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
         id_almacen: producto.id_almacen,
         precio_unitario: producto.precio_unitario,
         cantidad_actual: producto.cantidad_actual,
-        perecedero: false,
+        perecedero: producto.fecha_vencimiento ? true : false,
         fecha_vencimiento: producto.fecha_vencimiento,
         id_proveedor: "",
         nombre_categoria: "",

@@ -13,7 +13,7 @@ export default function ProductTableRow({
     categorias,
     proveedores = [],
     onDelete,
-    onCantidadClick, // ✅ nuevo prop para abrir modal de cantidad
+    props
 }) {
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
