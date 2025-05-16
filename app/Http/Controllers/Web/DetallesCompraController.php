@@ -259,10 +259,12 @@ class DetallesCompraController extends Controller
                 'estado' => $detalle->estado,
                 'fecha_compra' => optional($detalle->compra)->fecha_compra,
                 'nombre' => $detalle->producto->nombre,
+                'id_categoria' => $detalle->producto->id_categoria,
                 'id_producto' => $detalle->id_producto,
                 'precio_unitario' => $detalle->precio_unitario,
                 'proveedor' => optional($detalle->compra->proveedor)->nombre,
                 'id_proveedor' => optional($detalle->compra->proveedor)->id,
+
             ];
         });
 
