@@ -54,7 +54,7 @@ class DetallesCompraController extends Controller
         ]);
 
 
-            // 1. Buscar o crear la categoría
+        //Busca o crea la categoría
         $categoria = Categoria::where('id_user', $user->id)
             ->where(function ($query) use ($datos) {
                 $query->where('nombre', $datos['nombre_categoria'])
@@ -69,7 +69,7 @@ class DetallesCompraController extends Controller
             ]);
         }
 
-        // 2. Buscar o crear producto
+        //Busca o crear producto
         $producto = Producto::updateOrCreate(
             [
                 'codigo' => $datos['codigo'],
@@ -83,7 +83,7 @@ class DetallesCompraController extends Controller
             ]
         );
 
-        // 3. Buscar o crear proveedor
+        //Busca o crear proveedor
         $proveedor = null;
 
         if ($datos['id_proveedor']) {
@@ -98,7 +98,7 @@ class DetallesCompraController extends Controller
             ]);
         }
 
-        // 4. Actualizar compra si el proveedor cambió
+        //Actualizar compra si el proveedor cambió
         $detalle = DetalleCompra::with('compra')->find($datos['id_detalle']);
 
         if ($proveedor && $detalle->compra->id_proveedor !== $proveedor->id) {
@@ -106,7 +106,7 @@ class DetallesCompraController extends Controller
             $detalle->compra->save();
         }
 
-        // 5. Actualizar detalle de compra
+        //Actualiza detalle de compra
         $detalle->update([
             'id_producto' => $producto->id,
             'id_almacen' => $datos['id_almacen'],
@@ -217,6 +217,38 @@ class DetallesCompraController extends Controller
         ]);
 
         return $this->renderInventario($user);
+    }
+
+    public function destroy(Request $request){
+        $user = Auth::user();
+        $datos = $request->validate([
+            'id_detalle' => 'required|exists:detalle_compras,id',
+        ]);
+
+        $detalle = DetalleCompra::with('compra', 'producto')->find($datos['id_detalle']);
+
+        if ($detalle->compra->id_user !== $user->id) {
+            abort(403, 'No tienes permisos para eliminar este detalle.');
+        }
+
+        $compra = $detalle->compra;
+        $producto = $detalle->producto;
+
+        $detalle->delete();
+
+        if ($compra->detalles()->count() === 0) {
+            $compra->delete();
+        }
+
+        $productoUsado = DetalleCompra::where('id_producto', $producto->id)->exists() ||
+                        Inventario::where('id_producto', $producto->id)->exists();
+
+        if (!$productoUsado) {
+            $producto->delete();
+        }
+
+        return $this->renderInventario($user);
+
     }
 
     public function addInventario(Request $request){

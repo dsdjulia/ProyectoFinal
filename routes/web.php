@@ -42,6 +42,7 @@ Route::get('/inventario/producto', [AlmacenController::class ,'getProduct'])->na
 Route::get('/pedidos', [DetallesCompraController::class ,'index'])->name('pedidos.index');
 Route::post('/pedidos', [DetallesCompraController::class ,'store'])->name('pedidos.store');
 Route::post('/pedidos/add', [DetallesCompraController::class ,'addInventario'])->name('pedidos.addInventario');
+Route::delete('/pedidos', [DetallesCompraController::class ,'destroy'])->name('pedidos.destroy');
 
 Route::patch('/pedidos/patch', [DetallesCompraController::class ,'patch'])->name('pedidos.patchInventario');
 

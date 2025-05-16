@@ -46,10 +46,27 @@ export default function OrdenesCompra({ props }) {
         );
 
         // Aquí podrías usar router.post o router.put para actualizar backend:
-        router.post("/productos/actualizar-stock", {
-            producto_id: selectedPedido.id,
-            cantidad,
-            tipo: tipoOperacion,
+        router.post(route('pedidos.destroy'), {
+            id_detalle: selectedPedido.id,
+        },{
+            onSuccess: () => {
+                showModificableAlert(
+                    "Pedido eliminado",
+                    "Se elimino el pedido correctamente.",
+                    "success"
+                );
+                onClose();
+                router.visit(route("pedidos.index"), {
+                    preserveScroll: true,
+                });
+            },
+            onError: (errors) => {
+                showModificableAlert(
+                    "Error al eliminar el pedido",
+                    `Error: ${JSON.stringify(errors)}`,
+                    "error"
+                );
+            },
         });
     };
 
