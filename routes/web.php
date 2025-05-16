@@ -31,23 +31,25 @@ Route::get('/inventario', [AlmacenController::class ,'index'])->name('inventario
 Route::delete('/inventario', [AlmacenController::class ,'delete'])->name('inventario.delete');
 Route::post('/inventario', [AlmacenController::class ,'store'])->name('inventario.store');
 
-
 // CRUD DE PRODUCTOS AÑADIR Y BORRAR
 Route::delete('/inventario/producto', [ProductoController::class ,'delete'])->name('producto.delete');
 Route::post('/inventario/producto', [ProductoController::class ,'store'])->name('producto.store');
 Route::patch('/inventario/producto', [ProductoController::class ,'patch'])->name('producto.patch');
 
-
-//Route::update('/inventario/producto', [AlmacenController::class ,'update'])->name('producto.edit');
+// CRUD DE PEDIDOS
 Route::get('/pedidos', [DetallesCompraController::class ,'index'])->name('pedidos.index');
 Route::post('/pedidos', [DetallesCompraController::class ,'store'])->name('pedidos.store');
 Route::post('/pedidos/add', [DetallesCompraController::class ,'addInventario'])->name('pedidos.addInventario');
 Route::delete('/pedidos', [DetallesCompraController::class ,'destroy'])->name('pedidos.destroy');
-
 Route::patch('/pedidos/patch', [DetallesCompraController::class ,'patch'])->name('pedidos.patchInventario');
 
+//CRUD DE VENTAS
+Route::post('/ventas', [DetallesVentaController::class ,'store'])->name('ventas.store');
+
+
+
 // NAV BAR
-Route::get('producto/detalles', [ProductoController::class ,'index'])->name('producto.index');
+// NECESITA ID DE PRODUCTO Route::get('producto/detalles', [ProductoController::class ,'index'])->name('producto.index');
 Route::get('/dashboard', [InventarioController::class ,'dashboard'])->name('dashboard.index');
 Route::get('/ventas', [DetallesVentaController::class ,'index'])->name('ventas.index');
 Route::get('/proveedores', [ProveedoresController::class ,'index'])->name('proveedores.index');
