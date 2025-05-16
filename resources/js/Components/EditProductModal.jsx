@@ -26,7 +26,6 @@ export default function EditproductoModal({ producto, onClose, context, almacene
     });
 
     console.log(producto);
-    console.log(formData);
 
     const [mostrarNuevaCategoria, setMostrarNuevaCategoria] = useState(false);
     const [mostrarNuevoProveedor, setMostrarNuevoProveedor] = useState(false);

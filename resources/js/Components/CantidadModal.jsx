@@ -19,13 +19,15 @@ export default function CantidadModal({ isOpen, onClose, producto, tipo }) {
     }
 
     const [formData, setFormData] = useState({        
+        // Estos van con readOnly
         codigo: "",
         nombre: "",
         precio_unitario: "",
-        cantidad_vendida: "",
         id_almacen: "",
-
-        nombre_cliente: "",
+        
+        cantidad_vendida: "",
+        nombre_cliente: "", // Selector de cliente con el nombre y la identificacion juntos
+        // Si no existe se despliega lo demas
         identificacion_cliente: "",
         telefono_cliente: "",
         email_cliente: "",
