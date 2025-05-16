@@ -262,7 +262,7 @@ class DetallesCompraController extends Controller
                 'id_producto' => $detalle->id_producto,
                 'precio_unitario' => $detalle->precio_unitario,
                 'proveedor' => optional($detalle->compra->proveedor)->nombre,
-                'proveedor_id' => optional($detalle->compra->proveedor)->id,
+                'id_proveedor' => optional($detalle->compra->proveedor)->id,
             ];
         });
 
