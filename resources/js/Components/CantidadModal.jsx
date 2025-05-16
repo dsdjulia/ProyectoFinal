@@ -18,22 +18,20 @@ export default function CantidadModal({ isOpen, onClose, producto, tipo }) {
         return;
     }
 
-    const [formData, setFormData] = useState({        
-        // Estos van con readOnly
-        codigo: "",
-        nombre: "",
-        precio_unitario: "",
-        id_almacen: "",
-        
-        cantidad_vendida: "",
-        nombre_cliente: "", // Selector de cliente con el nombre y la identificacion juntos
-        // Si no existe se despliega lo demas
-        identificacion_cliente: "",
-        telefono_cliente: "",
-        email_cliente: "",
-        direccion_cliente: "",
-        tipo_comprador: "",
-    });
+    // const [formData, setFormData] = useState({        
+    //     codigo: "",
+    //     nombre: "",
+    //     precio_unitario: "",
+    //     id_almacen: "",
+    //     cantidad_vendida: "",
+    //     nombre_cliente: "",
+    //     identificacion_cliente: "",
+    //     telefono_cliente: "",
+    //     email_cliente: "",
+    //     direccion_cliente: "",
+    //     tipo_comprador: "",
+    // });
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
