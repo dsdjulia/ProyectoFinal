@@ -119,10 +119,10 @@ export default function AddModal({
         <Dialog
             open={isOpen}
             onClose={onClose}
-            className="fixed inset-0 z-50 flex items-center justify-center"
+            className="fixed inset-0 z-50 overflow-y-auto"
         >
             <div className="fixed inset-0 bg-black bg-opacity-25" />
-            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl z-50 relative">
+            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl mx-auto mt-20 mb-10 z-50 relative">
 
                 {/* Botón de cerrar */}
                 <button
@@ -132,8 +132,8 @@ export default function AddModal({
                     aria-label="Cerrar"
                 >
                     <span className="material-icons text-slate-500 text-2xl">
-                                close
-                            </span>
+                        close
+                    </span>
                 </button>
 
                 <Dialog.Title className="text-lg font-semibold text-gray-800 mb-4">
