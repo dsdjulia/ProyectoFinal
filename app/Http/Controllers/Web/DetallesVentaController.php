@@ -147,6 +147,8 @@ class DetallesVentaController extends Controller
 
         $datos = $request->validate([
             // cliente
+            'nombre',
+            'identificacion',
             'telefono' => 'required|string|min:1',
             'email' => 'required|email',
             //producto
