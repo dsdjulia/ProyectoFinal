@@ -7,15 +7,84 @@ use App\Models\Almacen;
 use App\Models\Producto;
 use App\Models\Categoria;
 use App\Models\Inventario;
+use App\Models\DetalleVenta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class ProductoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $user = Auth::user();
+
+        $request->validate([
+            'id_producto' => 'required|exists:productos,id',
+        ]);
+
+        $productoId = $request->id_producto;
+
+        $producto = Producto::with('categoria')->findOrFail($productoId);
+
+        // Stock disponible
+        $stock = Inventario::where('id_producto', $productoId)->sum('cantidad_actual');
+
+        // Ventas del producto por semana (último mes)
+        $ventasPorSemana = DetalleVenta::select(
+                DB::raw('WEEK(ventas.fecha_venta) as semana'),
+                DB::raw('SUM(detalle_ventas.cantidad * detalle_ventas.precio_unitario) as total')
+            )
+            ->join('ventas', 'detalle_ventas.id_venta', '=', 'ventas.id')
+            ->where('ventas.id_user', $user->id)
+            ->where('detalle_ventas.id_producto', $productoId)
+            ->whereBetween('ventas.fecha_venta', [now()->subWeeks(4), now()])
+            ->groupBy('semana')
+            ->orderBy('semana')
+            ->get();
+
+        // Distribución de ventas: vendido vs stock
+        $totalVendido = DetalleVenta::join('ventas', 'detalle_ventas.id_venta', '=', 'ventas.id')
+            ->where('ventas.id_user', $user->id)
+            ->where('detalle_ventas.id_producto', $productoId)
+            ->sum('detalle_ventas.cantidad');
+
+        // Precio promedio (para estimaciones)
+        $precioPromedio = DetalleVenta::where('id_producto', $productoId)->avg('precio_unitario') ?? 0;
+
+        // Beneficio neto estimado
+        $beneficioEstimado = $totalVendido * $precioPromedio;
+
+        // Ventas estimadas para este mes (simple proyección lineal por semana)
+        $ventasEstimadasMes = $ventasPorSemana->avg('total') > 0
+            ? round($ventasPorSemana->avg('total') * 4 / $precioPromedio)
+            : 0;
+
+        // Tendencia del stock por mes (últimos 5 meses)
+        $stockTendencia = Inventario::select(
+                DB::raw('DATE_FORMAT(fecha_entrada, "%b") as mes'),
+                DB::raw('SUM(cantidad_actual) as total_stock')
+            )
+            ->where('id_producto', $productoId)
+            ->where('fecha_entrada', '>=', now()->subMonths(4))
+            ->groupBy('mes')
+            ->orderByRaw('MIN(fecha_entrada)')
+            ->get();
+
+        return Inertia::render('Producto', [
+            'producto' => $producto,
+            'stock' => $stock,
+            'ventas_por_semana' => $ventasPorSemana,
+            'total_vendido' => $totalVendido,
+            'stock_vs_venta' => [
+                'vendido' => $totalVendido,
+                'stock' => $stock
+            ],
+            'beneficio_estimado' => round($beneficioEstimado, 2),
+            'ventas_estimadas_mes' => $ventasEstimadasMes,
+            'stock_tendencia' => $stockTendencia,
+        ]);
+
     }
 
     public function show(Request $request)

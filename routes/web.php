@@ -10,7 +10,7 @@ use App\Http\Controllers\Web\InventarioController;
 use App\Http\Controllers\Web\ProveedoresController;
 use App\Http\Controllers\Web\DetallesVentaController;
 use App\Http\Controllers\Web\DetallesCompraController;
-
+use App\Models\Producto;
 
 // EDIT PROFILE
 Route::middleware('auth')->group(function () {
@@ -36,7 +36,7 @@ Route::post('/inventario', [AlmacenController::class ,'store'])->name('inventari
 Route::delete('/inventario/producto', [ProductoController::class ,'delete'])->name('producto.delete');
 Route::post('/inventario/producto', [ProductoController::class ,'store'])->name('producto.store');
 Route::patch('/inventario/producto', [ProductoController::class ,'patch'])->name('producto.patch');
-Route::get('/inventario/producto', [AlmacenController::class ,'getProduct'])->name('producto.show');
+
 
 //Route::update('/inventario/producto', [AlmacenController::class ,'update'])->name('producto.edit');
 Route::get('/pedidos', [DetallesCompraController::class ,'index'])->name('pedidos.index');
@@ -46,7 +46,8 @@ Route::delete('/pedidos', [DetallesCompraController::class ,'destroy'])->name('p
 
 Route::patch('/pedidos/patch', [DetallesCompraController::class ,'patch'])->name('pedidos.patchInventario');
 
-
+// NAV BAR
+Route::get('producto/detalles', [ProductoController::class ,'index'])->name('producto.index');
 Route::get('/dashboard', [InventarioController::class ,'dashboard'])->name('dashboard.index');
 Route::get('/ventas', [DetallesVentaController::class ,'index'])->name('ventas.index');
 Route::get('/proveedores', [ProveedoresController::class ,'index'])->name('proveedores.index');
