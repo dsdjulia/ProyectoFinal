@@ -24,6 +24,44 @@ class DetallesVentaController extends Controller
         return $this->renderInventario($user);
     }
 
+    public function destroy(Request $request)
+    {
+        $user = Auth::user();
+        $datos = $request->validate([
+            'id_venta' => 'required|exists:detalle_ventas,id'
+        ]);
+
+        $detalleVenta = DetalleVenta::with('venta', 'producto')->findOrFail($datos['id_venta']);
+        
+        if ($detalleVenta->venta->id_user !== $user->id) {
+            abort(403, 'No tienes permiso para eliminar esta venta.');
+        }
+
+        $inventario = Inventario::where('id_producto', $detalleVenta->id_producto)
+            ->where('id_almacen', function ($query) use ($user) {
+                $query->select('id')
+                    ->from('almacenes')
+                    ->where('id_user', $user->id)
+                    ->limit(1);
+            })
+            ->orderByDesc('fecha_entrada')
+            ->first();
+
+        if ($inventario) {
+            $inventario->increment('cantidad_actual', $detalleVenta->cantidad);
+        }
+
+        $venta = $detalleVenta->venta;
+
+        $detalleVenta->delete();
+
+        if ($venta->detalleVentas()->count() === 0) {
+            $venta->delete();
+        }
+
+        return $this->renderInventario($user);
+    }
+
     public function store(Request $request){
         $user = Auth::user();
 

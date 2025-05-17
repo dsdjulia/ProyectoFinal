@@ -40,6 +40,9 @@ export default function Index() {
         }
     };
 
+    console.log(props)
+
+
     return (
         <div className="flex flex-col w-full">
             <div className="flex w-full bg-slate-100">
