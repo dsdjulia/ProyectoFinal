@@ -32,7 +32,7 @@ class DetallesVentaController extends Controller
         ]);
 
         $detalleVenta = DetalleVenta::with('venta', 'producto')->findOrFail($datos['id_venta']);
-        
+
         if ($detalleVenta->venta->id_user !== $user->id) {
             abort(403, 'No tienes permiso para eliminar esta venta.');
         }
@@ -67,21 +67,22 @@ class DetallesVentaController extends Controller
 
         $datos = $request->validate([
             // Cliente
-            'nombre_cliente' => 'required|string|min:1',
-            'identificacion_cliente' => 'required|string|min:1',
-            'telefono_cliente' => 'required|string|min:1',
-            'email_cliente' => 'required|email',
-            'direccion_cliente' => 'required|string|min:1',
-            'tipo_comprador' => 'required|in:particular,empresa',
+            'id_cliente' => '',
+            'nombre_cliente' => 'string|min:1',
+            'identificacion_cliente' => 'string|min:1',
+            'telefono_cliente' => 'string|min:1',
+            'email_cliente' => 'email',
+            'direccion_cliente' => 'string|min:1',
+            'tipo_comprador' => 'in:particular,empresa',
 
             // Producto
-            'codigo' => 'required|string|min:1',
-            'nombre' => 'required|string|min:1',
-            'precio_unitario' => 'required|numeric|min:1',
-            'id_almacen' => 'required|exists:almacenes,id',
+            'codigo' => '|string|min:1',
+            'nombre' => '|string|min:1',
+            'precio_unitario' => '|numeric|min:1',
+            'id_almacen' => '|exists:almacenes,id',
 
             // Detalles de venta
-            'cantidad_vendida' => 'required|integer|min:1'
+            'cantidad_vendida' => '|integer|min:1'
         ]);
 
         $producto = Producto::where('codigo', $datos['codigo'])
