@@ -31,7 +31,7 @@ export default function CantidadModal({ isOpen, onClose, producto, tipo }) {
     //     direccion_cliente: "",
     //     tipo_comprador: "",
     // });
-
+asdasd
 
     const handleSubmit = (e) => {
         e.preventDefault();
