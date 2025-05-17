@@ -67,22 +67,22 @@ class DetallesVentaController extends Controller
 
         $datos = $request->validate([
             // Cliente
-            'id_cliente' => '',
-            'nombre_cliente' => 'string|min:1',
-            'identificacion_cliente' => 'string|min:1',
-            'telefono_cliente' => 'string|min:1',
-            'email_cliente' => 'email',
-            'direccion_cliente' => 'string|min:1',
+            'id_cliente' => 'nullable|exists:comprador,column',
+            'nombre_cliente' => 'nullable|string|min:1',
+            'identificacion_cliente' => 'nullable|string|min:1',
+            'telefono_cliente' => 'nullable|string|min:1',
+            'email_cliente' => 'nullable|email',
+            'direccion_cliente' => 'nullable|string|min:1',
             'tipo_comprador' => 'in:particular,empresa',
 
             // Producto
-            'codigo' => '|string|min:1',
-            'nombre' => '|string|min:1',
-            'precio_unitario' => '|numeric|min:1',
-            'id_almacen' => '|exists:almacenes,id',
+            'codigo' => 'nullable|string|min:1',
+            'nombre' => 'nullable|string|min:1',
+            'precio_unitario' => 'nullable|numeric|min:1',
+            'id_almacen' => 'nullable|exists:almacenes,id',
 
             // Detalles de venta
-            'cantidad_vendida' => '|integer|min:1'
+            'cantidad_vendida' => 'required|integer|min:1'
         ]);
 
         $producto = Producto::where('codigo', $datos['codigo'])
