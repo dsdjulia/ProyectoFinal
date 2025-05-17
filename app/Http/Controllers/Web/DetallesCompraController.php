@@ -22,7 +22,6 @@ class DetallesCompraController extends Controller
     {
         $user = Auth::user();
         return $this->renderInventario($user);
-
     }
 
     public function patch(Request $request){

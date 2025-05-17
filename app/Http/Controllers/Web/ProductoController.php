@@ -87,7 +87,7 @@ class ProductoController extends Controller
 
     }
 
-    public function default()
+    public function defaultIndex()
     {
         $user = Auth::user();
 
@@ -121,9 +121,11 @@ class ProductoController extends Controller
                 })->values();
 
                 return [
-                    'id' => $producto->id,
+                    'id_producto' => $producto->id,
                     'codigo' => $producto->codigo,
                     'nombre' => $producto->nombre,
+                    'descripcion' =>$producto->descripcion,
+                    'imagen' =>$producto->imagen,
                     'precio_unitario' => $producto->pivot->precio_unitario,
                     'cantidad_actual' => $producto->pivot->cantidad_actual,
                     'fecha_entrada' => $producto->pivot->fecha_entrada,
@@ -152,7 +154,6 @@ class ProductoController extends Controller
         return Inertia::render('Producto',[
             'all_products' => $allProductos,
             'all_almacenes' => $almacenes
-
         ]);
     }
 
