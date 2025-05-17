@@ -48,11 +48,13 @@ Route::post('/ventas', [DetallesVentaController::class ,'store'])->name('ventas.
 
 
 
-// NAV BAR
 // NECESITA ID DE PRODUCTO Route::get('producto/detalles', [ProductoController::class ,'index'])->name('producto.index');
 Route::get('/dashboard', [InventarioController::class ,'dashboard'])->name('dashboard.index');
 Route::get('/ventas', [DetallesVentaController::class ,'index'])->name('ventas.index');
 Route::get('/proveedores', [ProveedoresController::class ,'index'])->name('proveedores.index');
+
+Route::get('/detalles/{id}', [ProductoController::class ,'index'])->name('producto.index');
+Route::get('/detalles', [ProductoController::class ,'default'])->name('producto.default');
 
 
 require __DIR__ . '/auth.php';

@@ -87,9 +87,73 @@ class ProductoController extends Controller
 
     }
 
-    public function show(Request $request)
+    public function default()
     {
-        //
+        $user = Auth::user();
+
+        $almacenesQuery = Almacen::with(['productos' => function ($query) {
+            $query->withPivot('id_almacen', 'cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
+        }])
+        ->where('id_user', $user->id);
+
+        $allProductos = [];
+
+        $almacenes = $almacenesQuery->get()->map(function ($almacen) use (&$allProductos, $user) {
+            $productos = $almacen->productos;
+
+            $precioTotal = $productos->sum(fn($producto) =>
+                $producto->pivot->cantidad_actual * $producto->pivot->precio_unitario
+            );
+
+            $cantidadTotal = $productos->sum(fn($producto) =>
+                $producto->pivot->cantidad_actual
+            );
+
+            $productosData = $productos->map(function ($producto) use ($almacen, $user) {
+                // Aquí usamos el método para obtener proveedores por producto
+                $proveedores = $producto->proveedores($user->id)->map(function ($p) {
+                    return [
+                        'id' => $p->id,
+                        'nombre' => $p->nombre,
+                        'telefono' => $p->telefono,
+                        'email' => $p->email,
+                    ];
+                })->values();
+
+                return [
+                    'id' => $producto->id,
+                    'codigo' => $producto->codigo,
+                    'nombre' => $producto->nombre,
+                    'precio_unitario' => $producto->pivot->precio_unitario,
+                    'cantidad_actual' => $producto->pivot->cantidad_actual,
+                    'fecha_entrada' => $producto->pivot->fecha_entrada,
+                    'fecha_salida' => $producto->pivot->fecha_salida,
+                    'imagen' => $producto->imagen,
+                    'almacen_id' => $almacen->id,
+                    'almacen_nombre' => $almacen->nombre,
+                    'proveedores' => $proveedores->toArray(),
+                    'perecedero' =>$producto->perecedero,
+                ];
+            })->toArray();
+
+            $allProductos = array_merge($allProductos, $productosData);
+
+            return [
+                'id' => $almacen->id,
+                'nombre' => $almacen->nombre,
+                'direccion' => $almacen->direccion,
+                'productos_count' => $productos->count(),
+                'cantidad_total' => $cantidadTotal,
+                'precio_total' => $precioTotal,
+                'productos' => $productosData,
+            ];
+        });
+
+        return Inertia::render('Producto',[
+            'all_products' => $allProductos,
+            'all_almacenes' => $almacenes
+
+        ]);
     }
 
     public function delete(Request $request)
