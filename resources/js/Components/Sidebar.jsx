@@ -23,7 +23,8 @@ export function Sidebar({ active }) {
     { id: "inventario", icon: "inventory_2", label: "Inventario", path: "inventario.index"},
     { id: "pedidos", icon: "shopping_cart", label: "Pedidos", path: "pedidos.index" },
     { id: "ventas", icon: "point_of_sale", label: "Ventas", path: "ventas.index" },
-    { id: "detalleProducto", icon: "info", label: "Detalle de Producto", path: "producto.index" },
+    { id: "detalleProducto", icon: "info", label: "Detalle de Producto", path: "producto.default" },
+
     { id: "contactoProveedores", icon: "contacts", label: "Contacto proveedores", path: "proveedores.index" },
   ];
 

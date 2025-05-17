@@ -74,7 +74,7 @@ export default function Index() {
                         </div>
 
                         {/* Vista del producto */}
-                        <ProductOverview producto={producto}/>
+                        <ProductOverview />
                     </div>
                     <Footer/>
                 </AuthenticatedLayout>
