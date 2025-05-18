@@ -48,11 +48,11 @@ export default function CantidadModal({
 
         const cantidadNum = parseInt(cantidad, 10);
         const precioVentaNum = parseFloat(precioVenta);
-        const precioTotal = precioVentaNum * cantidadNum;
+
 
         if ( esVenta && (
             cantidadNum <= 0 ||
-            isNaN(precioTotal) ||
+            isNaN(precioVenta) ||
             cantidadNum > producto.cantidad_actual)
         ) {
             showModificableAlert(
@@ -66,7 +66,7 @@ export default function CantidadModal({
         const datos = {
             ...producto,
             cantidad_vendida: cantidadNum,
-            precio_venta: precioTotal,
+            precio_venta: precioVentaNum,
             id_cliente: null,
         };
 
