@@ -82,7 +82,8 @@ class DetallesVentaController extends Controller
             'id_almacen' => 'nullable|exists:almacenes,id',
 
             // Detalles de venta
-            'cantidad_vendida' => 'required|integer|min:1'
+            'cantidad_vendida' => 'required|integer|min:1',
+            'precio_venta' => 'required|numeric'
         ]);
 
         $producto = Producto::where('codigo', $datos['codigo'])
@@ -118,9 +119,6 @@ class DetallesVentaController extends Controller
             return redirect()->back()->withErrors('No hay suficiente stock disponible para este producto.');
         }
 
-        //Aqui esta el beneficio
-        $margen = 0.25;
-        $precioVenta = round($inventario->precio_unitario * (1 + $margen), 2);
 
         $venta = Venta::create([
             'id_user' => $user->id,
@@ -132,7 +130,7 @@ class DetallesVentaController extends Controller
             'id_producto' => $producto->id,
             'id_venta' => $venta->id,
             'cantidad' => $datos['cantidad_vendida'],
-            'precio_unitario' => $precioVenta,
+            'precio_unitario' => $datos['precio_venta']
         ]);
 
         $inventario->decrement('cantidad_actual', $datos['cantidad_vendida']);
