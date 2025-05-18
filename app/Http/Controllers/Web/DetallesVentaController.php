@@ -98,11 +98,11 @@ class DetallesVentaController extends Controller
 
         if(!$comprador){
             $comprador = Comprador::create([
-                'nombre_cliente' => $datos['nombre_cliente'],
-                'identificacion_cliente' =>$datos['identificacion_cliente'],
-                'telefono_cliente' => $datos['telefono_cliente'],
-                'email_cliente' =>$datos['email_cliente'] ,
-                'direccion_cliente' =>$datos['direccion_cliente'] ,
+                'nombre' => $datos['nombre_cliente'],
+                'identificacion' =>$datos['identificacion_cliente'],
+                'telefono' => $datos['telefono_cliente'],
+                'email' =>$datos['email_cliente'] ,
+                'direccion' =>$datos['direccion_cliente'] ,
                 'tipo_comprador' => $datos['tipo_comprador'],
             ]);
         }
