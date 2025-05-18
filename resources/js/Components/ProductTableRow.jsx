@@ -31,9 +31,8 @@ export default function ProductTableRow({
 
     const detalleProducto = () => {
         console.log(product);
-        router.get(route("producto.index", {id: product.id}), {
-            onSuccess: () => {
-            },
+        router.get(route("producto.index", { id: product.id }), {
+            onSuccess: () => {},
             onError: (errors) => {
                 showModificableAlert(
                     "Error al mostar los detalles del producto",
@@ -103,14 +102,16 @@ export default function ProductTableRow({
                     >
                         <span className="material-icons">edit</span>
                     </div>
-                    
+
                     {/* Eliminar: solo si no está recibido */}
                     {!product.estado && (
                         <div
                             className="flex items-center justify-center text-red-400 w-8 h-8 rounded-full hover:text-red-500 cursor-pointer"
                             onClick={(e) => {
                                 e.stopPropagation();
-                                setDeleteModalOpen(true);
+                                if (onDelete) {
+                                    onDelete(product, context); // <--- Aquí pasas el contexto
+                                }
                             }}
                             title="Eliminar producto"
                         >
@@ -163,14 +164,7 @@ export default function ProductTableRow({
                 />
             )}
 
-            {/* Modal de eliminación */}
-            {isDeleteModalOpen && (
-                <DeleteProductModal
-                    product={product}
-                    onClose={() => setDeleteModalOpen(false)}
-                    onDelete={onDelete}
-                />
-            )}
+           
         </>
     );
 }

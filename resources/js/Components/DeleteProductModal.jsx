@@ -1,96 +1,124 @@
 import { useState } from "react";
-import { Inertia } from "@inertiajs/inertia";
 import { router } from "@inertiajs/react";
 import { showModificableAlert } from "@/utils/alerts";
 
 export default function DeleteProductModal({ product, totalAmount, onClose }) {
-    const [reduceAmount, setReduceAmount] = useState(0);
+  const [reduceAmount, setReduceAmount] = useState(0);
 
-    const handleDeleteAll = () => {
-        onClose();
+  const handleDeleteAll = () => {
+    onClose();
+    router.delete(route("producto.delete"), {
+      data: {
+        id_producto: product.id,
+        id_almacen: product.almacen_id,
+        precio_unitario: product.precio_unitario,
+      },
+      onSuccess: () => {
+        showModificableAlert(
+          "Producto eliminado",
+          `${product.nombre} eliminado del inventario.`,
+          "success"
+        );
+        router.visit(route("inventario.index"));
+      },
+      onError: (error) =>
+        showModificableAlert(
+          "Error al eliminar el producto",
+          `Error: ${JSON.stringify(error)}`,
+          "error"
+        ),
+    });
+  };
 
-        router.delete(route('producto.delete'), {
-            data: {
-                id_producto: product.id,
-                id_almacen: product.almacen_id,
-                precio_unitario: product.precio_unitario
-            },
-            onSuccess: () => {
-                showModificableAlert('Producto eliminado', `${product.nombre} eliminado del inventario.`, 'success');
-                router.visit(route('inventario.index'));
-            },
-            onError: (error) =>
-                showModificableAlert('Error al eliminar el producto', `Error: ${JSON.stringify(error)}`, 'error'),
-        });
-    };
-
-    const handleDeletePartial = () => {
-        if (reduceAmount <= product.cantidad_actual) {
-            onClose();
-
-            router.patch(route('producto.patch'), {
-                id_almacen: product.almacen_id,
-                id_producto: product.id,
-                cantidad_actual: product.cantidad_actual - reduceAmount,
-            }, {
-                onSuccess: () => {
-                    showModificableAlert('Cantidad reducida', `Cantidad de ${product.nombre} actualizada.`, 'success');
-                    router.visit(route('inventario.index'));
-                },
-                onError: (error) =>
-                    showModificableAlert('Error al reducir la cantidad del producto', `Error: ${JSON.stringify(error)}`, 'error'),
-            });
-        } else {
-            showModificableAlert('Cantidad excedida', `La cantidad máxima a reducir es de: ${product.cantidad_actual}.`, 'warning');
+  const handleDeletePartial = () => {
+    if (reduceAmount <= product.cantidad_actual) {
+      onClose();
+      router.patch(
+        route("producto.patch"),
+        {
+          id_almacen: product.almacen_id,
+          id_producto: product.id,
+          cantidad_actual: product.cantidad_actual - reduceAmount,
+        },
+        {
+          onSuccess: () => {
+            showModificableAlert(
+              "Cantidad reducida",
+              `Cantidad de ${product.nombre} actualizada.`,
+              "success"
+            );
+            router.visit(route("inventario.index"));
+          },
+          onError: (error) =>
+            showModificableAlert(
+              "Error al reducir la cantidad del producto",
+              `Error: ${JSON.stringify(error)}`,
+              "error"
+            ),
         }
-    };
+      );
+    } else {
+      showModificableAlert(
+        "Cantidad excedida",
+        `La cantidad máxima a reducir es de: ${product.cantidad_actual}.`,
+        "warning"
+      );
+    }
+  };
 
-    return (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-            <div className="bg-white text-black rounded-md shadow-xl p-8 w-[50vw]">
-                <h2 className="text-2xl font-bold mb-6">Eliminar Producto</h2>
-                <p className="mb-4">
-                    ¿Deseas eliminar el producto por completo o reducir la cantidad?
-                </p>
-                <div className="flex flex-col">
-                    <div className="mb-4">
-                        <p className="text-sm text-gray-700">
-                            Cantidad total disponible: <span className="font-bold">{totalAmount}</span>
-                        </p>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium">Cantidad a reducir</label>
-                        <input
-                            type="number"
-                            min="0"
-                            max={totalAmount}
-                            value={reduceAmount}
-                            onChange={(e) => setReduceAmount(e.target.value)}
-                            className="w-1/2 border border-gray-300 rounded-lg p-2 mt-1 mr-4 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        />
-                        <button
-                            className="px-4 py-2 bg-gray-200 text-black rounded-md hover:bg-gray-300"
-                            onClick={handleDeletePartial}
-                        >
-                            Reducir Cantidad
-                        </button>
-                    </div>
-                </div>
-                <div className="mt-6 flex justify-start gap-2">
-                    <button
-                        className="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400"
-                        onClick={onClose}
-                    >
-                        Cancelar
-                    </button>
-                    <button
-                        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                        onClick={handleDeleteAll}
-                    >
-                        Eliminar Todo
-                    </button>
-                </div>
-            </div>
+  return (
+    <div className="fixed inset-0 bg-slate-800 bg-opacity-30 flex items-center justify-center z-50">
+      <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+          Eliminar producto
+        </h2>
+
+        <p className="text-gray-700 mb-3">
+          ¿Deseas eliminar el producto completo o reducir su cantidad?
+        </p>
+
+        <div className="mb-4 font-bold text-gray-700">
+          Cantidad disponible:{product.cantidad_actual}
+          <span className="font-semibold text-black">{totalAmount}</span>
         </div>
-    );
+
+        <div className="mb-4">
+          <label className="block text-gray-700 mb-1">Cantidad a reducir</label>
+          <div className="flex gap-2">
+            <input
+              type="number"
+              min="0"
+              max={totalAmount}
+              value={reduceAmount}
+              onChange={(e) => setReduceAmount(Number(e.target.value))}
+              className="w-full border border-slate-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400"
+              placeholder="Cantidad a reducir"
+            />
+            <button
+              type="button"
+              className="px-4 py-2 rounded-md bg-slate-500 text-white hover:bg-slate-700 transition"
+              onClick={handleDeletePartial}
+            >
+              Reducir
+            </button>
+          </div>
+        </div>
+
+        <div className="flex justify-end gap-3">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 rounded-md border border-gray-300 text-gray-600 hover:bg-gray-100 transition"
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={handleDeleteAll}
+            className="px-4 py-2 rounded-md text-white bg-red-500 hover:bg-red-600 transition"
+          >
+            Eliminar todo
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }

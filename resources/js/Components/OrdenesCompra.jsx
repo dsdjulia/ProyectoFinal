@@ -170,6 +170,7 @@ export default function OrdenesCompra({ props }) {
                         product={selectedPedido}
                         totalAmount={selectedPedido.existencias}
                         onClose={() => setIsDeleteModalOpen(false)}
+                        
                     />
                 )}
 
