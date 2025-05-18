@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Web;
 
 use Inertia\Inertia;
+use App\Models\DetalleVenta;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Models\{Almacen, Categoria, Inventario, DetalleCompra};
 
 class AlmacenController extends Controller
@@ -86,6 +87,33 @@ class AlmacenController extends Controller
         $allProductos = collect($almacenes)->pluck('productos')->flatten(1)->values();
         $allProveedores = $this->obtenerProveedores($user->id);
         $categorias = Categoria::where('id_user', $user->id)->with('productos')->get();
+        
+
+        $detallesVentasRaw = DetalleVenta::with(['producto', 'venta.comprador'])
+            ->whereHas('venta', function ($query) use ($user) {
+                $query->where('id_user', $user->id);
+            })
+            ->get();
+
+        $detallesVentas = $detallesVentasRaw->map(function ($detalle) {
+            return [
+                'id_detalle' => $detalle->id,
+                'producto_id' => $detalle->id_producto,
+                'codigo' => $detalle->producto->codigo,
+                'nombre' => $detalle->producto->nombre,
+                'precio_unitario' => $detalle->precio_unitario,
+                'cantidad' => $detalle->cantidad,
+                'fecha_venta' => optional($detalle->venta)->fecha_venta,
+                'cliente' => optional($detalle->venta->comprador)->nombre,
+            ];
+        });
+
+        $allClientes = $detallesVentasRaw
+            ->pluck('venta.comprador') 
+            ->filter() 
+            ->unique('id') 
+            ->values();
+
 
         return Inertia::render('Inventario', [
             'status' => true,
@@ -100,6 +128,7 @@ class AlmacenController extends Controller
             'data' => $almacenes,
             'all_productos' => $allProductos,
             'all_proveedores' => $allProveedores,
+            'all_clientes' => $allClientes,
             'categorias' => $categorias,
         ]);
     }
