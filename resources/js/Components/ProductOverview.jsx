@@ -98,17 +98,26 @@ if (!producto) {
 
   // Si hay producto seleccionado, mostrar vista detallada
   const revenue = 12456;
-  const netProfitEstimate = 8000;
+  const netProfitEstimate = props.beneficio_estimado;
   const stock = props.stock;
   const recommendedReorder = 10;
   const estimatedSold = props.ventas_estimadas_mes;
+  const ventastotales = props.total_vendido;
+
+  const ventasSemanas = props.ventas_por_semana
+  const stockTendencias = props.stock_tendencias
+
+  const datosBarras = []
+  ventasSemanas.forEach(venta => {
+    datosBarras.push(venta.total)
+  });
 
   const revenueData = {
     labels: ["Semana 1", "Semana 2", "Semana 3", "Semana 4"],
     datasets: [
       {
-        label: "Ingresos mensuales ($)",
-        data: [2800, 3300, 3100, 3256],
+        label: "Ingresos mensuales (€)",
+        data: datosBarras,
         backgroundColor: "#4ade80"
       }
     ]
@@ -118,7 +127,7 @@ if (!producto) {
     labels: ["Vendido", "En Stock"],
     datasets: [
       {
-        data: [estimatedSold, stock],
+        data: [ventastotales, stock],
         backgroundColor: ["#60a5fa", "#facc15"]
       }
     ]
@@ -184,7 +193,7 @@ if (!producto) {
         <div className="flex flex-col md:flex-row gap-4">
           <div className="bg-white rounded-md shadow p-4 w-full md:w-1/3">
             <h2 className="text-sm font-bold">Beneficio Neto Estimado</h2>
-            <p className="text-2xl font-semibold text-green-500 mt-1">${netProfitEstimate}</p>
+            <p className="text-2xl font-semibold text-green-500 mt-1">{netProfitEstimate} €</p>
           </div>
           <div className="bg-white rounded-md shadow p-4 w-full md:w-1/3">
             <h2 className="text-sm font-bold">Stock Disponible</h2>

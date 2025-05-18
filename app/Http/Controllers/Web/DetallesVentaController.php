@@ -67,7 +67,7 @@ class DetallesVentaController extends Controller
 
         $datos = $request->validate([
             // Cliente
-            'id_cliente' => 'nullable|exists:comprador,column',
+            'id_cliente' => 'nullable|exists:compradores,id',
             'nombre_cliente' => 'nullable|string|min:1',
             'identificacion_cliente' => 'nullable|string|min:1',
             'telefono_cliente' => 'nullable|string|min:1',
