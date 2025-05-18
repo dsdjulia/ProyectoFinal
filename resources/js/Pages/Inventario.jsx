@@ -16,7 +16,7 @@ export default function Index() {
                     <Sidebar active={"inventario"}/>
                 </div>
                 <AuthenticatedLayout>
-                    <div className=" bg-slate-100 ">
+                    <div className=" bg-slate-100 h-screen">
                         <InventarioTabla props={props} />
                     </div>
                 <Footer/>
