@@ -59,7 +59,7 @@ class DetallesCompraController extends Controller
                 $query->where('nombre', $datos['nombre_categoria'])
                     ->orWhere('id', $datos['id_categoria']);
             })
-            ->first();
+            ->firstOrFail();
 
         if (!$categoria) {
             $categoria = Categoria::create([
@@ -154,7 +154,7 @@ class DetallesCompraController extends Controller
                 $query->where('nombre', $datos['nombre_categoria'])
                     ->orWhere('id', $datos['id_categoria']);
             })
-            ->first();
+            ->firstOrFail();
 
         if(!$categoria){
             $categoria = Categoria::create([
@@ -169,7 +169,7 @@ class DetallesCompraController extends Controller
             ->where('descripcion',$datos['descripcion'])
             ->where('imagen',$datos['imagen'])
             ->where('perecedero',$datos['perecedero'])
-            ->first();
+            ->firstOrFail();
             
 
         if(!$producto){
@@ -197,7 +197,7 @@ class DetallesCompraController extends Controller
 
         $almacen = Almacen::where('id_user', $user->id)
         ->where('id',$datos['id_almacen'])
-        ->first();
+        ->firstOrFail();
 
         $compra = Compra::create([
             'id_user' => $user->id,
@@ -265,14 +265,14 @@ class DetallesCompraController extends Controller
         ]);
 
         $detalleCompra = DetalleCompra::where('id',$datos['id_detalle'])
-            ->first();
+            ->firstOrFail();
         
         $detalleCompra->estado = true;
         $detalleCompra->save();
 
         $inventario = Inventario::where('id_producto', $datos['id_producto'])
             ->where('precio_unitario', $datos['precio_unitario'])
-            ->first();
+            ->firstOrFail();
 
         if ($inventario) {
             $inventario->cantidad_actual += $datos['cantidad_actual'];

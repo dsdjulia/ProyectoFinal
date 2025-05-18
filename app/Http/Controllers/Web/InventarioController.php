@@ -107,7 +107,7 @@ class InventarioController extends Controller
                 ->whereBetween('ventas.fecha_venta', [$fechaInicio, $fechaFin])
                 ->groupBy('productos.id', 'productos.nombre', 'productos.imagen', 'productos.descripcion')
                 ->orderByDesc('total_vendido')
-                ->first();
+                ->firstOrFail();
 
             // Ventas última semana
             $fechaInicioSemana = now()->subDays(6)->startOfDay()->toDateTimeString();

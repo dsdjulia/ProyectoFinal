@@ -39,6 +39,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::delete('/inventario', [AlmacenController::class ,'delete'])->name('inventario.delete');
     Route::post('/inventario', [AlmacenController::class ,'store'])->name('inventario.store');
+    // ESTA ESTAS TOCANDO
+    Route::update('inventario/almacen', [AlmacenController::class ,'update'])->name('almacen.patch');
 });
 
 // CRUD DE PRODUCTOS AÑADIR Y BORRAR

@@ -44,7 +44,23 @@ class AlmacenController extends Controller
 
     public function update(Request $request)
     {
+        $user = Auth::user();
+
+        $datos = $request->validate([
+            'id_almacen' => 'required|exists:almacenes,id',
+            'nombre' => 'required|string|min:1',
+            'direccion' => 'required|string|min:1'
+        ]);
         
+        $almacen = Almacen::where('id_user',$user->id)
+        ->where('id_almacen',$datos['id_almacen'])
+        ->firstOrFail();
+
+        $almacen->nombre = $datos['nombre'];
+        $almacen->direccion = $datos['direccion'];
+        $almacen->save();
+
+        $this->renderInventario($user); 
     }
 
     private function validateAlmacen(Request $request)
