@@ -5,7 +5,7 @@ export default function ConcactoProveedores({ proveedores }) {
     const [mensaje, setMensaje] = useState("");
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-6 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-6 py-8 min-h-screen">
             {/* Columna izquierda (1/3): Proveedores + Detalles */}
             <div className="flex flex-col gap-4 col-span-2 h-full">
                 {/* Lista de proveedores */}
