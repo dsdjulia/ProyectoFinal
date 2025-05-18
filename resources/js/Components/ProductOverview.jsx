@@ -3,103 +3,105 @@
 import React from "react";
 import { Bar, Doughnut, Line } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-  Filler
+	Chart as ChartJS,
+	CategoryScale,
+	LinearScale,
+	BarElement,
+	PointElement,
+	LineElement,
+	Title,
+	Tooltip,
+	Legend,
+	ArcElement,
+	Filler
 } from "chart.js";
 import { router } from "@inertiajs/react";
 
 
 ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-  Filler
+	CategoryScale,
+	LinearScale,
+	BarElement,
+	PointElement,
+	LineElement,
+	Title,
+	Tooltip,
+	Legend,
+	ArcElement,
+	Filler
 );
 
 
 
-const ProductOverview = ({ producto, productos = [], searchTerm}) => {
+const ProductOverview = ({ producto, productos = [], searchTerm, props}) => {
 
 console.log(producto);
 
 console.log(productos);
 
-  const detalleProducto = (prod) => {
-      console.log(prod);
-      router.get(route("producto.index", {id: prod.id_producto}), {
-          onSuccess: () => {
-          },
-          onError: (errors) => {
-              showModificableAlert(
-                  "Error al mostar los detalles del producto",
-                  `Error: ${JSON.stringify(errors)}`,
-                  "error"
-              );
-          },
-      });
-  };
+console.log(props);
+
+const detalleProducto = (prod) => {
+	console.log(prod);
+	router.get(route("producto.index", {id: prod.id_producto}), {
+		onSuccess: () => {
+		},
+		onError: (errors) => {
+			showModificableAlert(
+				"Error al mostar los detalles del producto",
+				`Error: ${JSON.stringify(errors)}`,
+				"error"
+			);
+		},
+	});
+};
 
 if (!producto) {
 
-  return (
-	<div className="w-full bg-slate-100 p-6 h-[80vh]">
-	<h2 className="text-xl font-bold text-slate-700 mb-2">Ningún Producto Seleccionado</h2>
-	<p className="text-sm text-gray-600 mb-4">Primero selecciona un producto para su visualización</p>
+	return (
+		<div className="w-full bg-slate-100 p-6 h-[80vh]">
+		<h2 className="text-xl font-bold text-slate-700 mb-2">Ningún Producto Seleccionado</h2>
+		<p className="text-sm text-gray-600 mb-4">Primero selecciona un producto para su visualización</p>
 
-	<div className="overflow-x-auto rounded-md shadow">
-		<table className="min-w-full bg-white border border-slate-300 text-sm">
-		<thead className="bg-slate-200 text-slate-700">
-			<tr>
-			<th className="px-4 py-2 text-left border-b">ID</th>
-			<th className="px-4 py-2 text-left border-b">Nombre del Producto</th>
-			</tr>
-		</thead>
-		<tbody>
-			{productos
-			.filter((prod) =>
-				prod.nombre.toLowerCase().includes(searchTerm.toLowerCase()) // Filtro por nombre
-			)
-			.map((prod) => (
-				<tr
-				key={prod.id_producto}
-				className="cursor-pointer hover:bg-slate-100 transition"
-				onClick={() => detalleProducto(prod)}
-				>
-				<td className="px-4 py-2 border-b">{prod.id_producto}</td>
-				<td className="px-4 py-2 border-b">{prod.nombre}</td>
+		<div className="overflow-x-auto rounded-md shadow">
+			<table className="min-w-full bg-white border border-slate-300 text-sm">
+			<thead className="bg-slate-200 text-slate-700">
+				<tr>
+				<th className="px-4 py-2 text-left border-b">ID</th>
+				<th className="px-4 py-2 text-left border-b">Nombre del Producto</th>
 				</tr>
-			))}
-		</tbody>
-		</table>
-	</div>
-	</div>
+			</thead>
+			<tbody>
+				{productos
+				.filter((prod) =>
+					prod.nombre.toLowerCase().includes(searchTerm.toLowerCase()) // Filtro por nombre
+				)
+				.map((prod) => (
+					<tr
+					key={prod.id_producto}
+					className="cursor-pointer hover:bg-slate-100 transition"
+					onClick={() => detalleProducto(prod)}
+					>
+					<td className="px-4 py-2 border-b">{prod.id_producto}</td>
+					<td className="px-4 py-2 border-b">{prod.nombre}</td>
+					</tr>
+				))}
+			</tbody>
+			</table>
+		</div>
+		</div>
 
 
-  );
+	);
 }
 
 
   // Si hay producto seleccionado, mostrar vista detallada
   const revenue = 12456;
   const netProfitEstimate = 8000;
-  const stock = 240;
-  const recommendedReorder = 100;
-  const estimatedSold = 360;
+  const stock = props.stock;
+  const recommendedReorder = 10;
+  const estimatedSold = props.ventas_estimadas_mes;
 
   const revenueData = {
     labels: ["Semana 1", "Semana 2", "Semana 3", "Semana 4"],
