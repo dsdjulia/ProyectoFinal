@@ -77,7 +77,10 @@ export default function CantidadModal({
                     if (!valor.trim()) {
                         showModificableAlert(
                             "Falta información",
-                            `El campo ${campo.replace("_", " ")} es obligatorio.`,
+                            `El campo ${campo.replace(
+                                "_",
+                                " "
+                            )} es obligatorio.`,
                             "error"
                         );
                         return;
@@ -205,6 +208,7 @@ export default function CantidadModal({
                                 <input
                                     type="number"
                                     min="0"
+                                    step="any"
                                     value={precioVenta}
                                     onChange={(e) =>
                                         setPrecioVenta(e.target.value)
