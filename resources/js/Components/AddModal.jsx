@@ -122,7 +122,7 @@ export default function AddModal({
             className="fixed inset-0 z-50 overflow-y-auto"
         >
             <div className="fixed inset-0 bg-black bg-opacity-25" />
-            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl mx-auto mt-20 mb-10 z-50 relative">
+            <div className="bg-white rounded-lg shadow-lg p-6 w-2/3 mx-auto mt-20 mb-10 z-50 relative">
 
                 {/* Botón de cerrar */}
                 <button

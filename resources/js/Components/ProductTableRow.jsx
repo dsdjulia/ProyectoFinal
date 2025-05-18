@@ -15,7 +15,7 @@ export default function ProductTableRow({
     proveedores = [],
     onDelete,
     onCantidadClick,
-    props
+    props,
 }) {
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -79,7 +79,7 @@ export default function ProductTableRow({
                 {/* Estado o almacén */}
                 <div className="text-gray-700 text-center">
                     {context === "orders" ? (
-                        <Chip status={!!product.estado}/>
+                        <Chip status={!!product.estado} />
                     ) : (
                         <span>{product.almacen_nombre || "Sin asignar"}</span>
                     )}
@@ -103,18 +103,20 @@ export default function ProductTableRow({
                     >
                         <span className="material-icons">edit</span>
                     </div>
-
-                    {/* Eliminar */}
-                    <div
-                        className="flex items-center justify-center text-red-400 w-8 h-8 rounded-full hover:text-red-500 cursor-pointer"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setDeleteModalOpen(true);
-                        }}
-                        title="Eliminar producto"
-                    >
-                        <span className="material-icons">delete</span>
-                    </div>
+                    
+                    {/* Eliminar: solo si no está recibido */}
+                    {!product.estado && (
+                        <div
+                            className="flex items-center justify-center text-red-400 w-8 h-8 rounded-full hover:text-red-500 cursor-pointer"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setDeleteModalOpen(true);
+                            }}
+                            title="Eliminar producto"
+                        >
+                            <span className="material-icons">delete</span>
+                        </div>
+                    )}
 
                     {/* Vender o Recibir */}
                     <div
@@ -127,7 +129,9 @@ export default function ProductTableRow({
                             e.stopPropagation();
                             if (onCantidadClick) {
                                 onCantidadClick(
-                                    context === "orders" ? "recepcion" : "venta",
+                                    context === "orders"
+                                        ? "recepcion"
+                                        : "venta",
                                     product
                                 );
                             }
