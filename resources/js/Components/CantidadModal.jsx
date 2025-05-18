@@ -64,7 +64,7 @@ export default function CantidadModal({
 
         const datos = {
             ...producto,
-            cantidad: cantidadNum,
+            cantidad_vendida: cantidadNum,
 
         };
 
