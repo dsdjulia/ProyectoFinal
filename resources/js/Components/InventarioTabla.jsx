@@ -25,6 +25,8 @@ export default function InventarioTabla({ props }) {
     const [isCantidadModalOpen, setCantidadModalOpen] = useState(false);
     const [tipoOperacion, setTipoOperacion] = useState("");
 
+    console.log(selected);
+
     console.log(props);
 
     const handleAddProduct = (newProduct) => {
@@ -196,7 +198,8 @@ export default function InventarioTabla({ props }) {
                 <div className="grid grid-cols-1 px-4 pb-4">
                     {products
                         .filter((product) =>
-                            product.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+                            product.nombre.toLowerCase().includes(searchTerm.toLowerCase()) &&
+                            (selected.length === 0 || selected.includes(product.id_almacen)) // Filtro por almacenes
                         )
                         .map((product, index) => (
                             <ProductTableRow
@@ -215,6 +218,7 @@ export default function InventarioTabla({ props }) {
                             />
                         ))}
                 </div>
+
 
                 {/* Modals */}
                 <AddModal

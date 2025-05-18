@@ -4,6 +4,7 @@ import { useState } from "react";
 import Chip from "@/Components/Chip";
 import EditProductModal from "@/Components/EditProductModal";
 import DeleteProductModal from "@/Components/DeleteProductModal";
+import { router } from "@inertiajs/react";
 
 export default function ProductTableRow({
     product,
@@ -28,11 +29,27 @@ export default function ProductTableRow({
         setEditModalOpen(false);
     };
 
+    const detalleProducto = () => {
+        console.log(product);
+        router.get(route("producto.index", {id: product.id}), {
+            onSuccess: () => {
+            },
+            onError: (errors) => {
+                showModificableAlert(
+                    "Error al mostar los detalles del producto",
+                    `Error: ${JSON.stringify(errors)}`,
+                    "error"
+                );
+            },
+        });
+    };
+
     return (
         <>
             <div
                 className="relative group grid grid-cols-8 items-center bg-white rounded-sm border border-slate-200 p-2 gap-4 hover:px-1 hover:border-slate-600 hover:border-2 transition-all cursor-pointer"
                 title="Ver detalle del producto"
+                onClick={detalleProducto}
             >
                 {/* Código */}
                 <div className="text-gray-700 font-semibold text-left pl-2">
