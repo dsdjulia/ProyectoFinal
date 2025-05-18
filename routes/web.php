@@ -30,8 +30,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/inventario', [AlmacenController::class ,'index'])->name('inventario.index');
     Route::get('/pedidos', [DetallesCompraController::class ,'index'])->name('pedidos.index');
     Route::get('/ventas', [DetallesVentaController::class ,'index'])->name('ventas.index');
-    Route::get('/detalles', [ProductoController::class ,'defaultIndex'])->name('producto.default');
     Route::get('/proveedores', [ProveedoresController::class ,'index'])->name('proveedores.index');
+    Route::get('/detalles', [ProductoController::class ,'defaultIndex'])->name('producto.default');
     Route::get('/detalles/{id}', [ProductoController::class ,'index'])->name('producto.index');
 });
 
