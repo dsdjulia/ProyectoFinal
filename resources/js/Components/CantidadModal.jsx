@@ -18,6 +18,7 @@ export default function CantidadModal({
         telefono_cliente: "",
         email_cliente: "",
         direccion_cliente: "",
+        tipo_comprador: "",
     });
 
     const esVenta = tipo === "venta";
@@ -42,32 +43,31 @@ export default function CantidadModal({
         return;
     }
 
-    // const [formData, setFormData] = useState({
-    //     codigo: "",
-    //     nombre: "",
-    //     precio_unitario: "",
-    //     id_almacen: "",
-    //     cantidad_vendida: "",
-    //     nombre_cliente: "",
-    //     identificacion_cliente: "",
-    //     telefono_cliente: "",
-    //     email_cliente: "",
-    //     direccion_cliente: "",
-    //     tipo_comprador: "",
-    // });
-// cantidad modal antiguo
-
     const handleSubmit = (e) => {
         e.preventDefault();
 
         const cantidadNum = parseInt(cantidad, 10);
-        const precioVentaNum = parseInt(precioVenta, 10);
-        const precioTotal = (precioVentaNum*cantidadNum)
+        const precioVentaNum = parseFloat(precioVenta);
+        const precioTotal = precioVentaNum * cantidadNum;
+
+        if (
+            cantidadNum <= 0 ||
+            isNaN(precioTotal) ||
+            cantidadNum > producto.cantidad_actual
+        ) {
+            showModificableAlert(
+                "Datos inválidos",
+                "Verifica que la cantidad y el precio unitario sean válidos.",
+                "error"
+            );
+            return;
+        }
 
         const datos = {
             ...producto,
             cantidad_vendida: cantidadNum,
-            precio_venta: precioTotal
+            precio_venta: precioTotal,
+            precio_unitario: precioVentaNum,
         };
 
         if (esVenta) {
@@ -77,10 +77,7 @@ export default function CantidadModal({
                     if (!valor.trim()) {
                         showModificableAlert(
                             "Falta información",
-                            `El campo ${campo.replace(
-                                "_",
-                                " "
-                            )} es obligatorio.`,
+                            `El campo ${campo.replace("_", " ")} es obligatorio.`,
                             "error"
                         );
                         return;
@@ -99,6 +96,7 @@ export default function CantidadModal({
                         "success"
                     );
                     setCantidad("");
+                    setPrecioVenta("");
                     setClienteSeleccionado("");
                     setNuevoCliente({
                         nombre_cliente: "",
@@ -106,6 +104,7 @@ export default function CantidadModal({
                         telefono_cliente: "",
                         email_cliente: "",
                         direccion_cliente: "",
+                        tipo_comprador: "",
                     });
                     onClose();
                     router.visit(route("ventas.index"), {
@@ -144,6 +143,22 @@ export default function CantidadModal({
             });
         }
     };
+
+    const calcularTotal = () => {
+        const cantidadNum = parseFloat(cantidad);
+        const precioNum = parseFloat(precioVenta);
+        if (
+            !isNaN(cantidadNum) &&
+            cantidadNum > 0 &&
+            !isNaN(precioNum) &&
+            precioNum >= 0
+        ) {
+            return (cantidadNum * precioNum).toFixed(2);
+        }
+        return null;
+    };
+
+    const totalEstimado = calcularTotal();
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -192,12 +207,20 @@ export default function CantidadModal({
                                     min="0"
                                     value={precioVenta}
                                     onChange={(e) =>
-                                        setCantidad(e.target.value)
+                                        setPrecioVenta(e.target.value)
                                     }
                                     className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder={`precio de venta unitario`}
+                                    placeholder="Precio unitario"
                                     required
                                 />
+                                {totalEstimado && (
+                                    <div className="text-sm text-gray-600 mt-1">
+                                        Total estimado:{" "}
+                                        <span className="font-semibold text-gray-800">
+                                            ${totalEstimado}
+                                        </span>
+                                    </div>
+                                )}
                             </div>
 
                             <div className="mb-4">
@@ -330,6 +353,7 @@ export default function CantidadModal({
                             type="button"
                             onClick={() => {
                                 setCantidad("");
+                                setPrecioVenta("");
                                 setClienteSeleccionado("");
                                 onClose();
                             }}
