@@ -67,7 +67,7 @@ export default function CantidadModal({
             ...producto,
             cantidad_vendida: cantidadNum,
             precio_venta: precioTotal,
-            precio_unitario: precioVentaNum,
+            id_cliente: null,
         };
 
         if (esVenta) {
