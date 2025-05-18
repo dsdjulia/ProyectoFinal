@@ -10,6 +10,7 @@ export default function CantidadModal({
     clientes = [],
 }) {
     const [cantidad, setCantidad] = useState("");
+    const [precioVenta, setPrecioVenta] = useState("");
     const [clienteSeleccionado, setClienteSeleccionado] = useState("");
     const [nuevoCliente, setNuevoCliente] = useState({
         nombre_cliente: "",
@@ -188,7 +189,7 @@ export default function CantidadModal({
                                 <input
                                     type="number"
                                     min="0"
-                                    value={precio_venta}
+                                    value={precioVenta}
                                     onChange={(e) =>
                                         setCantidad(e.target.value)
                                     }
