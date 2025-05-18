@@ -15,15 +15,12 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductoController extends Controller
 {
-    public function index(Request $request)
+    public function index($id)
     {
         $user = Auth::user();
 
-        $request->validate([
-            'id_producto' => 'required|exists:productos,id',
-        ]);
 
-        $productoId = $request->id_producto;
+        $productoId = $id;
 
         $producto = Producto::with('categoria')->findOrFail($productoId);
 

@@ -19,42 +19,48 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
 // LOGIN
 Route::get('/', function () {
     return Inertia::render('Auth/Login');
 });
 
+// NAV
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [InventarioController::class ,'dashboard'])->name('dashboard.index');
+    Route::get('/inventario', [AlmacenController::class ,'index'])->name('inventario.index');
+    Route::get('/pedidos', [DetallesCompraController::class ,'index'])->name('pedidos.index');
+    Route::get('/ventas', [DetallesVentaController::class ,'index'])->name('ventas.index');
+    Route::get('/proveedores', [ProveedoresController::class ,'index'])->name('proveedores.index');
+    Route::get('/detalles', [ProductoController::class ,'defaultIndex'])->name('producto.default');
+    Route::get('/detalles/{id}', [ProductoController::class ,'index'])->name('producto.index');
+});
 
 // CRUD DE ALMACENES
-Route::get('/inventario', [AlmacenController::class ,'index'])->name('inventario.index');
-Route::delete('/inventario', [AlmacenController::class ,'delete'])->name('inventario.delete');
-Route::post('/inventario', [AlmacenController::class ,'store'])->name('inventario.store');
+Route::middleware('auth')->group(function () {
+    Route::delete('/inventario', [AlmacenController::class ,'delete'])->name('inventario.delete');
+    Route::post('/inventario', [AlmacenController::class ,'store'])->name('inventario.store');
+});
 
 // CRUD DE PRODUCTOS AÑADIR Y BORRAR
-Route::delete('/inventario/producto', [ProductoController::class ,'delete'])->name('producto.delete');
-Route::post('/inventario/producto', [ProductoController::class ,'store'])->name('producto.store');
-Route::patch('/inventario/producto', [ProductoController::class ,'patch'])->name('producto.patch');
+Route::middleware('auth')->group(function () {
+    Route::delete('/inventario/producto', [ProductoController::class ,'delete'])->name('producto.delete');
+    Route::post('/inventario/producto', [ProductoController::class ,'store'])->name('producto.store');
+    Route::patch('/inventario/producto', [ProductoController::class ,'patch'])->name('producto.patch');
+});
 
 // CRUD DE PEDIDOS
-Route::get('/pedidos', [DetallesCompraController::class ,'index'])->name('pedidos.index');
-Route::post('/pedidos', [DetallesCompraController::class ,'store'])->name('pedidos.store');
-Route::post('/pedidos/add', [DetallesCompraController::class ,'addInventario'])->name('pedidos.addInventario');
-Route::delete('/pedidos', [DetallesCompraController::class ,'destroy'])->name('pedidos.destroy');
-Route::patch('/pedidos/patch', [DetallesCompraController::class ,'patch'])->name('pedidos.patchInventario');
+Route::middleware('auth')->group(function () {
+    Route::post('/pedidos', [DetallesCompraController::class ,'store'])->name('pedidos.store');
+    Route::post('/pedidos/add', [DetallesCompraController::class ,'addInventario'])->name('pedidos.addInventario');
+    Route::delete('/pedidos', [DetallesCompraController::class ,'destroy'])->name('pedidos.destroy');
+    Route::patch('/pedidos/patch', [DetallesCompraController::class ,'patch'])->name('pedidos.patchInventario');
+});
 
 //CRUD DE VENTAS
-Route::post('/ventas', [DetallesVentaController::class ,'store'])->name('ventas.store');
-
-
-
-// NECESITA ID DE PRODUCTO Route::get('producto/detalles', [ProductoController::class ,'index'])->name('producto.index');
-Route::get('/dashboard', [InventarioController::class ,'dashboard'])->name('dashboard.index');
-Route::get('/ventas', [DetallesVentaController::class ,'index'])->name('ventas.index');
-Route::get('/proveedores', [ProveedoresController::class ,'index'])->name('proveedores.index');
-
-Route::get('/detalles/{id}', [ProductoController::class ,'index'])->name('producto.index');
-Route::get('/detalles', [ProductoController::class ,'defaultIndex'])->name('producto.default');
+Route::middleware('auth')->group(function () {
+    Route::post('/ventas', [DetallesVentaController::class ,'store'])->name('ventas.store');
+    Route::delete('/ventas', [DetallesVentaController::class ,'destroy'])->name('ventas.destroy');
+});
 
 
 require __DIR__ . '/auth.php';

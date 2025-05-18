@@ -46,11 +46,6 @@ class AlmacenController extends Controller
         
     }
 
-    public function getProduct()
-    {
-        return Inertia::render('Producto');
-    }
-
     private function validateAlmacen(Request $request)
     {
         return $request->validate([
@@ -146,7 +141,7 @@ class AlmacenController extends Controller
                     'nombre' => $producto->nombre,
                     'imagen' => $producto->imagen,
                     'categoria' => $producto->categoria->nombre,
-                    'almacen_id' => $almacen->id,
+                    'id_almacen' => $almacen->id,
                     'almacen_nombre' => $almacen->nombre,
                     'precio_unitario' => $producto->pivot->precio_unitario,
                     'cantidad_actual' => $producto->pivot->cantidad_actual,

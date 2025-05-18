@@ -11,37 +11,16 @@ import Footer from "@/Components/Footer";
 export default function Index() {
     const { props } = usePage();
     const [busqueda, setBusqueda] = useState("");
-    const [producto, setProducto] = useState({
-        id_categoria: 1,
-        codigo: "ABC123",
-        nombre: "Cámara Fotográfica Pro X10",
-        descripcion:
-            "Una cámara profesional con zoom óptico de 50x y grabación en 4K.",
-        imagen: "https://www.pngarts.com/files/3/Photo-Camera-Free-PNG-Image.png",
-    });
+    const [producto, setProducto] = useState(props.producto);
+
+    console.log(props);
 
     const handleBuscar = (e) => {
         e.preventDefault();
         // Aquí puedes hacer lógica para buscar producto en base a `busqueda`
         console.log("Buscando producto:", busqueda);
 
-        // Ejemplo de lógica ficticia:
-        if (busqueda.toLowerCase() === "abc123") {
-            setProducto({
-                id_categoria: 1,
-                codigo: "ABC123",
-                nombre: "Cámara Fotográfica Pro X10",
-                descripcion:
-                    "Una cámara profesional con zoom óptico de 50x y grabación en 4K.",
-                imagen: "https://www.pngarts.com/files/3/Photo-Camera-Free-PNG-Image.png",
-            });
-        } else {
-            alert("Producto no encontrado.");
-        }
     };
-
-    console.log(props)
-
 
     return (
         <div className="flex flex-col w-full">
@@ -77,7 +56,10 @@ export default function Index() {
                         </div>
 
                         {/* Vista del producto */}
-                        <ProductOverview />
+                        <ProductOverview 
+                        producto={producto}
+                        productos={props.all_products}
+                        searchTerm={busqueda}/>
                     </div>
                     <Footer/>
                 </AuthenticatedLayout>

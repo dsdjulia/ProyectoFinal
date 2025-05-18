@@ -41,6 +41,21 @@ export default function CantidadModal({
         return;
     }
 
+    // const [formData, setFormData] = useState({
+    //     codigo: "",
+    //     nombre: "",
+    //     precio_unitario: "",
+    //     id_almacen: "",
+    //     cantidad_vendida: "",
+    //     nombre_cliente: "",
+    //     identificacion_cliente: "",
+    //     telefono_cliente: "",
+    //     email_cliente: "",
+    //     direccion_cliente: "",
+    //     tipo_comprador: "",
+    // });
+// cantidad modal antiguo
+
     const handleSubmit = (e) => {
         e.preventDefault();
 

@@ -67,22 +67,22 @@ class DetallesVentaController extends Controller
 
         $datos = $request->validate([
             // Cliente
-            'id_cliente' => '',
-            'nombre_cliente' => 'string|min:1',
-            'identificacion_cliente' => 'string|min:1',
-            'telefono_cliente' => 'string|min:1',
-            'email_cliente' => 'email',
-            'direccion_cliente' => 'string|min:1',
+            'id_cliente' => 'nullable|exists:comprador,column',
+            'nombre_cliente' => 'nullable|string|min:1',
+            'identificacion_cliente' => 'nullable|string|min:1',
+            'telefono_cliente' => 'nullable|string|min:1',
+            'email_cliente' => 'nullable|email',
+            'direccion_cliente' => 'nullable|string|min:1',
             'tipo_comprador' => 'in:particular,empresa',
 
             // Producto
-            'codigo' => '|string|min:1',
-            'nombre' => '|string|min:1',
-            'precio_unitario' => '|numeric|min:1',
-            'id_almacen' => '|exists:almacenes,id',
+            'codigo' => 'nullable|string|min:1',
+            'nombre' => 'nullable|string|min:1',
+            'precio_unitario' => 'nullable|numeric|min:1',
+            'id_almacen' => 'nullable|exists:almacenes,id',
 
             // Detalles de venta
-            'cantidad_vendida' => '|integer|min:1'
+            'cantidad_vendida' => 'required|integer|min:1'
         ]);
 
         $producto = Producto::where('codigo', $datos['codigo'])
@@ -93,17 +93,19 @@ class DetallesVentaController extends Controller
             ->where('id', $datos['id_almacen'])
             ->firstOrFail();
 
-        // Buscar o crear el comprador
-        $comprador = Comprador::firstOrCreate(
-            ['identificacion' => $datos['identificacion_cliente']],
-            [
-                'nombre' => $datos['nombre_cliente'],
-                'telefono' => $datos['telefono_cliente'],
-                'email' => $datos['email_cliente'],
-                'direccion' => $datos['direccion_cliente'],
+        $comprador = Comprador::where('id',$datos['id_cliente'])
+        ->first();
+
+        if(!$comprador){
+            $comprador = Comprador::create([
+                'nombre_cliente' => $datos['nombre_cliente'],
+                'identificacion_cliente' =>$datos['identificacion_cliente'],
+                'telefono_cliente' => $datos['telefono_cliente'],
+                'email_cliente' =>$datos['email_cliente'] ,
+                'direccion_cliente' =>$datos['direccion_cliente'] ,
                 'tipo_comprador' => $datos['tipo_comprador'],
-            ]
-        );
+            ]);
+        }
 
         // Buscar inventario suficiente
         $inventario = Inventario::where('id_producto', $producto->id)
@@ -116,6 +118,7 @@ class DetallesVentaController extends Controller
             return redirect()->back()->withErrors('No hay suficiente stock disponible para este producto.');
         }
 
+        //Aqui esta el beneficio
         $margen = 0.25;
         $precioVenta = round($inventario->precio_unitario * (1 + $margen), 2);
 
