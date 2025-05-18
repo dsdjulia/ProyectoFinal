@@ -244,6 +244,7 @@ export default function InventarioTabla({ props }) {
                     onClose={() => setCantidadModalOpen(false)}
                     onConfirm={handleCantidadConfirm}
                     producto={selectedProduct}
+                    clientes={props.all_clientes}
                     tipo={tipoOperacion}
                 />
 
