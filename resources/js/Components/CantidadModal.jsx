@@ -61,12 +61,13 @@ export default function CantidadModal({
         e.preventDefault();
 
         const cantidadNum = parseInt(cantidad, 10);
-
+        const precioVentaNum = parseInt(precioVenta, 10);
+        const precioTotal = (precioVentaNum*cantidadNum)
 
         const datos = {
             ...producto,
             cantidad_vendida: cantidadNum,
-
+            precio_venta: precioTotal
         };
 
         if (esVenta) {
