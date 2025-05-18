@@ -45,7 +45,7 @@ export default function Index() {
 
     return (
         <div className="flex flex-col w-full">
-            <div className="flex w-full bg-slate-100">
+           <div className="flex w-full bg-slate-100 h-screen overflow-y-auto">
                 <div className="sticky top-0 left-0 h-screen">
                     <Sidebar active={"detalleProducto"}/>
                 </div>
