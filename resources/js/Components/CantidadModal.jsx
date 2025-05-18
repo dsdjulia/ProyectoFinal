@@ -67,7 +67,8 @@ export default function CantidadModal({
         const datos = {
             ...producto,
             cantidad_vendida: cantidadNum,
-            precio_venta: precioTotal
+            precio_venta: precioTotal,
+            id_cliente: null,
         };
 
         if (esVenta) {
