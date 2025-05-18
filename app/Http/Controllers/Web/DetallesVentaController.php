@@ -93,17 +93,19 @@ class DetallesVentaController extends Controller
             ->where('id', $datos['id_almacen'])
             ->firstOrFail();
 
-        // Buscar o crear el comprador
-        $comprador = Comprador::firstOrCreate(
-            ['identificacion' => $datos['identificacion_cliente']],
-            [
-                'nombre' => $datos['nombre_cliente'],
-                'telefono' => $datos['telefono_cliente'],
-                'email' => $datos['email_cliente'],
-                'direccion' => $datos['direccion_cliente'],
+        $comprador = Comprador::where('id',$datos['id_cliente'])
+        ->first();
+
+        if(!$comprador){
+            $comprador = Comprador::create([
+                'nombre_cliente' => $datos['nombre_cliente'],
+                'identificacion_cliente' =>$datos['identificacion_cliente'],
+                'telefono_cliente' => $datos['telefono_cliente'],
+                'email_cliente' =>$datos['email_cliente'] ,
+                'direccion_cliente' =>$datos['direccion_cliente'] ,
                 'tipo_comprador' => $datos['tipo_comprador'],
-            ]
-        );
+            ]);
+        }
 
         // Buscar inventario suficiente
         $inventario = Inventario::where('id_producto', $producto->id)
@@ -116,6 +118,7 @@ class DetallesVentaController extends Controller
             return redirect()->back()->withErrors('No hay suficiente stock disponible para este producto.');
         }
 
+        //Aqui esta el beneficio
         $margen = 0.25;
         $precioVenta = round($inventario->precio_unitario * (1 + $margen), 2);
 
