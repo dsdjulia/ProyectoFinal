@@ -10,6 +10,7 @@ export default function CantidadModal({
     clientes = [],
 }) {
     const [cantidad, setCantidad] = useState("");
+    const [precioVenta, setPrecioVenta] = useState("");
     const [clienteSeleccionado, setClienteSeleccionado] = useState("");
     const [nuevoCliente, setNuevoCliente] = useState({
         nombre_cliente: "",
@@ -60,12 +61,13 @@ export default function CantidadModal({
         e.preventDefault();
 
         const cantidadNum = parseInt(cantidad, 10);
-
+        const precioVentaNum = parseInt(precioVenta, 10);
+        const precioTotal = (precioVentaNum*cantidadNum)
 
         const datos = {
             ...producto,
             cantidad_vendida: cantidadNum,
-
+            precio_venta: precioTotal
         };
 
         if (esVenta) {
@@ -188,7 +190,7 @@ export default function CantidadModal({
                                 <input
                                     type="number"
                                     min="0"
-                                    value={precio_venta}
+                                    value={precioVenta}
                                     onChange={(e) =>
                                         setCantidad(e.target.value)
                                     }
