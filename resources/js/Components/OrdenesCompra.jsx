@@ -72,7 +72,7 @@ export default function OrdenesCompra({ props }) {
 
     if (!almacenes || almacenes.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center h-[80vh] text-center gap-6">
+            <div className="flex flex-col items-center justify-center h-5/6 text-center gap-6">
                 <span className="material-icons text-slate-400 text-7xl">
                     warehouse
                 </span>
