@@ -208,11 +208,23 @@ export default function CantidadModal({
                                 <input
                                     type="number"
                                     min="0"
-                                    step="any"
+                                    step="0.01"
                                     value={precioVenta}
-                                    onChange={(e) =>
-                                        setPrecioVenta(e.target.value)
-                                    }
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        // Limita a dos decimales si no está vacío
+                                        if (value === "") {
+                                            setPrecioVenta("");
+                                        } else {
+                                            const floatValue =
+                                                parseFloat(value);
+                                            // Fijamos a máximo dos decimales sin forzar la coma
+                                            setPrecioVenta(
+                                                Math.floor(floatValue * 100) /
+                                                    100
+                                            );
+                                        }
+                                    }}
                                     className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     placeholder="Precio unitario"
                                     required
