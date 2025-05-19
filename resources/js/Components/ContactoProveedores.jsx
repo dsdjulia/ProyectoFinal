@@ -1,9 +1,34 @@
 import { useState } from "react";
 import { router } from "@inertiajs/react";
+import { showModificableAlert } from "@/utils/alerts";
 
 export default function ConcactoProveedores({ proveedores }) {
     const [selectedProveedor, setSelectedProveedor] = useState(proveedores[0] ?? null);
     const [mensaje, setMensaje] = useState("");
+
+    const enviarMail = () => {
+        router.post(route('proveedor.email'), {
+            to: selectedProveedor.email,
+            subject: `Mensaje para ${selectedProveedor.nombre}`,
+            message: mensaje,
+        }, {
+            onSuccess: () => {
+                console.log('Entra aqui')
+                showModificableAlert(
+                    "Mail enviado",
+                    `Mail enviado correctamente a: ${selectedProveedor.nombre}`,
+                    "success"
+                );
+            },
+            onError: (errors) => {
+                showModificableAlert(
+                    "Error al enviar el mail",
+                    `Error: ${JSON.stringify(errors)}`,
+                    "error"
+                );
+            },
+        });
+}
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-6 py-8 min-h-screen">
@@ -71,22 +96,8 @@ export default function ConcactoProveedores({ proveedores }) {
                             onChange={(e) => setMensaje(e.target.value)}
                         ></textarea>
                         <button
-                                onClick={() => {
-                                    router.post(route('proveedor.email'), {
-                                        to: selectedProveedor.email,
-                                        subject: `Mensaje para ${selectedProveedor.nombre}`,
-                                        message: mensaje,
-                                    }, {
-                                        onSuccess: () => {
-                                            setMensaje("");
-                                            alert("Correo enviado con éxito");
-                                        },
-                                        onError: (errors) => {
-                                            console.error(errors);
-                                            alert("Error al enviar el correo");
-                                        }
-                                    });
-                                }}
+                            onClick={enviarMail}
+                            disabled={!mensaje}
                             className="mt-4 bg-slate-600 hover:bg-slate-700 text-white text-sm py-2 px-6 rounded-md transition"
                         >
                             Enviar
