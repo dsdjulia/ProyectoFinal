@@ -28,6 +28,7 @@ export default function ConcactoProveedores({ proveedores }) {
                 );
             },
         });
+        setMensaje('')
 }
 
     return (
