@@ -2,7 +2,7 @@ import { useState } from "react";
 import { router } from "@inertiajs/react";
 import { showModificableAlert } from "@/utils/alerts";
 
-export default function DeleteProductModal({ product, totalAmount, onClose }) {
+export default function DeleteProductModal({ product, totalAmount, onClose, contexto }) {
   const [reduceAmount, setReduceAmount] = useState(0);
 
   const handleDeleteAll = () => {
@@ -74,35 +74,41 @@ export default function DeleteProductModal({ product, totalAmount, onClose }) {
         </h2>
 
         <p className="text-gray-700 mb-3">
-          ¿Deseas eliminar el producto completo o reducir su cantidad?
+          {contexto === "stock"
+            ? "¿Deseas eliminar el producto completo o reducir su cantidad?"
+            : "¿Deseas eliminar este producto de la orden?"}
         </p>
 
-        <div className="mb-4 font-bold text-gray-700">
-          Cantidad disponible:{product.cantidad_actual}
-          <span className="font-semibold text-black">{totalAmount}</span>
-        </div>
+        {contexto === "stock" && (
+          <>
+            <div className="mb-4 font-bold text-gray-700">
+              Cantidad disponible:{" "}
+              <span className="font-semibold text-black">{product.cantidad_actual}</span>
+            </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Cantidad a reducir</label>
-          <div className="flex gap-2">
-            <input
-              type="number"
-              min="0"
-              max={totalAmount}
-              value={reduceAmount}
-              onChange={(e) => setReduceAmount(Number(e.target.value))}
-              className="w-full border border-slate-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400"
-              placeholder="Cantidad a reducir"
-            />
-            <button
-              type="button"
-              className="px-4 py-2 rounded-md bg-slate-500 text-white hover:bg-slate-700 transition"
-              onClick={handleDeletePartial}
-            >
-              Reducir
-            </button>
-          </div>
-        </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-1">Cantidad a reducir</label>
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  min="0"
+                  max={totalAmount}
+                  value={reduceAmount}
+                  onChange={(e) => setReduceAmount(Number(e.target.value))}
+                  className="w-full border border-slate-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400"
+                  placeholder="Cantidad a reducir"
+                />
+                <button
+                  type="button"
+                  className="px-4 py-2 rounded-md bg-slate-500 text-white hover:bg-slate-700 transition"
+                  onClick={handleDeletePartial}
+                >
+                  Reducir
+                </button>
+              </div>
+            </div>
+          </>
+        )}
 
         <div className="flex justify-end gap-3">
           <button

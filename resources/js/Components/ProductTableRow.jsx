@@ -13,14 +13,11 @@ export default function ProductTableRow({
     onUpdate,
     categorias,
     proveedores = [],
-    onDelete,
     onCantidadClick,
     props,
 }) {
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-    console.log(product);
-    console.log(categorias);
 
     const handleEditSave = (updatedData) => {
         if (onUpdate) {
@@ -30,12 +27,11 @@ export default function ProductTableRow({
     };
 
     const detalleProducto = () => {
-        console.log(product);
         router.get(route("producto.index", { id: product.id }), {
             onSuccess: () => {},
             onError: (errors) => {
                 showModificableAlert(
-                    "Error al mostar los detalles del producto",
+                    "Error al mostrar los detalles del producto",
                     `Error: ${JSON.stringify(errors)}`,
                     "error"
                 );
@@ -109,9 +105,7 @@ export default function ProductTableRow({
                             className="flex items-center justify-center text-red-400 w-8 h-8 rounded-full hover:text-red-500 cursor-pointer"
                             onClick={(e) => {
                                 e.stopPropagation();
-                                if (onDelete) {
-                                    onDelete(product, context); // <--- Aquí pasas el contexto
-                                }
+                                setDeleteModalOpen(true);
                             }}
                             title="Eliminar producto"
                         >
@@ -164,7 +158,15 @@ export default function ProductTableRow({
                 />
             )}
 
-           
+            {/* Modal de eliminación */}
+            {isDeleteModalOpen && (
+                <DeleteProductModal
+                    product={product}
+                    totalAmount={product.cantidad_actual}
+                    onClose={() => setDeleteModalOpen(false)}
+                    contexto={context}
+                />
+            )}
         </>
     );
 }

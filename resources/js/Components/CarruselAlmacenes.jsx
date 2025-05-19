@@ -1,10 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { router } from '@inertiajs/react';  // Actualiza esta importación
+import { router } from '@inertiajs/react';
 import { showModificableAlert } from "@/utils/alerts";
-
-
 
 function AddAlmacenModal({ isOpen, onClose, onAdd }) {
     const [form, setForm] = useState({
@@ -21,22 +19,18 @@ function AddAlmacenModal({ isOpen, onClose, onAdd }) {
         e.preventDefault();
 
         if (form.nombre && form.direccion) {
-            console.log('Entra a enviar');
             onClose();
-            router.post(route('inventario.store'), form, {  // Usa router.post en lugar de Inertia.post
+            router.post(route('inventario.store'), form, {
                 onSuccess: () => {
-                    console.log('success');
                     showModificableAlert('Almacén añadido', `${form.nombre} agregado al inventario.`, 'success');
                     router.visit(route('inventario.index'), { preserveScroll: true });
                 },
                 onError: (errors) => {
                     showModificableAlert('Error al añadir el almacén', `Error: ${errors}`, 'error');
-            }
+                }
             });
         }
     };
-
-
 
     if (!isOpen) return null;
 
@@ -78,20 +72,15 @@ function DeleteAlmacenModal({ isOpen, onClose, almacenes, onDelete }) {
             onDelete(selected);
             onClose();
             router.delete(route('inventario.delete'), {
-                data: {
-                    id: selected
-                },
+                data: { id: selected },
                 onSuccess: () => {
                     showModificableAlert('Almacén eliminado', `Almacén eliminado del inventario.`, 'success');
-
                     router.visit(route('inventario.index'), { preserveScroll: true });
                 },
                 onError: (errors) => {
-                    console.log(errors);
                     showModificableAlert('Error al eliminar el almacén', `${JSON.stringify(errors)}`, 'error');
                 }
             });
-
         }
     };
 
@@ -125,7 +114,7 @@ function DeleteAlmacenModal({ isOpen, onClose, almacenes, onDelete }) {
     );
 }
 
-export default function CarruselAlmacenes({arrayAlmacenes, selected, setSelected }) {
+export default function CarruselAlmacenes({ arrayAlmacenes, selected, setSelected }) {
     const almacenes = arrayAlmacenes;
     const [showAddModal, setShowAddModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -133,59 +122,29 @@ export default function CarruselAlmacenes({arrayAlmacenes, selected, setSelected
     const toggleSelect = (id) => {
         setSelected((prev) =>
             prev.includes(id)
-                ? prev.filter((selectedId) => selectedId !== id)  // Deseleccionar
-                : [...prev, id]  // Seleccionar
+                ? prev.filter((selectedId) => selectedId !== id)
+                : [...prev, id]
         );
     };
 
-
     const filtrarAlmacenes = () => {
-        console.log(selected);
         router.post(route(''), {
-            data: {
-                id: selected
-            },
+            data: { id: selected },
             onSuccess: () => {
                 console.log('Almacenes filtrados');
             },
             onError: (errors) => {
-                console.log(errors);
                 showModificableAlert('Error al filtrar los almacenes', `${JSON.stringify(errors)}`, 'error');
             }
         });
-    }
-
-    const handleAddAlmacen = (newAlmacen) => {
-
     };
 
-    const handleDeleteAlmacen = (index) => {
-
-    };
+    const handleAddAlmacen = () => {};
+    const handleDeleteAlmacen = () => {};
 
     return (
         <div className="w-full">
-            <div className="flex justify-start gap-3 items-center mb-2 px-2">
-                <button
-                    onClick={() => setShowAddModal(true)}
-                    className="bg-slate-500 text-white px-3 py-1 rounded hover:bg-slate-600 text-sm"
-                >
-                    Añadir Almacén
-                </button>
-                <button
-                    onClick={() => filtrarAlmacenes()}
-                    className="bg-slate-400 text-white px-3 py-1 rounded hover:bg-slate-500 text-sm"
-                >
-                    Filtrar Almacenes
-                </button>
-                <button
-                    onClick={() => setShowDeleteModal(true)}
-                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm"
-                >
-                    Eliminar Almacén
-                </button>
-            </div>
-
+            {/* Carrusel */}
             <div className="overflow-x-auto w-full py-2">
                 <div className="flex space-x-4 px-1">
                     {almacenes.map((almacen, index) => (
@@ -218,12 +177,37 @@ export default function CarruselAlmacenes({arrayAlmacenes, selected, setSelected
                 </div>
             </div>
 
+            {/* Botones debajo del carrusel */}
+            <div className="flex justify-start gap-3 items-center mt-4 px-2">
+                <button
+                    onClick={() => setShowAddModal(true)}
+                    className="bg-slate-500 text-white px-3 py-2 rounded hover:bg-slate-600 text-sm flex items-center gap-1"
+                >
+                    <span className="material-icons">add</span>
+                    Añadir Almacén
+                </button>
+                <button
+                    onClick={filtrarAlmacenes}
+                    className="bg-slate-400 text-white px-3 py-2 rounded hover:bg-slate-500 text-sm flex items-center gap-1"
+                >
+                    <span className="material-icons">filter_alt</span>
+                    Filtrar Almacenes
+                </button>
+                <button
+                    onClick={() => setShowDeleteModal(true)}
+                    className="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600 text-sm flex items-center gap-1"
+                >
+                    <span className="material-icons">delete</span>
+                    Eliminar Almacén
+                </button>
+            </div>
+
+            {/* Modales */}
             <AddAlmacenModal
                 isOpen={showAddModal}
                 onClose={() => setShowAddModal(false)}
                 onAdd={handleAddAlmacen}
             />
-
             <DeleteAlmacenModal
                 isOpen={showDeleteModal}
                 onClose={() => setShowDeleteModal(false)}
