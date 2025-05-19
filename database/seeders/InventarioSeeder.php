@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
-use Carbon\Carbon;
-use App\Models\Almacen;
-use App\Models\Producto;
 use App\Models\Inventario;
+use App\Models\Producto;
+use App\Models\Almacen;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Carbon\Carbon;
 
 class InventarioSeeder extends Seeder
 {
@@ -16,39 +15,34 @@ class InventarioSeeder extends Seeder
      */
     public function run(): void
     {
-        // Obtener productos y almacenes disponibles
-        $productos = Producto::pluck('id');
+        $productos = Producto::all();
         $almacenes = Almacen::pluck('id');
 
         if ($productos->isEmpty()) {
-            $this->command->warn('No hay productos en la tabla productos. Ejecuta primero ProductoSeeder.');
+            $this->command->warn('No hay productos. Ejecuta primero ProductoSeeder.');
             return;
         }
 
         if ($almacenes->isEmpty()) {
-            $this->command->warn('No hay almacenes en la tabla almacenes. Ejecuta primero AlmacenSeeder.');
+            $this->command->warn('No hay almacenes. Ejecuta primero AlmacenSeeder.');
             return;
         }
 
-        foreach ($productos as $productoId) {
-            // Para cada producto asignamos entre 1 y 3 almacenes aleatorios
-            $seleccionAlmacenes = $almacenes->shuffle()->take(rand(1, 3));
+        foreach ($productos as $producto) {
+            // Relacionar con 1 o 2 almacenes al azar
+            $almacenesAleatorios = $almacenes->shuffle()->take(rand(1, 2));
 
-            foreach ($seleccionAlmacenes as $almacenId) {
-                $fechaEntrada = Carbon::now()->subDays(rand(1, 30))->toDateString();
-                // A veces no hay salida; si la hay, será de 1 a 30 días después de la entrada
-                $fechaSalida = rand(0, 1)
-                    ? Carbon::parse($fechaEntrada)->addDays(rand(1, 30))->toDateString()
-                    : null;
-
+            foreach ($almacenesAleatorios as $almacenId) {
                 Inventario::create([
-                    'id_producto'      => $productoId,
-                    'id_almacen'       => $almacenId,
-                    'precio_unitario'  => rand(100, 1000) / 100, // entre 1.00 y 10.00
-                    'cantidad_actual'  => rand(1, 100),
-                    'fecha_entrada'    => $fechaEntrada,
-                    'fecha_salida'     => $fechaSalida,
-                    'fecha_vencimiento'=> Carbon::parse($fechaEntrada)->addDays(rand(1, 60))->toDateString(),
+                    'id_producto'       => $producto->id,
+                    'id_almacen'        => $almacenId,
+                    'cantidad_actual'   => rand(5, 50),
+                    'precio_unitario'   => rand(100, 1000) / 100, // 1.00 - 10.00 €
+                    'fecha_entrada'     => Carbon::now()->subDays(rand(5, 60))->toDateString(),
+                    'fecha_salida'      => rand(0, 1) ? Carbon::now()->subDays(rand(1, 4))->toDateString() : null,
+                    'fecha_vencimiento' => $producto->perecedero
+                        ? Carbon::now()->addDays(rand(30, 180))->toDateString()
+                        : null,
                 ]);
             }
         }

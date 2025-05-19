@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Proveedor;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class ProveedorSeeder extends Seeder
 {
@@ -16,23 +15,58 @@ class ProveedorSeeder extends Seeder
         $proveedores = [
             [
                 'nombre'  => 'Distribuciones López',
-                'telefono'=> '912345678',
                 'email'   => 'contacto@dlopez.es',
+                'telefono' => '912345678',
             ],
             [
                 'nombre'  => 'Insumos Alimenticios S.A.',
-                'telefono'=> '918765432',
                 'email'   => 'ventas@insumosalimenta.com',
+                'telefono' => '918765432',
             ],
             [
                 'nombre'  => 'Calzados Martínez',
-                'telefono'=> '916543210',
                 'email'   => 'info@calzmartinez.es',
+                'telefono' => '916543210',
+            ],
+            [
+                'nombre'  => 'Grupo Textil Rivera',
+                'email'   => 'info@gruporivera.com',
+                'telefono' => '915678901',
+            ],
+            [
+                'nombre'  => 'Lácteos del Sur',
+                'email'   => 'pedidos@lacteossur.es',
+                'telefono' => '914321789',
+            ],
+            [
+                'nombre'  => 'Electrodomésticos Europa',
+                'email'   => 'soporte@electroeuro.com',
+                'telefono' => '913210987',
+            ],
+            [
+                'nombre'  => 'Higiene Global',
+                'email'   => 'contacto@higieneglobal.net',
+                'telefono' => '919876543',
+            ],
+            [
+                'nombre'  => 'Alimentos Naturales',
+                'email'   => 'ventas@alimentosnaturales.com',
+                'telefono' => '911234567',
+            ],
+            [
+                'nombre'  => 'Suministros del Norte',
+                'email'   => 'info@sumnorte.com',
+                'telefono' => '917654321',
+            ],
+            [
+                'nombre'  => 'Papelería Moderna',
+                'email'   => 'pedidos@papeleriamoderna.com',
+                'telefono' => '910123456',
             ],
         ];
 
-        foreach ($proveedores as $prov) {
-            Proveedor::create($prov);
+        foreach ($proveedores as $data) {
+            Proveedor::create($data);
         }
     }
 }

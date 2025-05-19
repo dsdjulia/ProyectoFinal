@@ -6,7 +6,6 @@ use App\Models\Venta;
 use App\Models\Producto;
 use App\Models\DetalleVenta;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DetalleVentaSeeder extends Seeder
 {
@@ -16,7 +15,7 @@ class DetalleVentaSeeder extends Seeder
     public function run(): void
     {
         $ventas    = Venta::pluck('id');
-        $productos = Producto::pluck('id');
+        $productos = Producto::all();
 
         if ($ventas->isEmpty()) {
             $this->command->warn('No hay registros en la tabla ventas. Ejecuta primero VentaSeeder.');
@@ -29,15 +28,15 @@ class DetalleVentaSeeder extends Seeder
         }
 
         foreach ($ventas as $ventaId) {
-            // Para cada venta, asociamos entre 1 y 3 productos aleatorios
+            // Para cada venta, seleccionamos de 1 a 3 productos aleatorios
             $seleccion = $productos->shuffle()->take(rand(1, 3));
 
-            foreach ($seleccion as $productoId) {
+            foreach ($seleccion as $producto) {
                 DetalleVenta::create([
                     'id_venta'        => $ventaId,
-                    'id_producto'     => $productoId,
+                    'id_producto'     => $producto->id,
                     'cantidad'        => rand(1, 5),
-                    'precio_unitario' => rand(100, 1000) / 100, // precio entre 1.00 y 10.00
+                    'precio_unitario' => rand(100, 1000) / 100, // 1.00 – 10.00 €
                 ]);
             }
         }

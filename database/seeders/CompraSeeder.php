@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Models\Compra;
 use App\Models\Proveedor;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class CompraSeeder extends Seeder
 {
@@ -16,11 +15,11 @@ class CompraSeeder extends Seeder
      */
     public function run(): void
     {
-        $users      = User::pluck('id');
+        $user = User::first();
         $proveedores = Proveedor::pluck('id');
 
-        if ($users->isEmpty()) {
-            $this->command->warn('No hay usuarios en la tabla users. Ejecuta primero UserSeeder.');
+        if (!$user) {
+            $this->command->warn('No se encontró ningún usuario. Ejecuta primero el UserSeeder.');
             return;
         }
 
@@ -29,19 +28,14 @@ class CompraSeeder extends Seeder
             return;
         }
 
-        $compras = [
-            ['fecha_compra' => Carbon::now()->subDays(20)->toDateString()],
-            ['fecha_compra' => Carbon::now()->subDays(15)->toDateString()],
-            ['fecha_compra' => Carbon::now()->subDays(10)->toDateString()],
-            ['fecha_compra' => Carbon::now()->subDays(5)->toDateString()],
-            ['fecha_compra' => Carbon::now()->toDateString()],
-        ];
+        for ($i = 0; $i < 30; $i++) {
+            // Fecha aleatoria en los últimos 90 días (~3 meses)
+            $fecha = Carbon::now()->subDays(rand(0, 120))->toDateString();
 
-        foreach ($compras as $data) {
             Compra::create([
-                'id_user'       => $users->random(),
-                'id_proveedor'  => $proveedores->random(),
-                'fecha_compra'  => $data['fecha_compra'],
+                'id_user'      => $user->id,
+                'id_proveedor' => $proveedores->random(),
+                'fecha_compra' => $fecha,
             ]);
         }
     }

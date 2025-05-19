@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Models\Venta;
 use App\Models\Comprador;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class VentaSeeder extends Seeder
 {
@@ -16,32 +15,26 @@ class VentaSeeder extends Seeder
      */
     public function run(): void
     {
-        $users       = User::pluck('id');
+        $user = User::first();
         $compradores = Comprador::pluck('id');
 
-        if ($users->isEmpty()) {
-            $this->command->warn('No hay usuarios en la tabla users. Ejecuta primero UserSeeder.');
+        if (!$user) {
+            $this->command->warn('No se encontró ningún usuario. Ejecuta primero el UserSeeder.');
             return;
         }
 
         if ($compradores->isEmpty()) {
-            $this->command->warn('No hay registros en la tabla compradores. Ejecuta primero CompradorSeeder.');
+            $this->command->warn('No hay compradores en la tabla compradores. Ejecuta primero CompradorSeeder.');
             return;
         }
 
-        $ventas = [
-            ['fecha_venta' => Carbon::now()->subDays(18)->toDateString()],
-            ['fecha_venta' => Carbon::now()->subDays(12)->toDateString()],
-            ['fecha_venta' => Carbon::now()->subDays(7)->toDateString()],
-            ['fecha_venta' => Carbon::now()->subDays(3)->toDateString()],
-            ['fecha_venta' => Carbon::now()->toDateString()],
-        ];
+        for ($i = 0; $i < 30; $i++) {
+            $fecha = Carbon::now()->subDays(rand(0, 120))->toDateString();
 
-        foreach ($ventas as $data) {
             Venta::create([
-                'id_user'       => $users->random(),
-                'id_comprador'  => $compradores->random(),
-                'fecha_venta'   => $data['fecha_venta'],
+                'id_user'      => $user->id,
+                'id_comprador' => $compradores->random(),
+                'fecha_venta'  => $fecha,
             ]);
         }
     }
