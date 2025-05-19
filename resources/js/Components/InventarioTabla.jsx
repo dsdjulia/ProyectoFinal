@@ -152,20 +152,20 @@ export default function InventarioTabla({ props }) {
                 <h2 className="text-xl font-semibold text-gray-700 mb-4">Inventario</h2>
 
                 {/* Buscar */}
-                <div className="flex flex-col justify-start items-left gap-2 mb-4">
+                <div className="flex flex-col justify-start items-left gap-2 mb-5">
                     <input
                         type="text"
                         placeholder="Buscar"
-                        className="border border-gray-300 rounded-lg py-2 px-4 w-64 focus:outline-none focus:ring-2 focus:ring-slate-500"
+                        className="border border-gray-300 rounded-lg py-2 px-4 w-64 focus:outline-none focus:ring-2 focus:ring-slate-500 mb-3"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                     <div>
-                        <button className="mr-2 bg-slate-300 text-slate-600 px-4 py-2 rounded-md font-semibold hover:bg-slate-400 hover:text-white">
+                        <button className="mr-2 bg-slate-600 text-slate-50 px-4 py-1 rounded-md text-sm hover:bg-slate-400 hover:text-white">
                             Buscar
                         </button>
                         <button
-                            className="hover:underline text-sm text-red-400"
+                            className="mr-2 bg-red-500 text-red-50 px-4 py-1 rounded-md text-sm hover:bg-slate-400 hover:text-white"
                             onClick={limpiarFiltros}
                         >
                             Limpiar Filtros

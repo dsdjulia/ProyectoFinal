@@ -181,21 +181,15 @@ export default function CarruselAlmacenes({ arrayAlmacenes, selected, setSelecte
             <div className="flex justify-start gap-3 items-center mt-4 px-2">
                 <button
                     onClick={() => setShowAddModal(true)}
-                    className="bg-slate-500 text-white px-3 py-2 rounded hover:bg-slate-600 text-sm flex items-center gap-1"
+                    className="bg-slate-600 text-white px-3 py-1 rounded-md hover:bg-slate-700 text-sm flex items-center gap-1"
                 >
                     <span className="material-icons">add</span>
                     Añadir Almacén
                 </button>
-                <button
-                    onClick={filtrarAlmacenes}
-                    className="bg-slate-400 text-white px-3 py-2 rounded hover:bg-slate-500 text-sm flex items-center gap-1"
-                >
-                    <span className="material-icons">filter_alt</span>
-                    Filtrar Almacenes
-                </button>
+
                 <button
                     onClick={() => setShowDeleteModal(true)}
-                    className="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600 text-sm flex items-center gap-1"
+                    className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 text-sm flex items-center gap-1"
                 >
                     <span className="material-icons">delete</span>
                     Eliminar Almacén
