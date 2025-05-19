@@ -81,7 +81,7 @@ export default function ConcactoProveedores({ proveedores }) {
 
             {/* Área de contacto (2/3) sin tarjeta */}
             <div className=" flex flex-col justify-center h-full">
-                 <span className="material-icons text-8xl text-slate-300 mb-4 self-center">badge</span>
+                <span className="material-icons text-8xl text-slate-300 mb-4 self-center">badge</span>
                 <h2 className="text-xl font-semibold text-slate-700 mb-4">Contacto</h2>
                 {selectedProveedor ? (
                     <>
