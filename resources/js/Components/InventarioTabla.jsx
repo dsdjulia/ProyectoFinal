@@ -161,11 +161,11 @@ export default function InventarioTabla({ props }) {
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                     <div>
-                        <button className="mr-2 bg-slate-600 text-slate-50 px-4 py-1 rounded-md text-sm hover:bg-slate-400 hover:text-white">
+                        <button className="mr-2 bg-slate-600 text-slate-50 px-4 py-1 rounded-md text-sm hover:bg-slate-700 hover:text-white">
                             Buscar
                         </button>
                         <button
-                            className="mr-2 bg-red-500 text-red-50 px-4 py-1 rounded-md text-sm hover:bg-slate-400 hover:text-white"
+                            className="mr-2 bg-red-500 text-red-50 px-4 py-1 rounded-md text-sm hover:bg-red-600 hover:text-white"
                             onClick={limpiarFiltros}
                         >
                             Limpiar Filtros

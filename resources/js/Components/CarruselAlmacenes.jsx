@@ -183,7 +183,7 @@ export default function CarruselAlmacenes({ arrayAlmacenes, selected, setSelecte
                     onClick={() => setShowAddModal(true)}
                     className="bg-slate-600 text-white px-3 py-1 rounded-md hover:bg-slate-700 text-sm flex items-center gap-1"
                 >
-                    <span className="material-icons">add</span>
+                    <span className="material-icons text-xl">add</span>
                     Añadir Almacén
                 </button>
 
@@ -191,7 +191,7 @@ export default function CarruselAlmacenes({ arrayAlmacenes, selected, setSelecte
                     onClick={() => setShowDeleteModal(true)}
                     className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 text-sm flex items-center gap-1"
                 >
-                    <span className="material-icons">delete</span>
+                    <span className="material-icons text-xl">delete</span>
                     Eliminar Almacén
                 </button>
             </div>
