@@ -45,7 +45,7 @@ class DetallesVentaController extends Controller
                     ->limit(1);
             })
             ->orderByDesc('fecha_entrada')
-            ->firstOrFail();
+            ->first();
 
         if ($inventario) {
             $inventario->increment('cantidad_actual', $detalleVenta->cantidad);
@@ -88,14 +88,14 @@ class DetallesVentaController extends Controller
 
         $producto = Producto::where('codigo', $datos['codigo'])
             ->where('nombre', $datos['nombre'])
-            ->firstOrFail();
+            ->first();
 
         $almacen = Almacen::where('id_user', $user->id)
             ->where('id', $datos['id_almacen'])
-            ->firstOrFail();
+            ->first();
 
         $comprador = Comprador::where('id',$datos['id_cliente'])
-        ->firstOrFail();
+        ->first();
 
         if(!$comprador){
             $comprador = Comprador::create([
@@ -113,7 +113,7 @@ class DetallesVentaController extends Controller
             ->where('id_almacen', $almacen->id)
             ->where('cantidad_actual', '>=', $datos['cantidad_vendida'])
             ->orderByDesc('fecha_entrada')
-            ->firstOrFail();
+            ->first();
 
         if (!$inventario) {
             return redirect()->back()->withErrors('No hay suficiente stock disponible para este producto.');

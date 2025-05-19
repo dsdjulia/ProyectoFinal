@@ -56,7 +56,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/pedidos', [DetallesCompraController::class ,'destroy'])->name('pedidos.destroy');
     Route::patch('/pedidos/patch', [DetallesCompraController::class ,'patch'])->name('pedidos.patchInventario');
     Route::post('/pedidos', [DetallesCompraController::class ,'store'])->name('pedidos.store');
-
 });
 
 //CRUD DE VENTAS

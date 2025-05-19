@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 
 class InventarioController extends Controller
 {
-    public function dashboard(Request $request)
+    public function dashboard()
     {
         $user = Auth::user();
 
@@ -107,7 +107,7 @@ class InventarioController extends Controller
                 ->whereBetween('ventas.fecha_venta', [$fechaInicio, $fechaFin])
                 ->groupBy('productos.id', 'productos.nombre', 'productos.imagen', 'productos.descripcion')
                 ->orderByDesc('total_vendido')
-                ->firstOrFail();
+                ->first();
 
             // Ventas última semana
             $fechaInicioSemana = now()->subDays(6)->startOfDay()->toDateTimeString();
@@ -169,9 +169,8 @@ class InventarioController extends Controller
                 'trace' => $e->getTraceAsString(),
             ]);
 
-            return response()->json([
-                'error' => 'Error interno al obtener las estadísticas. Inténtalo más tarde.',
-            ], 500);
+            return redirect()->back()->withErrors(['dashboard' => 'No se pudo cargar el dashboard.']);
+
         }
     }
 }

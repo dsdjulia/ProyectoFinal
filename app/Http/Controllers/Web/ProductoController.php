@@ -165,7 +165,7 @@ class ProductoController extends Controller
         Inventario::where('id_producto',$datos['id_producto'])
             ->where('id_almacen',$datos['id_almacen'])
             ->where('precio_unitario',$datos['precio_unitario'])
-            ->firstOrFail()
+            ->first()
             ->delete();
         
         return redirect()->route('inventario.index');
@@ -195,7 +195,7 @@ class ProductoController extends Controller
 
         $categoria = Categoria::where('id',$data['id_categoria'])
             ->where('id_user',$user->id)
-            ->firstOrFail();
+            ->first();
 
         if(!$categoria){
             $newCategoria = Categoria::create([
@@ -254,11 +254,11 @@ class ProductoController extends Controller
 
         $almacen = Almacen::where('id',$datos['id_almacen'])
             ->where('id_user',$user->id)
-            ->firstOrFail();
+            ->first();
 
         $inventario = Inventario::where('id_producto', $datos['id_producto'])
             ->where('id_almacen', $almacen->id)
-            ->firstOrFail();
+            ->first();
 
         $inventario->cantidad_actual = $datos['cantidad_actual'];
         $inventario->save();

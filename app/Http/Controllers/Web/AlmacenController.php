@@ -54,7 +54,7 @@ class AlmacenController extends Controller
         
         $almacen = Almacen::where('id_user',$user->id)
         ->where('id_almacen',$datos['id_almacen'])
-        ->firstOrFail();
+        ->first();
 
         $almacen->nombre = $datos['nombre'];
         $almacen->direccion = $datos['direccion'];
@@ -75,7 +75,7 @@ class AlmacenController extends Controller
     {
         return Almacen::where('id_user', Auth::id())
             ->where('id', $id)
-            ->firstOrFail();
+            ->first();
     }
 
     private function calcularStockStats($almacenes)
