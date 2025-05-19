@@ -26,7 +26,7 @@ class SendEmaillController extends Controller
                         ->subject($request->subject);
             });
 
-            return response()->json(['success' => true, 'message' => 'Correo enviado con éxito']);
+            return redirect()->back()->with('success', 'Correo enviado con éxito');
         } catch (\Exception $e) {
             Log::error('Error enviando correo: ' . $e->getMessage());
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
