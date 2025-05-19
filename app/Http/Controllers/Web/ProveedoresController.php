@@ -16,7 +16,7 @@ class ProveedoresController extends Controller
     public function index(){
         $user = Auth::user();
 
-        $this->renderProveedores($user);
+        return $this->renderProveedores($user);
     }
 
     public function store(Request $request){
