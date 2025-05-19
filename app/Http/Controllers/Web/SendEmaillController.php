@@ -22,7 +22,7 @@ class SendEmaillController extends Controller
             ]);
 
             Mail::raw($request->message, function ($message) use ($request) {
-                $message->to('isamegusta@gmail.com')
+                $message->to('testgiddonpk@gmail.com')
                         ->subject($request->subject);
             });
 
