@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { router } from "@inertiajs/react";
 
 export default function ConcactoProveedores({ proveedores }) {
     const [selectedProveedor, setSelectedProveedor] = useState(proveedores[0] ?? null);
@@ -70,7 +71,22 @@ export default function ConcactoProveedores({ proveedores }) {
                             onChange={(e) => setMensaje(e.target.value)}
                         ></textarea>
                         <button
-                            onClick={() => alert(`Mensaje enviado a ${selectedProveedor.email}`)}
+                                onClick={() => {
+                                    router.post(route('proveedor.email'), {
+                                        to: selectedProveedor.email,
+                                        subject: `Mensaje para ${selectedProveedor.nombre}`,
+                                        message: mensaje,
+                                    }, {
+                                        onSuccess: () => {
+                                            setMensaje("");
+                                            alert("Correo enviado con éxito");
+                                        },
+                                        onError: (errors) => {
+                                            console.error(errors);
+                                            alert("Error al enviar el correo");
+                                        }
+                                    });
+                                }}
                             className="mt-4 bg-slate-600 hover:bg-slate-700 text-white text-sm py-2 px-6 rounded-md transition"
                         >
                             Enviar

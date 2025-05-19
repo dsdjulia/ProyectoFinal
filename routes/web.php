@@ -2,15 +2,15 @@
 
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\Web\AlmacenController;
 use App\Http\Controllers\Web\ProfileController;
-
 use App\Http\Controllers\Web\ProductoController;
 use App\Http\Controllers\Web\InventarioController;
 use App\Http\Controllers\Web\ProveedoresController;
 use App\Http\Controllers\Web\DetallesVentaController;
 use App\Http\Controllers\Web\DetallesCompraController;
-use App\Models\Producto;
+use App\Http\Controllers\Web\SendEmaillController;
 
 // EDIT PROFILE
 Route::middleware('auth')->group(function () {
@@ -40,7 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/inventario', [AlmacenController::class ,'delete'])->name('inventario.delete');
     Route::post('/inventario', [AlmacenController::class ,'store'])->name('inventario.store');
     // ESTA ESTAS TOCANDO
-    Route::update('inventario/almacen', [AlmacenController::class ,'update'])->name('almacen.patch');
+    Route::patch('inventario/almacen', [AlmacenController::class ,'update'])->name('almacen.patch');
 });
 
 // CRUD DE PRODUCTOS AÑADIR Y BORRAR
@@ -63,6 +63,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/ventas', [DetallesVentaController::class ,'store'])->name('ventas.store');
     Route::delete('/ventas', [DetallesVentaController::class ,'destroy'])->name('ventas.destroy');
 });
+
+
+//TEST EMAIL
+Route::post('/proveedor/email', [SendEmaillController::class, 'sendEmail'])->name('proveedor.email');
 
 
 require __DIR__ . '/auth.php';
