@@ -11,6 +11,7 @@ use App\Http\Controllers\Web\ProveedoresController;
 use App\Http\Controllers\Web\DetallesVentaController;
 use App\Http\Controllers\Web\DetallesCompraController;
 use App\Http\Controllers\Web\SendEmaillController;
+use App\Models\Proveedor;
 
 // EDIT PROFILE
 Route::middleware('auth')->group(function () {
@@ -39,7 +40,6 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::delete('/inventario', [AlmacenController::class ,'delete'])->name('inventario.delete');
     Route::post('/inventario', [AlmacenController::class ,'store'])->name('inventario.store');
-    // ESTA ESTAS TOCANDO
     Route::patch('inventario/almacen', [AlmacenController::class ,'update'])->name('almacen.patch');
 });
 
@@ -64,6 +64,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/ventas', [DetallesVentaController::class ,'destroy'])->name('ventas.destroy');
 });
 
+//CRUD DE PROVEEDORES
+Route::middleware('auth')->group(function () {
+    Route::post('/proveedor', [ProveedoresController::class ,'store'])->name('proveedor.store');
+    Route::delete('/proveedor', [ProveedoresController::class ,'destroy'])->name('proveedor.destroy');
+    Route::patch('/proveedor', [ProveedoresController::class ,'patch'])->name('proveedor.patch');
+});
 
 //TEST EMAIL
 Route::post('/proveedor/email', [SendEmaillController::class, 'sendEmail'])->name('proveedor.email');
