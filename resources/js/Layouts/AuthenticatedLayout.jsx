@@ -12,7 +12,7 @@ export default function AuthenticatedLayout({ header, children }) {
         useState(false);
 
     return (
-        <div className="min-h-screen bg-transparent w-screen rounded-bl-lg z-10">
+        <div className="min-h-screen bg-transparent w-full rounded-bl-lg z-10">
             <nav className="border-b border-gray-100 bg-slate-200 sticky top-0 rounded-bl-lg z-10">
                 <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-20 justify-between">

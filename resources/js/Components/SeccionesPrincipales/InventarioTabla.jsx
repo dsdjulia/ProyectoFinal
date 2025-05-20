@@ -94,7 +94,7 @@ export default function InventarioTabla({ props }) {
     }
 
     return (
-        <div className="w-full flex flex-col align-middle justify-start p-12 pt-0 pb-34 mt-12">
+        <div className="flex flex-col p-12 pt-12 pb-34 align-middle justify-start h-full ">
             {/* Top Summary */}
             <div className="flex justify-start mb-12 w-full">
                 <div className="flex items-center border-r justify-start align-middle w-1/3">
@@ -148,7 +148,7 @@ export default function InventarioTabla({ props }) {
             </div>
 
             {/* Inventario Table Section */}
-            <div className="bg-white rounded-lg overflow-hidden shadow-lg p-6 relative flex flex-col gap-6">
+            <div className="bg-white rounded-lg overflow-hidden shadow-lg mt-4 p-4">
                 <h2 className="text-xl font-semibold text-gray-700 mb-4">Inventario</h2>
 
                 {/* Buscar */}
