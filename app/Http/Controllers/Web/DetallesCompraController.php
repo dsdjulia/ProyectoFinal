@@ -321,14 +321,21 @@ class DetallesCompraController extends Controller
 
             $productosData = $productos->map(function ($producto) use ($almacen, $user) {
                 // Aquí usamos el método para obtener proveedores por producto
-                $proveedores = $producto->proveedores($user->id)->map(function ($p) {
-                    return [
-                        'id' => $p->id,
-                        'nombre' => $p->nombre,
-                        'telefono' => $p->telefono,
-                        'email' => $p->email,
-                    ];
-                })->values();
+                $proveedores = DetalleCompra::with('compra.proveedor')
+                    ->where('id_producto', $producto->id)
+                    ->get()
+                    ->pluck('compra.proveedor')
+                    ->filter()
+                    ->unique('id')
+                    ->values()
+                    ->map(function ($proveedor) {
+                        return [
+                            'id' => $proveedor->id,
+                            'nombre' => $proveedor->nombre,
+                            'telefono' => $proveedor->telefono,
+                            'email' => $proveedor->email,
+                        ];
+                    });
 
                 return [
                     'id_categoria' => $producto->categoria->id,
