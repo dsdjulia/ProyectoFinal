@@ -57,10 +57,10 @@ export default function Index() {
 
                         {/* Vista del producto */}
                         <ProductOverview
-                        producto={producto}
-                        productos={props.all_products}
-                        searchTerm={busqueda}
-                        props={props}/>
+                            producto={producto}
+                            productos={props.all_products}
+                            searchTerm={busqueda}
+                            props={props}/>
                     </div>
                     <Footer/>
                 </AuthenticatedLayout>

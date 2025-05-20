@@ -111,31 +111,23 @@ class AlmacenController extends Controller
             })
             ->get();
 
-        $detallesVentas = $detallesVentasRaw->map(function ($detalle) {
-            return [
-                'id_detalle' => $detalle->id,
-                'producto_id' => $detalle->id_producto,
-                'codigo' => $detalle->producto->codigo,
-                'nombre' => $detalle->producto->nombre,
-                'precio_unitario' => $detalle->precio_unitario,
-                'cantidad' => $detalle->cantidad,
-                'fecha_venta' => optional($detalle->venta)->fecha_venta,
-                'cliente' => optional($detalle->venta->comprador)->nombre,
-            ];
-        });
-
         $allClientes = $detallesVentasRaw
             ->pluck('venta.comprador') 
             ->filter() 
             ->unique('id') 
             ->values();
 
+        $alm = Almacen::with('productos')->where('id_user', $user->id)->get();
+        // Obtener el total de productos unicos
+        $totalProductos = $alm->pluck('productos')
+        ->flatten() 
+        ->count();
 
         return Inertia::render('Inventario', [
             'status' => true,
             'message' => 'Almacenes encontrados',
             'count' => count($almacenes),
-            'total_productos' => collect($almacenes)->sum('productos_count'),
+            'total_productos' => $totalProductos,
             'total_unidades' => collect($almacenes)->sum('cantidad_total'),
             'total_precio' => collect($almacenes)->sum('precio_total'),
             'disponible' => $stats['disponible'],
@@ -149,15 +141,11 @@ class AlmacenController extends Controller
         ]);
     }
 
-    private function obtenerAlmacenesConProductos($userId, $almacenesIds = null)
+    private function obtenerAlmacenesConProductos($userId)
     {
         $query = Almacen::with(['productos' => function ($q) {
             $q->withPivot('id_almacen', 'cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
         }])->where('id_user', $userId);
-
-        if (is_array($almacenesIds)) {
-            $query->whereIn('id', $almacenesIds);
-        }
 
         return $query->get()->map(function ($almacen) {
             $productos = $almacen->productos;

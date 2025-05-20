@@ -137,25 +137,18 @@ export default function Main({ props }) {
             {/* Tarjetas de métricas */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[
-                    { label: "Almacenes", value: datos.total_almacenes, growth: datos.growth_almacenes },
-                    { label: "Total Productos", value: datos.total_productos, growth: datos.growth_productos },
-                    { label: "Total Ventas", value: datos.total_ventas, growth: datos.growth_ventas },
-                    { label: "Beneficio Mensual", value: datos.beneficio_mensual, growth: datos.growth_beneficio },
+                    { label: "Almacenes", value: datos.total_almacenes},
+                    { label: "Total Productos", value: datos.total_productos,},
+                    { label: "Total Ventas", value: datos.total_ventas,},
+                    { label: "Total Pedidos", value: datos.total_compras,},
+                    { label: "Total Gastos", value: datos.total_gastos,},
+                    { label: "Beneficio Mensual", value: datos.beneficio_mensual,},
+                    
                 ].map((item, index) => (
                     <div key={index} className="bg-transparent p-5 border-r-2 border-slate-300">
                         <div className="text-sm text-slate-500 mb-1">{item.label}</div>
                         <div className="text-xl font-semibold text-slate-800">{item.value}</div>
-                        <div
-                            className={`text-xs mt-1 ${
-                                item.growth.startsWith("+")
-                                    ? "text-green-500"
-                                    : item.growth.startsWith("-")
-                                    ? "text-red-500"
-                                    : "text-gray-500"
-                            }`}
-                        >
-                            {item.growth} este mes
-                        </div>
+
                     </div>
                 ))}
             </div>
