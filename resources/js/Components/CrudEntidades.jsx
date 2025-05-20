@@ -1,88 +1,107 @@
 import { useState } from "react";
 
-// Suponiendo que ya tienes estos componentes:
-/* import AddAlmacenModal from "./AddAlmacenModal";
+import AddAlmacenModal from "./AddAlmacenModal";
 import AddCategoriaModal from "./AddCategoriaModal";
 import AddClienteModal from "./AddClienteModal";
-import AddProveedorModal from "./AddProveedorModal"; */
+import AddProveedorModal from "./AddProveedorModal";
+
+import EditAlmacenModal from "./EditAlmacenModal";
+import EditCategoriaModal from "./EditCategoriaModal";
+import EditClienteModal from "./EditClienteModal";
+import EditProveedorModal from "./EditProveedorModal";
+
 
 const entidades = {
-  almacenes: {
-    label: "Almacenes",
-    icon: "📦",
-    data: [
-      { id: 1, nombre: "Almacén Central", direccion: "Av. Principal 123" },
-      { id: 2, nombre: "Depósito Norte", direccion: "Calle 45 Norte" },
-    ],
-  },
-  categorias: {
-    label: "Categorías",
-    icon: "🗂️",
-    data: [
-      { id: 1, nombre: "Electrónica" },
-      { id: 2, nombre: "Ropa" },
-    ],
-  },
-  compradores: {
-    label: "Compradores",
-    icon: "🧑‍💼",
-    data: [
-      {
-        id: 1,
-        nombre: "Juan Pérez",
-        identificacion: "123456789",
-        telefono: "555-1234",
-        email: "juan@example.com",
-        direccion: "Calle Falsa 123",
-        tipo_comprador: "Mayorista",
-      },
-      {
-        id: 2,
-        nombre: "Ana Gómez",
-        identificacion: "987654321",
-        telefono: "555-5678",
-        email: "ana@example.com",
-        direccion: "Av. Las Flores 321",
-        tipo_comprador: "Minorista",
-      },
-    ],
-  },
-  proveedores: {
-    label: "Proveedores",
-    icon: "🚚",
-    data: [
-      { id: 1, nombre: "Proveedor Uno", telefono: "555-7890", email: "prov1@example.com" },
-      { id: 2, nombre: "Proveedor Dos", telefono: "555-6789", email: "prov2@example.com" },
-    ],
-  },
+    almacenes: {
+        label: "Almacenes",
+        icon: "📦",
+        data: [
+            {
+                id: 1,
+                nombre: "Almacén Central",
+                direccion: "Av. Principal 123",
+            },
+            { id: 2, nombre: "Depósito Norte", direccion: "Calle 45 Norte" },
+        ],
+    },
+    categorias: {
+        label: "Categorías",
+        icon: "🗂️",
+        data: [
+            { id: 1, nombre: "Electrónica" },
+            { id: 2, nombre: "Ropa" },
+        ],
+    },
+    compradores: {
+        label: "Compradores",
+        icon: "🧑‍💼",
+        data: [
+            {
+                id: 1,
+                nombre: "Juan Pérez",
+                identificacion: "123456789",
+                telefono: "555-1234",
+                email: "juan@example.com",
+                direccion: "Calle Falsa 123",
+                tipo_comprador: "Mayorista",
+            },
+            {
+                id: 2,
+                nombre: "Ana Gómez",
+                identificacion: "987654321",
+                telefono: "555-5678",
+                email: "ana@example.com",
+                direccion: "Av. Las Flores 321",
+                tipo_comprador: "Minorista",
+            },
+        ],
+    },
+    proveedores: {
+        label: "Proveedores",
+        icon: "🚚",
+        data: [
+            {
+                id: 1,
+                nombre: "Proveedor Uno",
+                telefono: "555-7890",
+                email: "prov1@example.com",
+            },
+            {
+                id: 2,
+                nombre: "Proveedor Dos",
+                telefono: "555-6789",
+                email: "prov2@example.com",
+            },
+        ],
+    },
 };
 
 export default function CrudEntidades() {
-  const [selectedType, setSelectedType] = useState("almacenes");
-  const [data, setData] = useState(entidades);
-  const [itemToEdit, setItemToEdit] = useState(null);
-  const [itemToDelete, setItemToDelete] = useState(null);
-  const [itemToAdd, setItemToAdd] = useState(false); // <-- Nuevo estado
+    const [selectedType, setSelectedType] = useState("almacenes");
+    const [data, setData] = useState(entidades);
+    const [itemToEdit, setItemToEdit] = useState(null);
+    const [itemToDelete, setItemToDelete] = useState(null);
+    const [itemToAdd, setItemToAdd] = useState(false); // <-- Nuevo estado
 
-  const currentItems = data[selectedType].data;
-  const iconoEntidad = data[selectedType].icon;
-  const tipoEntidad = data[selectedType].label;
+    const currentItems = data[selectedType].data;
+    const iconoEntidad = data[selectedType].icon;
+    const tipoEntidad = data[selectedType].label;
 
-  const handleEdit = (item) => setItemToEdit(item);
+    const handleEdit = (item) => setItemToEdit(item);
 
-  const handleDelete = (id) => {
-    const updated = {
-      ...data,
-      [selectedType]: {
-        ...data[selectedType],
-        data: data[selectedType].data.filter((item) => item.id !== id),
-      },
+    const handleDelete = (id) => {
+        const updated = {
+            ...data,
+            [selectedType]: {
+                ...data[selectedType],
+                data: data[selectedType].data.filter((item) => item.id !== id),
+            },
+        };
+        setData(updated);
+        setItemToDelete(null);
     };
-    setData(updated);
-    setItemToDelete(null);
-  };
 
-  /* const renderEditModal = () => {
+    const renderEditModal = () => {
     if (!itemToEdit) return null;
     switch (selectedType) {
       case "almacenes":
@@ -97,119 +116,195 @@ export default function CrudEntidades() {
         return null;
     }
   };
-
-  const renderAddModal = () => {
+const renderAddModal = () => {
     if (!itemToAdd) return null;
     switch (selectedType) {
-      case "almacenes":
-        return <AddAlmacenModal onClose={() => setItemToAdd(false)} />;
-      case "categorias":
-        return <AddCategoriaModal onClose={() => setItemToAdd(false)} />;
-      case "compradores":
-        return <AddClienteModal onClose={() => setItemToAdd(false)} />;
-      case "proveedores":
-        return <AddProveedorModal onClose={() => setItemToAdd(false)} />;
-      default:
-        return null;
+        case "almacenes":
+            return (
+                <AddAlmacenModal
+                    isOpen={true}
+                    onClose={() => setItemToAdd(false)}
+                    onAdd={(newItem) => {
+                        setData((prev) => ({
+                            ...prev,
+                            almacenes: {
+                                ...prev.almacenes,
+                                data: [...prev.almacenes.data, newItem],
+                            },
+                        }));
+                        setItemToAdd(false);
+                    }}
+                />
+            );
+        case "categorias":
+            return (
+                <AddCategoriaModal
+                    isOpen={true}
+                    onClose={() => setItemToAdd(false)}
+                    onAdd={(newItem) => {
+                        setData((prev) => ({
+                            ...prev,
+                            categorias: {
+                                ...prev.categorias,
+                                data: [...prev.categorias.data, newItem],
+                            },
+                        }));
+                        setItemToAdd(false);
+                    }}
+                />
+            );
+        case "compradores":
+            return (
+                <AddClienteModal
+                    isOpen={true}
+                    onClose={() => setItemToAdd(false)}
+                    onAdd={(newItem) => {
+                        setData((prev) => ({
+                            ...prev,
+                            compradores: {
+                                ...prev.compradores,
+                                data: [...prev.compradores.data, newItem],
+                            },
+                        }));
+                        setItemToAdd(false);
+                    }}
+                />
+            );
+        case "proveedores":
+            return (
+                <AddProveedorModal
+                    isOpen={true}
+                    onClose={() => setItemToAdd(false)}
+                    onAdd={(newItem) => {
+                        setData((prev) => ({
+                            ...prev,
+                            proveedores: {
+                                ...prev.proveedores,
+                                data: [...prev.proveedores.data, newItem],
+                            },
+                        }));
+                        setItemToAdd(false);
+                    }}
+                />
+            );
+        default:
+            return null;
     }
-  }; */
+};
 
-  return (
-    <div className="flex h-screen relative">
-      <aside className="w-1/4 bg-white shadow-md p-4">
-        <h2 className="pt-2 text-sm font-semibold mb-4 text-slate-600">Tipos de entidad</h2>
-        <hr />
-        <br />
-        {Object.entries(data).map(([key, val]) => (
-          <button
-            key={key}
-            onClick={() => setSelectedType(key)}
-            className={`block text-left p-2 mb-2 w-full rounded-lg text-sm ${
-              selectedType === key ? "bg-slate-300 font-bold " : "hover:bg-slate-100 font-medium text-slate-600 "
-            }`}
-          >
-            {val.label}
-          </button>
-        ))}
-      </aside>
+    return (
+        <div className="flex h-screen relative">
+            <aside className="w-1/4 bg-white  p-4">
+                <h2 className="pt-2 text-sm font-semibold mb-4 text-slate-600">
+                    Tipos de entidad
+                </h2>
+                <hr />
+                <br />
+                {Object.entries(data).map(([key, val]) => (
+                    <button
+                        key={key}
+                        onClick={() => setSelectedType(key)}
+                        className={`block text-left p-2 mb-2 w-full rounded-lg text-sm ${
+                            selectedType === key
+                                ? "bg-slate-300 font-bold "
+                                : "hover:bg-slate-100 font-medium text-slate-600 "
+                        }`}
+                    >
+                        {val.label}
+                    </button>
+                ))}
+            </aside>
 
-      <main className="flex-1 p-6 overflow-y-auto">
-        <h1 className="text-2xl font-bold mb-6">{tipoEntidad}</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {/* Crear nuevo */}
-          <div
-            onClick={() => setItemToAdd(true)}
-            className="flex flex-col items-center justify-center p-6 bg-slate-100 border-2 border-dashed rounded-lg cursor-pointer hover:bg-slate-200"
-          >
-            <div className="w-16 h-16 bg-slate-300 rounded-full flex items-center justify-center text-3xl font-bold">
-              +
-            </div>
-            <p className="mt-4 text-sm font-medium text-slate-600">Crear nuevo</p>
-          </div>
+            <main className="flex-1 p-6 overflow-y-auto">
+                <h1 className="text-2xl font-bold mb-6">{tipoEntidad}</h1>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {/* Crear nuevo */}
+                    <div
+                        onClick={() => setItemToAdd(true)}
+                        className="flex flex-col items-center justify-center p-6 bg-slate-100 border-2 border-dashed rounded-lg cursor-pointer hover:bg-slate-200"
+                    >
+                        <div className="w-16 h-16 bg-slate-300 rounded-full flex items-center justify-center text-3xl font-bold">
+                            +
+                        </div>
+                        <p className="mt-4 text-sm font-medium text-slate-600">
+                            Crear nuevo
+                        </p>
+                    </div>
 
-          {/* Listado de entidades */}
-          {currentItems.map((item) => (
-            <div
-              key={item.id}
-              className="relative p-4 bg-white rounded-lg shadow hover:shadow-md transition"
-            >
-              <button
-                onClick={() => handleEdit(item)}
-                className="absolute inset-0 w-full h-full z-10 cursor-pointer"
-                title="Editar"
-              />
-              <button
-                onClick={() => setItemToDelete(item)}
-                className="absolute top-2 right-2 text-slate-500 hover:text-red-600 text-lg z-10"
-                title="Eliminar"
-              >
-                ❌
-              </button>
-              <div className="relative z-0">
-                <div className="w-full h-32 bg-slate-200 rounded mb-4 flex items-center justify-center text-4xl text-slate-500">
-                  {iconoEntidad}
+                    {/* Listado de entidades */}
+                    {currentItems.map((item) => (
+                        <div
+                            key={item.id}
+                            className="relative p-4 bg-white rounded-lg shadow hover:shadow-md transition"
+                        >
+                            <button
+                                onClick={() => handleEdit(item)}
+                                className="absolute inset-0 w-full h-full z-10 cursor-pointer"
+                                title="Editar"
+                            />
+                            <button
+                                onClick={() => setItemToDelete(item)}
+                                className="absolute top-2 right-2 z-10 text-red-500 hover:text-red-700"
+                                title="Eliminar"
+                            >
+                                <span className="material-icons text-2x1">
+                                    delete
+                                </span>
+                            </button>
+                            <div className="relative z-0">
+                                <div className="w-full h-32 bg-slate-200 rounded mb-4 flex items-center justify-center text-4xl text-slate-500">
+                                    {iconoEntidad}
+                                </div>
+                                <h2 className="text-sm font-bold mb-1">
+                                    {item.nombre || item.email || "Elemento"}
+                                </h2>
+                                <p className="text-xs text-slate-500">
+                                    {item.direccion ||
+                                        item.telefono ||
+                                        item.identificacion ||
+                                        item.tipo_comprador ||
+                                        ""}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
                 </div>
-                <h2 className="text-sm font-bold mb-1">{item.nombre || item.email || "Elemento"}</h2>
-                <p className="text-xs text-slate-500">
-                  {item.direccion || item.telefono || item.identificacion || item.tipo_comprador || ""}
-                </p>
-              </div>
-            </div>
-          ))}
+            </main>
+
+            {/* Modal de edición */}
+             {renderEditModal()}
+
+            {/* Modal de creación */}
+            {renderAddModal()}
+
+            {/* Modal de confirmación de eliminación */}
+            {itemToDelete && (
+                <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
+                        <h2 className="text-lg font-bold mb-4">
+                            ¿Eliminar {tipoEntidad.slice(0, -1)}?
+                        </h2>
+                        <p className="text-sm mb-6 text-slate-600">
+                            ¿Estás seguro que quieres eliminar{" "}
+                            <strong>{itemToDelete.nombre}</strong>?
+                        </p>
+                        <div className="flex justify-center gap-4">
+                            <button
+                                onClick={() => setItemToDelete(null)}
+                                className="px-4 py-2 bg-slate-200 rounded-lg hover:bg-slate-300 text-sm"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={() => handleDelete(itemToDelete.id)}
+                                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm"
+                            >
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
-      </main>
-
-      {/* Modal de edición */}
-     {/*  {renderEditModal()} */}
-
-      {/* Modal de creación */}
-      {/* {renderAddModal()} */}
-
-      {/* Modal de confirmación de eliminación */}
-      {itemToDelete && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
-            <h2 className="text-lg font-bold mb-4">¿Eliminar {tipoEntidad.slice(0, -1)}?</h2>
-            <p className="text-sm mb-6 text-slate-600">
-              ¿Estás seguro que quieres eliminar <strong>{itemToDelete.nombre}</strong>?
-            </p>
-            <div className="flex justify-center gap-4">
-              <button
-                onClick={() => setItemToDelete(null)}
-                className="px-4 py-2 bg-slate-200 rounded-lg hover:bg-slate-300 text-sm"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={() => handleDelete(itemToDelete.id)}
-                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm"
-              >
-                Eliminar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+    );
 }
