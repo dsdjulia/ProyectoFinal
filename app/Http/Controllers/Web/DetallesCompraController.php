@@ -336,6 +336,7 @@ class DetallesCompraController extends Controller
                             'email' => $proveedor->email,
                         ];
                     });
+                    // He cambiado esto
 
                 return [
                     'id_categoria' => $producto->categoria->id,
