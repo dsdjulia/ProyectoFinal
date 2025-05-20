@@ -68,7 +68,9 @@ export default function EditproductoModal({ producto, onClose, context, almacene
   return (
     <div className="fixed inset-0 bg-slate-800 bg-opacity-30 flex items-center justify-center z-50">
       <div className="bg-white text-black rounded-md shadow-md shadow-slate-400 p-6 w-full max-w-4xl max-h-[85vh] overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-4">Editar producto</h2>
+        <h2 className="text-2xl font-bold mb-4">
+            {context === "orders" ? "Editar Pedido" : "Editar Producto"}
+        </h2>
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div>
