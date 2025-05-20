@@ -107,11 +107,12 @@ export default function AddModal({
 
     const handleDeletePhoto = () => {
         setMostrarFoto("");
+        setImagenUpload("");
         inputFileRef.current.value = ""; // Reseteas el input file
     };
 
     const handleUpload = async () => {
-        if (!mostrarFoto) {
+        if (!imagenUpload) {
             console.log("No hay imagen para subir");
             setIsReady(true);
             return;

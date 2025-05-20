@@ -1,69 +1,161 @@
 import { showModificableAlert } from "@/utils/alerts";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { router } from "@inertiajs/react";
 
 export default function EditproductoModal({ producto, onClose, context, almacenes = [], categorias = [], proveedores }) {
-  const [formData, setFormData] = useState({
-    codigo: producto.codigo,
-    nombre: producto.nombre,
-    descripcion: producto.descripcion,
-    imagen: producto.producto_imagen,
-    id_categoria: producto.id_categoria,
-    nombre_categoria: producto.nombre_categoria,
-    id_almacen: producto.id_almacen,
-    precio_unitario: producto.precio_unitario,
-    cantidad_actual: producto.cantidad_actual,
-    perecedero: producto.fecha_vencimiento ? true : false,
-    fecha_vencimiento: producto.fecha_vencimiento,
-    id_proveedor: producto.id_proveedor,
-    nombre_proveedor: producto.proveedor,
-    id_detalle: producto.id_detalle,
-    status: context === "orders" ? producto.status : undefined,
-    almacen: context === "stock" ? producto.almacen_nombre : undefined,
-    telefono: producto.telefono || "",
-    email: producto.email || "",
-  });
+	console.log(producto)
+	const [formData, setFormData] = useState({
+		codigo: producto.codigo,
+		nombre: producto.nombre,
+		descripcion: producto.descripcion,
+		imagen: producto.imagen,
+		id_categoria: producto.id_categoria,
+		nombre_categoria: producto.nombre_categoria,
+		id_almacen: producto.id_almacen,
+		precio_unitario: producto.precio_unitario,
+		cantidad_actual: producto.cantidad_actual,
+		perecedero: producto.fecha_vencimiento ? true : false,
+		fecha_vencimiento: producto.fecha_vencimiento ?? "",
+		id_proveedor: producto.proveedores[0].id,
+		nombre_proveedor: producto.proveedores[0].nombre,
+		id_detalle: producto.id_detalle ? producto.id_detalle : 1 ,
+		telefono: producto.proveedores[0].telefono ,
+		email: producto.proveedores[0].email,
+		status: context === "orders" ? producto.status : undefined,
+		almacen: context === "stock" ? producto.almacen_nombre : undefined,
+	});
+	console.log(producto)
 
-  const [mostrarNuevaCategoria, setMostrarNuevaCategoria] = useState(false);
-  const [mostrarNuevoProveedor, setMostrarNuevoProveedor] = useState(false);
+	const [mostrarNuevaCategoria, setMostrarNuevaCategoria] = useState(false);
+	const [mostrarNuevoProveedor, setMostrarNuevoProveedor] = useState(false);
+	const [mostrarFoto, setMostrarFoto] = useState({url: producto.imagen ?? ""});
+	const [imagenUpload, setImagenUpload] = useState("");
+	const inputFileRef = useRef(null);
+	const [isReady, setIsReady] = useState(false);
 
-  const handleInputChange = ({ target: { name, value, type, checked } }) => {
-    const inputValue = type === "checkbox" ? checked : value;
-    if (name === "perecedero") {
-      setFormData(prev => ({ ...prev, [name]: inputValue, fecha_vencimiento: "" }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: inputValue }));
-    }
-  };
+	const handleInputChange = ({ target: { name, value, type, checked } }) => {
+		const inputValue = type === "checkbox" ? checked : value;
+		if (name === "perecedero") {
+		setFormData(prev => ({ ...prev, [name]: inputValue, fecha_vencimiento: "" }));
+		} else {
+		setFormData(prev => ({ ...prev, [name]: inputValue }));
+		}
+	};
 
-  const handleCategoriaChange = ({ target: { value } }) => {
-    setMostrarNuevaCategoria(value === "nueva");
-    setFormData(prev => ({ ...prev, id_categoria: value === "nueva" ? "" : value }));
-  };
+	const handleCategoriaChange = ({ target: { value } }) => {
+		setMostrarNuevaCategoria(value === "nueva");
+		setFormData(prev => ({ ...prev, id_categoria: value === "nueva" ? "" : value }));
+	};
 
-  const handleProveedorChange = ({ target: { value } }) => {
-    setMostrarNuevoProveedor(value === "nuevo");
-    setFormData(prev => ({ ...prev, id_proveedor: value === "nuevo" ? "" : value }));
-  };
+	const handleProveedorChange = ({ target: { value } }) => {
+		setMostrarNuevoProveedor(value === "nuevo");
+		setFormData(prev => ({ ...prev, id_proveedor: value === "nuevo" ? "" : value }));
+	};
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    router.patch(route("pedidos.patchInventario"), formData, {
-      onSuccess: () => {
-        showModificableAlert("Pedido actualizado", `El producto ${producto.nombre} se ha actualizado.`, "success");
-        onClose();
-        router.visit(route("pedidos.index"), { preserveScroll: true });
-      },
-      onError: (error) =>
-        showModificableAlert("Error al actualizar el producto", `Error: ${JSON.stringify(error)}`, "error"),
-    });
-  };
 
-  if (producto.estado) {
-    showModificableAlert("Pedido ya recibido", `No se puede editar un producto ya recibido`, "error");
-    onClose();
-    return;
-  }
+	if (producto.estado) {
+		showModificableAlert("Pedido ya recibido", `No se puede editar un producto ya recibido`, "error");
+		onClose();
+		return;
+	}
+
+
+	const mostrarFotoSeleccionada = (foto) => {
+		// Esto muestra las fotos subidas en la pagina
+		const urlImagen = foto.target.files[0];
+		// setMostrarFoto(URL.createObjectURL(urlImagen))
+		setMostrarFoto({
+			url: URL.createObjectURL(urlImagen)
+		});
+		setImagenUpload(urlImagen);
+		console.log(URL.createObjectURL(urlImagen));
+	};
+
+	const handleDeletePhoto = () => {
+		setMostrarFoto("");
+		setImagenUpload("");
+		inputFileRef.current.value = ""; // Reseteas el input file
+	};
+
+    const handleUpload = async () => {
+        if (!imagenUpload) {
+            console.log("No hay imagen para subir");
+            setIsReady(true);
+            return;
+        }
+
+        const uploadData = new FormData();
+
+        const uploadToCloudinary = async (image) => {
+            uploadData.append("file", image);
+            uploadData.append("upload_preset", "default");
+
+            try {
+                const response = await fetch(
+                    `https://api.cloudinary.com/v1_1/dcdvxqsxn/image/upload`,
+                    {
+                        method: "POST",
+                        body: uploadData,
+                    }
+                );
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    console.log("Imagen subida con éxito:", [
+                        data,
+                        data.url,
+                        data.public_id,
+                        data.original_filename,
+                    ]);
+                    return data; // Devolvemos los datos de la subida
+                } else {
+                    console.error("Error al subir imagen:", data.error.message);
+                    showModificableAlert(
+                        "Error",
+                        `Error: ${JSON.stringify(data.error.message)}`,
+                        "error"
+                    );
+                }
+            } catch (error) {
+                console.error("Error al conectar con Cloudinary:", error);
+            }
+            return null;
+        };
+
+        const result = await uploadToCloudinary(imagenUpload);
+
+        console.log(result);
+
+        if (result !== null) {
+            setFormData((prev) => ({
+                ...prev,
+                imagen: result.secure_url, // Guardamos la info de la imagen subida
+            }));
+            setIsReady(true);
+        }
+    };
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		handleUpload();
+	};
+
+	// Enviar los datos solo cuando form haya actualizado los datos
+	useEffect(() => {
+		if (isReady) {
+		router.patch(route("pedidos.patchInventario"), formData, {
+			onSuccess: () => {
+			showModificableAlert("Pedido actualizado", `El producto ${producto.nombre} se ha actualizado.`, "success");
+			onClose();
+			router.visit(route("pedidos.index"), { preserveScroll: true });
+			},
+			onError: (error) =>
+			showModificableAlert("Error al actualizar el producto", `Error: ${JSON.stringify(error)}`, "error"),
+		});
+			setIsReady(false);
+		}
+	}, [isReady]);
 
   return (
     <div className="fixed inset-0 bg-slate-800 bg-opacity-30 flex items-center justify-center z-50">
@@ -104,18 +196,6 @@ export default function EditproductoModal({ producto, onClose, context, almacene
               rows={2}
               className="w-full border border-slate-300 rounded p-1.5 mt-1 bg-white focus:ring-2 focus:ring-slate-400 focus:outline-none text-black"
               placeholder="Descripción del producto"
-            />
-          </div>
-
-          <div className="md:col-span-2">
-            <label className="block font-medium text-black">Imagen (URL)</label>
-            <input
-              type="text"
-              name="imagen"
-              value={formData.imagen}
-              onChange={handleInputChange}
-              className="w-full border border-slate-300 rounded p-1.5 mt-1 bg-white focus:ring-2 focus:ring-slate-400 focus:outline-none text-black"
-              placeholder="https://example.com/imagen.jpg"
             />
           </div>
 
@@ -222,6 +302,22 @@ export default function EditproductoModal({ producto, onClose, context, almacene
             </select>
           </div>
 
+          {/* Imagen */}
+          <div>
+              <label className="block text-sm font-medium text-gray-700">
+                  Imagen (subir archivo)
+              </label>
+              <input
+                  type="file"
+                  name="imagen"
+                  accept="image/*"
+                  ref={inputFileRef}
+                  onChange={(e) => mostrarFotoSeleccionada(e)}
+                  className="w-full border rounded-lg py-2 px-4"
+              />
+          </div>
+
+
           {mostrarNuevoProveedor && (
             <div className="md:col-span-2 grid gap-2">
               <input
@@ -250,6 +346,32 @@ export default function EditproductoModal({ producto, onClose, context, almacene
               />
             </div>
           )}
+
+          {/* Vista previa de imagen si existe */}
+          {mostrarFoto && (
+              <div className="md:col-span-2 mt-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Vista previa
+                  </label>
+                  <div className="relative inline-block bg-white border-black border b-2 rounded-md shadow-md p-2 mt-6">
+                      <img
+                          src={mostrarFoto.url}
+                          alt={"Imagen del producto"}
+                          className="h-52 w-auto object-cover rounded-md"
+                      />
+                      <button
+                          type="button"
+                          onClick={handleDeletePhoto}
+                          className="absolute -top-4 -right-4 text-red-500  hover:text-red-600 rounded-full  flex items-center justify-center "
+                      >
+                          <span className="material-icons text-4xl">
+                              delete
+                          </span>
+                      </button>
+                  </div>
+              </div>
+          )}
+
         </form>
 
         <div className="mt-4 flex justify-end space-x-3">
