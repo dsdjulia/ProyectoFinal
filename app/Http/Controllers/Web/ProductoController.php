@@ -162,12 +162,13 @@ class ProductoController extends Controller
             'precio_unitario' => 'required|numeric'
         ]);
 
-        Inventario::where('id_producto',$datos['id_producto'])
+        $inventario =Inventario::where('id_producto',$datos['id_producto'])
             ->where('id_almacen',$datos['id_almacen'])
             ->where('precio_unitario',$datos['precio_unitario'])
-            ->first()
-            ->delete();
-        
+            ->first();
+            
+        $inventario->delete();
+
         return redirect()->route('inventario.index');
 
     }

@@ -182,6 +182,7 @@ class AlmacenController extends Controller
 
                 return [
                     'id_producto' => $producto->id,
+                    'id_categoria' => $producto->id_categoria,
                     'codigo' => $producto->codigo,
                     'nombre' => $producto->nombre,
                     'imagen' => $producto->imagen,
