@@ -392,12 +392,10 @@ class DetallesCompraController extends Controller
                 'codigo' => $detalle->producto->codigo,
                 'nombre' => $detalle->producto->nombre,
                 'descripcion' => $detalle->producto->descripcion,
-                'producto_imagen' => $detalle->producto->imagen,
+                'imagen' => $detalle->producto->imagen,
 
-                'id_proveedor' => optional($detalle->compra->proveedor)->id,
-                'proveedor' => optional($detalle->compra->proveedor)->nombre,
-                
-                
+                'proveedores' => $detalle->compra->proveedor,
+
                 'id_detalle' => $detalle->id,
                 'fecha_vencimiento'=> $detalle->fecha_vencimiento,
                 'cantidad_actual' => $detalle->cantidad_actual,
