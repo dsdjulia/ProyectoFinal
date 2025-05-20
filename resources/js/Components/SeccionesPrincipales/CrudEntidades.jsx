@@ -33,7 +33,7 @@ const entidades = {
         ],
     },
     compradores: {
-        label: "Compradores",
+        label: "Clientes",
         icon: "🧑‍💼",
         data: [
             {
@@ -108,7 +108,7 @@ export default function CrudEntidades() {
         return <EditAlmacenModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
       case "categorias":
         return <EditCategoriaModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
-      case "compradores":
+      case "clientes":
         return <EditClienteModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
       case "proveedores":
         return <EditProveedorModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
@@ -153,7 +153,7 @@ const renderAddModal = () => {
                     }}
                 />
             );
-        case "compradores":
+        case "clientes":
             return (
                 <AddClienteModal
                     isOpen={true}
