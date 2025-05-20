@@ -158,7 +158,7 @@ if (!producto) {
         <img
           src={producto.imagen}
           alt={producto.nombre}
-          className="w-full h-auto object-contain rounded-md mb-4 bg-red-100"
+          className="w-full h-auto object-contain rounded-md mb-4"
         />
         </div>
 
