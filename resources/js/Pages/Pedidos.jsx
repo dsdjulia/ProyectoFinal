@@ -4,7 +4,7 @@ import Header from "@/Components/Header";
 import { usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Footer from "@/Components/Footer";
-import OrdenesCompra from "@/Components/OrdenesCompra";
+import OrdenesCompra from "@/Components/SeccionesPrincipales/OrdenesCompra";
 
 export default function Index() {
     const { props } = usePage();

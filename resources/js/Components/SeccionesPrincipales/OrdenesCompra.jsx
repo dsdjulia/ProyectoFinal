@@ -1,10 +1,10 @@
 import { useState } from "react";
-import ProductTableRow from "./ProductTableRow";
-import AddModal from "./AddModal";
-import DeleteProductModal from "./DeleteProductModal";
-import CantidadModal from "./CantidadModal"; // 👈 Importación del nuevo modal
+import ProductTableRow from "../ProductTableRow";
+import AddModal from "../Modales/AddModal";
+import DeleteProductModal from "../DeleteProductModal";
+import CantidadModal from "../Modales/CantidadModal"; // 👈 Importación del nuevo modal
 import { router } from "@inertiajs/react";
-import AddAlmacenModal from "./AddAlmacenModal";
+import AddAlmacenModal from "../Modales/AddAlmacenModal";
 
 export default function OrdenesCompra({ props }) {
     const [products, setProducts] = useState(props.all_productos);
@@ -171,7 +171,7 @@ export default function OrdenesCompra({ props }) {
                         product={selectedPedido}
                         totalAmount={selectedPedido.existencias}
                         onClose={() => setIsDeleteModalOpen(false)}
-                        
+
                     />
                 )}
 

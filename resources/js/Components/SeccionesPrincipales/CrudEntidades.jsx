@@ -1,14 +1,14 @@
 import { useState } from "react";
 
-import AddAlmacenModal from "./AddAlmacenModal";
-import AddCategoriaModal from "./AddCategoriaModal";
-import AddClienteModal from "./AddClienteModal";
-import AddProveedorModal from "./AddProveedorModal";
+import AddAlmacenModal from "../Modales/AddAlmacenModal";
+import AddCategoriaModal from "../Modales/AddCategoriaModal";
+import AddClienteModal from "../Modales/AddClienteModal";
+import AddProveedorModal from "../Modales/AddProveedorModal";
 
-import EditAlmacenModal from "./EditAlmacenModal";
-import EditCategoriaModal from "./EditCategoriaModal";
-import EditClienteModal from "./EditClienteModal";
-import EditProveedorModal from "./EditProveedorModal";
+import EditAlmacenModal from "../Modales/EditAlmacenModal";
+import EditCategoriaModal from "../Modales/EditCategoriaModal";
+import EditClienteModal from "../Modales/EditClienteModal";
+import EditProveedorModal from "../Modales/EditProveedorModal";
 
 
 const entidades = {

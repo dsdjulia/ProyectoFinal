@@ -5,7 +5,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Footer from "@/Components/Footer";
 import { useState } from "react";
 import { Bar, Doughnut, Line } from "react-chartjs-2";
-import Main from "@/Components/Main";
+import Main from "@/Components/SeccionesPrincipales/Main";
 import {
     Chart as ChartJS,
     CategoryScale,

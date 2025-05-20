@@ -3,7 +3,7 @@ import Sidebar from "@/Components/Sidebar";
 import { usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Footer from "@/Components/Footer";
-import InventarioTabla from "@/Components/InventarioTabla";
+import InventarioTabla from "@/Components/SeccionesPrincipales/InventarioTabla";
 
 export default function Index() {
     const { props } = usePage();

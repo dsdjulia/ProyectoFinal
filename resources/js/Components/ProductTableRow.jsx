@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Chip from "@/Components/Chip";
-import EditProductModal from "@/Components/EditProductModal";
+import EditProductModal from "@/Components/Modales/EditProductModal";
 import DeleteProductModal from "@/Components/DeleteProductModal";
 import { router } from "@inertiajs/react";
 

@@ -3,7 +3,7 @@ import Header from "@/Components/Header";
 import { usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Footer from "@/Components/Footer";
-import CrudEntidades from "@/Components/CrudEntidades";
+import CrudEntidades from "@/Components/SeccionesPrincipales/CrudEntidades";
 
 export default function Index() {
     const { props } = usePage();

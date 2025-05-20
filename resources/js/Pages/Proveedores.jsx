@@ -3,7 +3,7 @@ import Header from "@/Components/Header";
 import { usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Footer from "@/Components/Footer";
-import ConcactoProveedores from "@/Components/ContactoProveedores";
+import ConcactoProveedores from "@/Components/SeccionesPrincipales/ContactoProveedores";
 
 export default function Index() {
     const { props } = usePage();

@@ -1,10 +1,10 @@
 // resources/js/Pages/Producto/Index.jsx
 import Sidebar from "@/Components/Sidebar";
-import Main from "@/Components/Main";
+import Main from "@/Components/SeccionesPrincipales/Main";
 import Header from "@/Components/Header";
 import { usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import ProductOverview from "@/Components/ProductOverview";
+import ProductOverview from "@/Components/SeccionesPrincipales/ProductOverview";
 import { useState } from "react";
 import Footer from "@/Components/Footer";
 

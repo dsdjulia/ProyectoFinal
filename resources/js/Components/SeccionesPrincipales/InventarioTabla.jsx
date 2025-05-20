@@ -1,11 +1,11 @@
 import { useState } from "react";
-import ProductTableRow from "./ProductTableRow";
-import CarruselAlmacenes from "./CarruselAlmacenes";
-import AddModal from "./AddModal";
-import DeleteProductModal from "./DeleteProductModal";
-import CantidadModal from "./CantidadModal";
-import DoughnutChart from "./DoughnutChart";
-import AddAlmacenModal from "./AddAlmacenModal";
+import ProductTableRow from "../ProductTableRow";
+import CarruselAlmacenes from "../CarruselAlmacenes";
+import AddModal from "../Modales/AddModal";
+import DeleteProductModal from "../DeleteProductModal";
+import CantidadModal from "../Modales/CantidadModal";
+import DoughnutChart from "../DoughnutChart";
+import AddAlmacenModal from "../Modales/AddAlmacenModal";
 import { router } from "@inertiajs/react";
 
 export default function InventarioTabla({ props }) {
