@@ -5,7 +5,7 @@ import { showModificableAlert } from "@/utils/alerts";
 export default function DeleteProductModal({ product, totalAmount, onClose, contexto }) {
   const [reduceAmount, setReduceAmount] = useState(0);
     console.log(product)
-  const handleDeleteAll = () => {  /* Aqui poner if contexto===stock */
+  const handleDeleteAll = () => { 
     onClose();
     router.delete(route("producto.delete"), {
       data: {
