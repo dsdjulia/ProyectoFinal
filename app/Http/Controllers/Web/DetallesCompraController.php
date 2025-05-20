@@ -294,12 +294,6 @@ class DetallesCompraController extends Controller
 
 
     private function renderInventario($user, $almacenesIds = null){
-        // Cargar los detalles de compras con sus relaciones para la lista general de proveedores
-        $detallesComprasRaw = DetalleCompra::with(['producto', 'compra.proveedor'])
-            ->whereHas('compra', function ($query) use ($user) {
-                $query->where('id_user', $user->id);
-            })
-            ->get();
 
         $almacenesQuery = Almacen::with(['productos' => function ($query) {
             $query->withPivot('id_almacen', 'cantidad_actual', 'precio_unitario', 'fecha_entrada', 'fecha_salida');
@@ -372,6 +366,13 @@ class DetallesCompraController extends Controller
             ];
         });
 
+        // Cargar los detalles de compras con sus relaciones para la lista general de proveedores
+        $detallesComprasRaw = DetalleCompra::with(['producto', 'compra.proveedor'])
+            ->whereHas('compra', function ($query) use ($user) {
+                $query->where('id_user', $user->id);
+            })
+            ->get();
+
         // Lista general de proveedores únicos (sin repetir)
         $all_proveedores = $detallesComprasRaw
             ->pluck('compra.proveedor')
@@ -394,7 +395,7 @@ class DetallesCompraController extends Controller
                 'descripcion' => $detalle->producto->descripcion,
                 'imagen' => $detalle->producto->imagen,
 
-                'proveedores' => $detalle->compra->proveedor,
+                'proveedores' => [$detalle->compra->proveedor],
 
                 'id_detalle' => $detalle->id,
                 'fecha_vencimiento'=> $detalle->fecha_vencimiento,
