@@ -180,15 +180,15 @@ class ProductoController extends Controller
             // datos para crear producto
             'codigo' => 'required|string|unique:productos,codigo',
             'nombre' => 'required|string',
-            'descripcion' => 'nullable|string',
-            'imagen' => 'nullable|string',
-            // 'imagen' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'descripcion' => 'required|string',
+            'imagen' => 'required|image|mimes:png,jpeg,jpg|max:2048',
+
             //datos para crear inventario
             'id_almacen' => 'required|exists:almacenes,id',
             'cantidad_actual' => 'required|integer|min:1',
             'precio_unitario' => 'required|numeric|min:1',
             //datos para la categoria
-            'id_categoria' => '',
+            'id_categoria' => 'nullable|exists:categorias,id',
             'nombre_categoria' => 'nullable|string',
             'perecedero' => 'nullable|boolean'
         ]);
@@ -230,9 +230,20 @@ class ProductoController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'required|string',
-            'precio_unitario' => 'required|decimal',
+            // datos para crear producto
+            'codigo' => 'nullable|string|unique:productos,codigo',
+            'nombre' => 'nullable|string',
+            'descripcion' => 'nullable|string',
+            
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            //datos para crear inventario
+            'id_almacen' => 'required|exists:almacenes,id',
+            'cantidad_actual' => 'nullable|integer|min:1',
+            'precio_unitario' => 'nullable|numeric|min:1',
+            //datos para la categoria
+            'id_categoria' => 'nullable|exists:categorias,id',
+            'nombre_categoria' => 'nullable|string',
+            'perecedero' => 'nullable|boolean'
         ]);
 
         $producto = Producto::find($request->id);

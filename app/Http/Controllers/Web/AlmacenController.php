@@ -47,7 +47,7 @@ class AlmacenController extends Controller
         $user = Auth::user();
 
         $datos = $request->validate([
-            'id_almacen' => 'required|exists:almacenes,id',
+            'id_almacen' => 'nullable|exists:almacenes,id',
             'nombre' => 'required|string|min:1',
             'direccion' => 'required|string|min:1'
         ]);
@@ -60,7 +60,7 @@ class AlmacenController extends Controller
         $almacen->direccion = $datos['direccion'];
         $almacen->save();
 
-        $this->renderInventario($user); 
+        return $this->renderInventario($user); 
     }
 
     private function validateAlmacen(Request $request)

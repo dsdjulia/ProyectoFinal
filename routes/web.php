@@ -35,7 +35,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/detalles', [ProductoController::class ,'defaultIndex'])->name('producto.default');
     Route::get('/detalles/{id}', [ProductoController::class ,'index'])->name('producto.index');
     Route::get('/proveedores', [ProveedoresController::class ,'index'])->name('proveedores.index'); 
-
     Route::get('/entidades', [EntidadesController::class ,'index'])->name('entidades.index'); 
 });
 
