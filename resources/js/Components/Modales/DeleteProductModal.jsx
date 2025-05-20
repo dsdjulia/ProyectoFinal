@@ -9,7 +9,7 @@ export default function DeleteProductModal({ product, totalAmount, onClose, cont
     onClose();
     router.delete(route("producto.delete"), {
       data: {
-        id_producto: product.id,
+        id_producto: product.id_producto,
         id_almacen: product.id_almacen,
         precio_unitario: product.precio_unitario,
       },
@@ -37,7 +37,7 @@ export default function DeleteProductModal({ product, totalAmount, onClose, cont
         route("producto.patch"),
         {
           id_almacen: product.id_almacen,
-          id_producto: product.id,
+          id_producto: product.id_producto,
           cantidad_actual: product.cantidad_actual - reduceAmount,
         },
         {
