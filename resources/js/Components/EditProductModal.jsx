@@ -50,7 +50,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
     e.preventDefault();
     router.patch(route("pedidos.patchInventario"), formData, {
       onSuccess: () => {
-        showModificableAlert("Pedido actualizado", `${producto.nombre} actualizado.`, "success");
+        showModificableAlert("Pedido actualizado", `El producto ${producto.nombre} se ha actualizado.`, "success");
         onClose();
         router.visit(route("pedidos.index"), { preserveScroll: true });
       },
