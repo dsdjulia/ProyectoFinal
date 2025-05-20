@@ -348,11 +348,6 @@ class DetallesCompraController extends Controller
 
             $allProductos = array_merge($allProductos, $productosData);
 
-            //! Necesito que me llegue esto también
-            // perecedero: '',
-            // id_proveedor: "",
-            // nombre_categoria: "",
-
             return [
                 'id' => $almacen->id,
                 'nombre' => $almacen->nombre,
