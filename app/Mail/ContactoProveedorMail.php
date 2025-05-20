@@ -27,7 +27,7 @@ class ContactoProveedorMail extends Mailable
     public function build()
     {
         return $this->subject($this->subject)
-                    ->view('emails.contacto')
+                    ->view('emails')
                     ->with(['messageBody' => $this->messageBody]);
     }
 

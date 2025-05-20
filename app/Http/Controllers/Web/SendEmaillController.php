@@ -14,17 +14,17 @@ class SendEmaillController extends Controller
     
     public function sendEmail(Request $request)
     {
-    try {
+    
+        try {
             $request->validate([
                 'to' => 'required|email',
                 'subject' => 'required|string',
                 'message' => 'required|string',
             ]);
 
-            Mail::raw($request->message, function ($message) use ($request) {
-                $message->to($request->to)
-                        ->subject($request->subject);
-            });
+            Mail::to($request->to)->send(
+                new ContactoProveedorMail($request->subject, $request->message)
+            );
 
             return redirect()->back()->with('success', 'Correo enviado con éxito');
         } catch (\Exception $e) {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Dialog } from "@headlessui/react";
 import { router } from "@inertiajs/react";
 import { showModificableAlert } from "@/utils/alerts";
@@ -34,6 +34,12 @@ export default function AddModal({
     const [mostrarNuevaCategoria, setMostrarNuevaCategoria] = useState(false);
     const [mostrarNuevoProveedor, setMostrarNuevoProveedor] = useState(false);
     const [mostrarFecha, setMostrarFecha] = useState(false);
+    const [mostrarFoto, setMostrarFoto] = useState('');
+    const [imagenUpload, setImagenUpload] = useState('');
+    const inputFileRef = useRef(null);
+    const [isReady, setIsReady] = useState(false);
+
+
 
     useEffect(() => {
         if (!isOpen) {
@@ -89,32 +95,105 @@ export default function AddModal({
         }));
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const mostrarFotoSeleccionada = (foto) => { // Esto muestra las fotos subidas en la pagina
+        const urlImagen = foto.target.files[0]
+        // setMostrarFoto(URL.createObjectURL(urlImagen))
+        setMostrarFoto({url: URL.createObjectURL(urlImagen), nombre: urlImagen.name})
+        setImagenUpload(urlImagen)
+        console.log(URL.createObjectURL(urlImagen))
+    }
 
-        router.post(route("pedidos.store"), formData, {
-            onSuccess: () => {
+    const handleDeletePhoto = () => {
+        setMostrarFoto("")
+        inputFileRef.current.value = "";  // Reseteas el input file
+    }
+
+    const handleUpload = async () => {
+
+        if (!mostrarFoto) {
+            console.log("No hay imagen para subir");
+            setIsReady(true);
+            return;
+        }
+
+        const uploadData = new FormData();
+
+        const uploadToCloudinary = async (image) => {
+            uploadData.append("file", image);
+            uploadData.append("upload_preset", 'default');
+
+            try {
+            const response = await fetch(`https://api.cloudinary.com/v1_1/dcdvxqsxn/image/upload`, {
+                method: "POST",
+                body: uploadData,
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log("Imagen subida con éxito:", [data, data.url, data.public_id, data.original_filename]);
+                return data; // Devolvemos los datos de la subida
+            } else {
+                console.error("Error al subir imagen:", data.error.message);
                 showModificableAlert(
-                    "Pedido añadido",
-                    "Se agregó el pedido correctamente.",
-                    "success"
-                );
-                onAdd && onAdd(formData);
-                onClose();
-                router.visit(route("pedidos.index"), {
-                    preserveScroll: true,
-                });
-            },
-            onError: (errors) => {
-                showModificableAlert(
-                    "Error al añadir el producto",
-                    `Error: ${JSON.stringify(errors)}`,
+                    "Error",
+                    `Error: ${JSON.stringify(data.error.message)}`,
                     "error"
-                );
-            },
-        });
+                ); 
+            }
+            } catch (error) {
+            console.error("Error al conectar con Cloudinary:", error);
+            }
+            return null;
+        };
+
+        const result = await uploadToCloudinary(imagenUpload);
+
+        console.log(result)
+
+        if (result !== null) {
+            setFormData((prev) => ({
+            ...prev,
+            imagen: result.secure_url, // Guardamos la info de la imagen subida
+            }));
+            setIsReady(true);
+        }
     };
 
+    
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        handleUpload();
+    };
+
+    // Enviar los datos solo cuando form haya actualizado los datos
+    useEffect(() => {
+            if(isReady){
+                router.post(route("pedidos.store"), formData, {
+                    onSuccess: () => {
+                        showModificableAlert(
+                            "Pedido añadido",
+                            "Se agregó el pedido correctamente.",
+                            "success"
+                        );
+                        onAdd && onAdd(formData);
+                        onClose();
+                        router.visit(route("pedidos.index"), {
+                            preserveScroll: true,
+                        });
+                    },
+                    onError: (errors) => {
+                        showModificableAlert(
+                            "Error al añadir el producto",
+                            `Error: ${JSON.stringify(errors)}`,
+                            "error"
+                        );
+                    },
+                });
+                setIsReady(false)
+            }
+    }, [isReady])
+    
     return (
         <Dialog
             open={isOpen}
@@ -188,20 +267,8 @@ export default function AddModal({
                         />
                     </div>
 
-                    {/* Imagen */}
-                    <div className="md:col-span-2">
-                        <label className="block text-sm font-medium text-gray-700">
-                            Imagen (URL)
-                        </label>
-                        <input
-                            type="text"
-                            name="imagen"
-                            value={formData.imagen}
-                            onChange={handleInputChange}
-                            className="w-full border rounded-lg py-2 px-4"
-                            placeholder="https://example.com/imagen.jpg"
-                        />
-                    </div>
+
+
 
                     {/* Categoría */}
                     <div>
@@ -362,6 +429,41 @@ export default function AddModal({
                             />
                         </div>
                     )}
+
+                    {/* Imagen */}
+                    <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                        Imagen (subir archivo)
+                    </label>
+                    <input
+                        type="file"
+                        name="imagen"
+                        accept="image/*"
+                        ref={inputFileRef}
+                        onChange={(e) => {mostrarFotoSeleccionada(e)}}
+                        className="w-full border rounded-lg py-2 px-4"
+                    />
+                    </div>
+
+                    <div className="mt-4 flex flex-wrap gap-4" id="containerImages">
+                        <div className="mt-4 flex flex-wrap gap-4">
+                            {/* Aqui voy añadiendo las nuevas fotos.*/}
+                            <div className="relative w-auto h-32 inline-block">
+                                <img
+                                    src={mostrarFoto.url}
+                                    name={mostrarFoto.nombre}
+                                    className="w-auto h-32 object-cover rounded-lg"
+                                />
+                                <button
+                                    type="button"
+                                    className="font-extrabold absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-700 w-6 h-6 text-center flex items-center justify-center cursor-pointer"
+                                    onClick={handleDeletePhoto}
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
                     {/* Botón */}
                     <div className="md:col-span-2 text-right mt-4">
