@@ -181,18 +181,22 @@ class AlmacenController extends Controller
                     });
 
                 return [
-                    'id_producto' => $producto->id,
                     'id_categoria' => $producto->categoria->id,
+                    'categoria' => $producto->categoria->nombre,
+
+                    'id_producto' => $producto->id,
                     'codigo' => $producto->codigo,
                     'nombre' => $producto->nombre,
                     'imagen' => $producto->imagen,
-                    'categoria' => $producto->categoria->nombre,
+                    'descripcion' => $producto->descripcion,
+                    'fecha_entrada' => $producto->pivot->fecha_entrada,
+                    'fecha_salida' => $producto->pivot->fecha_salida,
+                    
                     'id_almacen' => $almacen->id,
                     'almacen_nombre' => $almacen->nombre,
                     'precio_unitario' => $producto->pivot->precio_unitario,
                     'cantidad_actual' => $producto->pivot->cantidad_actual,
-                    'fecha_entrada' => $producto->pivot->fecha_entrada,
-                    'fecha_salida' => $producto->pivot->fecha_salida,
+                    'fecha_vencimiento'=> $producto->pivot->fecha_vencimiento,
                     'proveedores' => $proveedores,
                 ];
             })->toArray();
