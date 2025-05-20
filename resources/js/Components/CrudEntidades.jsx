@@ -117,15 +117,15 @@ export default function CrudEntidades() {
   return (
     <div className="flex h-screen relative">
       <aside className="w-1/4 bg-white shadow-md p-4">
-        <h2 className="pt-12 text-sm font-semibold mb-4">Tipos de entidad</h2>
+        <h2 className="pt-2 text-sm font-semibold mb-4 text-slate-600">Tipos de entidad</h2>
         <hr />
         <br />
         {Object.entries(data).map(([key, val]) => (
           <button
             key={key}
             onClick={() => setSelectedType(key)}
-            className={`block text-left p-2 mb-2 w-full rounded-lg text-md ${
-              selectedType === key ? "bg-slate-300 font-bold" : "hover:bg-slate-100"
+            className={`block text-left p-2 mb-2 w-full rounded-lg text-sm ${
+              selectedType === key ? "bg-slate-300 font-bold " : "hover:bg-slate-100 font-medium text-slate-600 "
             }`}
           >
             {val.label}
