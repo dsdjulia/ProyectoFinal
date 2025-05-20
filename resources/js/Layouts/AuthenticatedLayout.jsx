@@ -17,8 +17,8 @@ export default function AuthenticatedLayout({ header, children }) {
                 <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-20 justify-between">
                         <div className="flex">
-                            <div className="flex items-center">
-                                <Link href={route("inventario.index")}>
+                            <div className="flex items-center overflow-hidden">
+                                <Link href={route("inventario.index")} className="flex items-start ">
                                     <ApplicationLogo className="block h-44 w-auto fill-current text-gray-800" />
                                 </Link>
                             </div>
