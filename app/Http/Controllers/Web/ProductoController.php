@@ -68,6 +68,24 @@ class ProductoController extends Controller
             ->orderByRaw('MIN(fecha_entrada)')
             ->get();
 
+
+            $meses = collect();
+            for ($i = 5; $i >= 0; $i--) {
+                $meses->push([
+                    'mes' => now()->subMonths($i)->format('M'), // Ej: Ene, Feb
+                    'total_stock' => 0
+                ]);
+            }
+
+            // Reemplazar los valores si existen datos
+            foreach ($stockTendencia as $dato) {
+                $meses = $meses->map(function ($mes) use ($dato) {
+                    return $mes['mes'] === $dato->mes
+                        ? ['mes' => $mes['mes'], 'total_stock' => $dato->total_stock]
+                        : $mes;
+                });
+            }
+
         return Inertia::render('Producto', [
             'producto' => $producto,
             'stock' => $stock,
@@ -80,6 +98,10 @@ class ProductoController extends Controller
             'beneficio_estimado' => round($beneficioEstimado, 2),
             'ventas_estimadas_mes' => $ventasEstimadasMes,
             'stock_tendencia' => $stockTendencia,
+            'stock_tendencia_chart' => [
+                'labels' => $meses->pluck('mes'),
+                'data' => $meses->pluck('total_stock'),
+            ],
         ]);
 
     }

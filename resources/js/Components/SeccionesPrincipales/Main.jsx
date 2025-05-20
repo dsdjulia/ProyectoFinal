@@ -36,41 +36,76 @@ export default function Main({ props }) {
     // Desestructuramos los datos importantes para evitar repetir "datos."
     const [datos, setDatos] = useState(props);
 
+    console.log(props)
     // Destructuramos producto estrella para usarlo directamente
     const producto_estrella = datos.producto_estrella || {};
 
+
+    const ventasDiarias = props.ventas_dias
+
+    const ventDiaLabel = [];
+    const ventDiaData = [];
+
+    ventasDiarias.forEach(venta => {
+        ventDiaLabel.push(venta['dia'])
+        ventDiaData.push(venta['total'])
+    });
+
     const ventasData = {
-        labels: ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"],
+        labels: ventDiaLabel,
         datasets: [
             {
                 label: "Ventas ($)",
-                data: [2200, 1800, 2500, 2100, 2600, 3000, 2800],
-                backgroundColor: "#0ea5e9", // blue-500
+                data: ventDiaData,
+                backgroundColor: "#7196bf", // blue-500
                 borderRadius: 6,
             },
         ],
     };
 
+
+    const gastos = props.gastos_mensuales
+    const labelGastos = []
+    const dataGastos = []
+    gastos.forEach(gasto => {
+        labelGastos.push(gasto.mes)
+        dataGastos.push(gasto.total_gastos)
+    });
+
     const gastosData = {
-        labels: ["Ene", "Feb", "Mar", "Abr", "May"],
+        labels: labelGastos,
         datasets: [
             {
                 label: "Gastos ($)",
-                data: [10000, 11000, 9500, 12300, 11700],
-                borderColor: "#14b8a6", // teal-500
-                backgroundColor: "rgba(20, 184, 166, 0.1)",
+                data: dataGastos,
+                borderColor: "#324d72", // teal-500
+                backgroundColor: "#cedae9",
                 fill: true,
                 tension: 0.4,
             },
         ],
     };
 
+    const distVent = props.distribucion_ventas
+    const labelDisVent = []
+    const dataDisVent = []
+    distVent.forEach(dist => {
+        labelDisVent.push(dist.categoria)
+        dataDisVent.push(dist.total_vendido)
+    });
+
     const distribucionVentas = {
-        labels: ["Cámaras", "Laptops", "Celulares", "TVs"],
+        labels: labelDisVent,
         datasets: [
             {
-                data: [25, 35, 20, 20],
-                backgroundColor: ["#64748b", "#0ea5e9", "#22d3ee", "#10b981"],
+                data: dataDisVent,
+                backgroundColor: [
+                    "#cedae9", // azul
+                    "#7196bf", // verde
+                    "#4f78a8", // naranja
+                    "#1e293b", // gris/morado
+                    "#1e293b"  // amarillo opcional
+                    ],
             },
         ],
     };
@@ -81,7 +116,7 @@ export default function Main({ props }) {
         plugins: {
             legend: {
                 labels: {
-                    color: "#334155", // slate-700
+                    color: "#1E293B", // slate-700
                 },
             },
         },

@@ -123,6 +123,28 @@ class InventarioController extends Controller
                 ->groupBy('fecha')
                 ->orderBy('fecha')
                 ->get();
+            
+            $fechasSemana = collect();
+            for ($i = 6; $i >= 0; $i--) {
+                $fecha = now()->subDays($i)->format('Y-m-d');
+                $dia = \Carbon\Carbon::parse($fecha)->locale('es')->isoFormat('ddd'); // "lun", "mar", etc.
+                $fechasSemana->push([
+                    'fecha' => $fecha,
+                    'dia' => ucfirst($dia),
+                    'total' => 0
+                ]);
+            }
+
+            // Combinar con ventas reales
+            $ventasAgrupadas = $ventasUltimaSemana->keyBy('fecha');
+
+            $ventasConDias = $fechasSemana->map(function ($dia) use ($ventasAgrupadas) {
+                $venta = $ventasAgrupadas->get($dia['fecha']);
+                return [
+                    'dia' => $dia['dia'],
+                    'total' => $venta ? round($venta->total, 2) : 0,
+                ];
+            });
 
             // Gastos últimos 5 meses
             $fechaCincoMesesAntes = now()->subMonths(4)->startOfMonth()->toDateString();
@@ -148,6 +170,8 @@ class InventarioController extends Controller
                 ->orderByDesc('total_vendido')
                 ->get();
 
+
+
             return Inertia::render('Dashboard', [
                 'total_almacenes' => $totalAlmacenes,
                 'growth_almacenes' => $growthAlmacenes,
@@ -161,6 +185,7 @@ class InventarioController extends Controller
                 'ventas_ultima_semana' => $ventasUltimaSemana,
                 'gastos_mensuales' => $gastosMensuales,
                 'distribucion_ventas' => $distribucionVentas,
+                'ventas_dias'=>$ventasConDias
             ]);
         } catch (Exception $e) {
             Log::error('Error al obtener estadísticas: ' . $e->getMessage(), [

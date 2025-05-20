@@ -118,7 +118,7 @@ if (!producto) {
       {
         label: "Ingresos mensuales (€)",
         data: datosBarras,
-        backgroundColor: "#4ade80"
+        backgroundColor: "#2c4360"
       }
     ]
   };
@@ -128,19 +128,20 @@ if (!producto) {
     datasets: [
       {
         data: [ventastotales, stock],
-        backgroundColor: ["#60a5fa", "#facc15"]
+        backgroundColor: ["#2c4360", "#a3bbd6"]
       }
     ]
   };
 
+  const stockTendencia = props.stock_tendencia_chart
   const stockTrendData = {
-    labels: ["Ene", "Feb", "Mar", "Abr", "May"],
+    labels: stockTendencia.labels,
     datasets: [
       {
         label: "Nivel de Stock",
-        data: [500, 400, 350, 280, stock],
-        borderColor: "#f87171",
-        backgroundColor: "#fecaca",
+        data: stockTendencia.data,
+        borderColor: "#324d72",
+        backgroundColor: "#cedae9",
         fill: true
       }
     ]
@@ -195,18 +196,18 @@ if (!producto) {
         <div className="flex flex-col md:flex-row gap-4">
           <div className="bg-white rounded-md shadow p-4 w-full md:w-1/3">
             <h2 className="text-sm font-bold">Beneficio Neto Estimado</h2>
-            <p className="text-2xl font-semibold text-green-500 mt-1">{netProfitEstimate} €</p>
+            <p className="text-2xl font-semibold text-emerald-500 mt-1">{netProfitEstimate} €</p>
           </div>
           <div className="bg-white rounded-md shadow p-4 w-full md:w-1/3">
             <h2 className="text-sm font-bold">Stock Disponible</h2>
-            <p className="text-2xl font-semibold text-yellow-500 mt-1">{stock} unidades</p>
+            <p className="text-2xl font-semibold text-yellow-600 mt-1">{stock} unidades</p>
             <p className="text-xs text-gray-500 mt-1">
               Reorden sugerido: <span className="font-medium">{recommendedReorder} unidades</span>
             </p>
           </div>
           <div className="bg-white rounded-md shadow p-4 w-full md:w-1/3">
             <h2 className="text-sm font-bold">Ventas Estimadas Este Mes</h2>
-            <p className="text-2xl font-semibold text-blue-500 mt-1">{estimatedSold} unidades</p>
+            <p className="text-2xl font-semibold text-cyan-600 mt-1">{estimatedSold} unidades</p>
           </div>
         </div>
       </div>
