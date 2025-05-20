@@ -2,7 +2,7 @@ import { useState } from "react";
 import ProductTableRow from "./ProductTableRow";
 import CarruselAlmacenes from "./CarruselAlmacenes";
 import AddModal from "./Modales/AddModal";
-import DeleteProductModal from "./DeleteProductModal";
+import DeleteProductModal from "./Modales/DeleteProductModal";
 import { usePage } from "@inertiajs/inertia-react";
 import { router } from "@inertiajs/react";
 

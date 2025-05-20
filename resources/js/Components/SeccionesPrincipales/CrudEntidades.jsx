@@ -32,7 +32,7 @@ const entidades = {
             { id: 2, nombre: "Ropa" },
         ],
     },
-    compradores: {
+    clientes: {
         label: "Clientes",
         icon: "🧑‍💼",
         data: [
@@ -161,9 +161,9 @@ const renderAddModal = () => {
                     onAdd={(newItem) => {
                         setData((prev) => ({
                             ...prev,
-                            compradores: {
-                                ...prev.compradores,
-                                data: [...prev.compradores.data, newItem],
+                            clientes: {
+                                ...prev.clientes,
+                                data: [...prev.clientes.data, newItem],
                             },
                         }));
                         setItemToAdd(false);
