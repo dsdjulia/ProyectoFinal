@@ -36,7 +36,7 @@ export default function ConcactoProveedores({ proveedores }) {
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-6 py-8 min-h-screen">
-            {/* Columna izquierda (2/3): Lista + Detalles */}
+            {/* Columna izquierda (1/3): Lista + Detalles */}
             <div className="flex flex-col gap-6 col-span-1">
                 {/* Lista de proveedores */}
                 <div className="bg-white border border-slate-200 rounded-xl shadow-md p-4 overflow-y-auto">
@@ -82,10 +82,10 @@ export default function ConcactoProveedores({ proveedores }) {
                 </div>
             </div>
 
-            {/* Columna derecha (1/3): Formulario de contacto */}
-            <div className="bg-white border border-slate-200 rounded-xl shadow-md p-6 flex flex-col col-span-2 h-full">
+            {/* Columna derecha (2/3): Formulario de contacto */}
+            <div className="bg-white border border-slate-200 rounded-xl shadow-md p-6 flex flex-col col-span-2 h-2/3">
                 <div className="flex flex-col h-full">
-                    <div className="mb-6">
+                    <div className="mb-4">
                         <span className="material-icons text-6xl text-slate-300 mb-2 self-center block text-center">
                             badge
                         </span>
@@ -102,20 +102,23 @@ export default function ConcactoProveedores({ proveedores }) {
                             </p>
 
                             <textarea
-                                rows={10}
-                                className="flex-grow border border-slate-300 rounded-lg p-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 resize-none mb-4 "
+                                rows={12}
+                                className="border border-slate-300 rounded-lg p-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 resize-none mb-4"
                                 placeholder="Escribe tu mensaje..."
                                 value={mensaje}
                                 onChange={(e) => setMensaje(e.target.value)}
                             ></textarea>
 
-                            <button
-                                onClick={enviarMail}
-                                disabled={!mensaje}
-                                className="bg-slate-600 hover:bg-slate-700 text-white text-sm py-2 px-6 rounded-md transition disabled:opacity-50"
-                            >
-                                Enviar
-                            </button>
+                            <div className="flex justify-end">
+                                <button
+                                    onClick={enviarMail}
+                                    disabled={!mensaje}
+                                    className="flex items-center gap-2 bg-slate-600 hover:bg-slate-700 text-white text-sm py-2 px-4 rounded-md transition disabled:opacity-50"
+                                >
+                                    <span className="material-icons text-base">send</span>
+                                    <span>Enviar</span>
+                                </button>
+                            </div>
                         </>
                     ) : (
                         <p className="text-sm text-slate-500">Selecciona un proveedor para contactar.</p>
