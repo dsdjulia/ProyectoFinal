@@ -20,11 +20,12 @@ export function Sidebar({ active }) {
 
   const navItems = [
     { id: "dashboard", icon: "dashboard", label: "Dashboard", path: "dashboard.index" },
-    { id: "inventario", icon: "inventory_2", label: "Inventario", path: "inventario.index"},
+    { id: "inventario", icon: "inventory_2", label: "Inventario", path: "inventario.index" },
     { id: "pedidos", icon: "shopping_cart", label: "Pedidos", path: "pedidos.index" },
     { id: "ventas", icon: "point_of_sale", label: "Ventas", path: "ventas.index" },
     { id: "detalleProducto", icon: "info", label: "Detalle de Producto", path: "producto.default" },
     { id: "contactoProveedores", icon: "contacts", label: "Contacto proveedores", path: "proveedores.index" },
+    { id: "entidades", icon: "category", label: "Entidades", path: "entidades.index" }, // Nuevo botón
   ];
 
   const handleNavigation = (path) => {
@@ -54,8 +55,6 @@ export function Sidebar({ active }) {
             />
           ))}
         </div>
-
-
       </div>
     </div>
   );
