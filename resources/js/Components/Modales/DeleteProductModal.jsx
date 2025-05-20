@@ -4,13 +4,13 @@ import { showModificableAlert } from "@/utils/alerts";
 
 export default function DeleteProductModal({ product, totalAmount, onClose, contexto }) {
   const [reduceAmount, setReduceAmount] = useState(0);
-
-  const handleDeleteAll = () => {
+    console.log(product)
+  const handleDeleteAll = () => {  /* Aqui poner if contexto===stock */
     onClose();
     router.delete(route("producto.delete"), {
       data: {
         id_producto: product.id,
-        id_almacen: product.almacen_id,
+        id_almacen: product.id_almacen,
         precio_unitario: product.precio_unitario,
       },
       onSuccess: () => {
@@ -36,7 +36,7 @@ export default function DeleteProductModal({ product, totalAmount, onClose, cont
       router.patch(
         route("producto.patch"),
         {
-          id_almacen: product.almacen_id,
+          id_almacen: product.id_almacen,
           id_producto: product.id,
           cantidad_actual: product.cantidad_actual - reduceAmount,
         },
@@ -121,7 +121,7 @@ export default function DeleteProductModal({ product, totalAmount, onClose, cont
             onClick={handleDeleteAll}
             className="px-4 py-2 rounded-md text-white bg-red-500 hover:bg-red-600 transition"
           >
-            Eliminar todo
+            Eliminar
           </button>
         </div>
       </div>

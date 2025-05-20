@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Chip from "@/Components/Chip";
 import EditProductModal from "@/Components/Modales/EditProductModal";
-import DeleteProductModal from "@/Components/DeleteProductModal";
+import DeleteProductModal from "@/Components/Modales/DeleteProductModal";
 import { router } from "@inertiajs/react";
 
 export default function ProductTableRow({

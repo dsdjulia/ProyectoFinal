@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ProductTableRow from "../ProductTableRow";
 import AddModal from "../Modales/AddModal";
-import DeleteProductModal from "../DeleteProductModal";
+import DeleteProductModal from "../Modales/DeleteProductModal";
 import CantidadModal from "../Modales/CantidadModal"; // 👈 Importación del nuevo modal
 import { router } from "@inertiajs/react";
 import AddAlmacenModal from "../Modales/AddAlmacenModal";

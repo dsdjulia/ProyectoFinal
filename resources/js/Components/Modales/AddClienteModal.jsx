@@ -48,8 +48,8 @@ export default function AddClienteModal({ isOpen, onClose, onAdd }) {
                 <input name="email" placeholder="Email" onChange={handleChange} value={form.email} className="w-full p-2 border rounded" />
                 <input name="direccion" placeholder="Dirección" onChange={handleChange} value={form.direccion} className="w-full p-2 border rounded" />
                 <select name="tipo_comprador" onChange={handleChange} value={form.tipo_comprador} className="w-full p-2 border rounded">
-                    <option value="Mayorista">Mayorista</option>
-                    <option value="Minorista">Minorista</option>
+                    <option value="empresa">Empresa</option>
+                    <option value="particular">Particular</option>
                 </select>
                 <div className="flex justify-end space-x-2">
                     <button onClick={onClose} className="text-red-500 hover:underline">Cancelar</button>
