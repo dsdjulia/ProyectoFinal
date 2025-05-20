@@ -165,10 +165,10 @@ export default function InventarioTabla({ props }) {
                             Buscar
                         </button>
                         <button
-                            className="mr-2 bg-red-500 text-red-50 px-4 py-1 rounded-md text-sm hover:bg-red-600 hover:text-white"
+                            className="mr-2 bg-red-100 text-red-600 px-4 py-1 rounded-md text-sm hover:bg-red-400 hover:text-white transition"
                             onClick={limpiarFiltros}
                         >
-                            Limpiar Filtros
+                              Limpiar Filtros
                         </button>
                     </div>
                 </div>
