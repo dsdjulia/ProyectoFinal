@@ -16,7 +16,7 @@ export default function Index() {
                     <Sidebar active={"contactoProveedores"}/>
                 </div>
                 <AuthenticatedLayout>
-                    <div className=" bg-slate-100 ">
+                    <div className=" bg-slate-100  min-h-screen">
                         <ConcactoProveedores proveedores={props.proveedores} />
                     </div>
                     <Footer/>

@@ -12,11 +12,11 @@ export default function Index() {
     return (
         <div className="flex flex-col w-full">
             <div className="flex w-full bg-slate-100 h-screen overflow-y-auto">
-                <div className="sticky top-0 left-0 ">
+                <div className="sticky top-0 left-0 h-screen ">
                     <Sidebar active={"inventario"}/>
                 </div>
                 <AuthenticatedLayout>
-                    <div className=" bg-slate-100 h-screen">
+                    <div className=" bg-slate-100  min-h-screen">
                         <InventarioTabla props={props} />
                     </div>
                 <Footer/>

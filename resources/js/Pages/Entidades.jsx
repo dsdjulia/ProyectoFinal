@@ -16,7 +16,7 @@ export default function Index() {
                     <Sidebar active={"Entidades"}/>
                 </div>
                 <AuthenticatedLayout>
-                    <div className=" bg-slate-100 ">
+                    <div className=" bg-slate-100  min-h-screen">
                         <CrudEntidades/>
                     </div>
                     <Footer/>

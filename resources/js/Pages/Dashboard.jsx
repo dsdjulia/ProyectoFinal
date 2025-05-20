@@ -44,7 +44,7 @@ export default function Index() {
                     <Sidebar active={"dashboard"} />
                 </div>
                 <AuthenticatedLayout>
-                    <div className=" overflow-y-auto bg-slate-100">
+                    <div className=" overflow-y-auto bg-slate-100  min-h-screen">
                         <Main props={props} />
                     </div>
                     <Footer />

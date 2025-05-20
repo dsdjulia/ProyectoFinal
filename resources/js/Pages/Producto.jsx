@@ -30,7 +30,7 @@ export default function Index() {
                 </div>
 
                 <AuthenticatedLayout>
-                    <div className="overflow-y-auto flex flex-col items-center w-full mt-8 px-6 gap-6 h-[90vh]">
+                    <div className="overflow-y-auto flex flex-col items-center w-full mt-8 px-6 gap-6 min-h-screen">
                         {/* Formulario de búsqueda */}
                         <div className="w-full  flex justify-start h-[24px]">
                             <form
@@ -56,7 +56,7 @@ export default function Index() {
                         </div>
 
                         {/* Vista del producto */}
-                        <ProductOverview 
+                        <ProductOverview
                         producto={producto}
                         productos={props.all_products}
                         searchTerm={busqueda}
