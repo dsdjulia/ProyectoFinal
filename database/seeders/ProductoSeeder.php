@@ -94,6 +94,8 @@ class ProductoSeeder extends Seeder
             ],
         ];
 
+        $ImagenDeMentira = 'https://chitoroshop.com/cdn/shop/files/Figurine-Pikachu-Moncolle-MS-01-ChitoroShop-2822.png?v=1710390192';
+
         foreach ($productos as $item) {
             $categoriaId = $categorias[$item['categoria']] ?? null;
 
@@ -108,7 +110,7 @@ class ProductoSeeder extends Seeder
                 'nombre'       => $item['nombre'],
                 'descripcion'  => $item['descripcion'],
                 'perecedero'   => $item['perecedero'],
-                'imagen'       => 'sin-imagen.png',
+                'imagen'       => $ImagenDeMentira,
             ]);
         }
     }

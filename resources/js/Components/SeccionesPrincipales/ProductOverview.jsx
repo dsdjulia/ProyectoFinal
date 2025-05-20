@@ -149,19 +149,19 @@ if (!producto) {
   return (
     <div className="flex flex-col lg:flex-row gap-12 w-5/6 mt-10 ">
       {/* Tarjeta del producto con imagen y detalles */}
-      <div className="w-1/3  p-4 flex flex-col items-center justify-between">
-        <div className="text-left w-full">
+      <div className="w-1/3  p-4 flex flex-col items-center justify-around">
+        <div className="text-center w-full">
           <h1 className="text-xl font-bold">{producto.nombre}</h1>
           <p className="text-gray-600 text-sm mt-1">{producto.descripcion}</p>
         </div>
-        <div className="h-full w-full rounded-md mb-4 flex items-center justify-center align-center">
+
         <img
           src={producto.imagen}
           alt={producto.nombre}
           className="w-full h-auto object-contain rounded-md mb-4"
         />
         </div>
-      </div>
+
 
       {/* Gráficos y estadísticas */}
       <div className="w-full lg:w-3/5 flex flex-col gap-6">
