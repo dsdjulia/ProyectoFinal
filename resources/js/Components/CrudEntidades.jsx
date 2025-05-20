@@ -1,5 +1,11 @@
 import { useState } from "react";
 
+// Suponiendo que ya tienes estos componentes:
+/* import AddAlmacenModal from "./AddAlmacenModal";
+import AddCategoriaModal from "./AddCategoriaModal";
+import AddClienteModal from "./AddClienteModal";
+import AddProveedorModal from "./AddProveedorModal"; */
+
 const entidades = {
   almacenes: {
     label: "Almacenes",
@@ -51,86 +57,18 @@ const entidades = {
   },
 };
 
-function EditAlmacenModal({ entity, onClose }) {
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full">
-        <h2 className="text-lg font-bold mb-4">Editar Almacén</h2>
-        <p className="text-sm mb-4">Editando: {entity.nombre}</p>
-        <button
-          onClick={onClose}
-          className="px-4 py-2 bg-slate-200 rounded-lg hover:bg-slate-300 text-sm"
-        >
-          Cerrar
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function EditCategoriaModal({ entity, onClose }) {
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full">
-        <h2 className="text-lg font-bold mb-4">Editar Categoría</h2>
-        <p className="text-sm mb-4">Editando: {entity.nombre}</p>
-        <button
-          onClick={onClose}
-          className="px-4 py-2 bg-slate-200 rounded-lg hover:bg-slate-300 text-sm"
-        >
-          Cerrar
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function EditClienteModal({ entity, onClose }) {
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full">
-        <h2 className="text-lg font-bold mb-4">Editar Cliente</h2>
-        <p className="text-sm mb-4">Editando: {entity.nombre}</p>
-        <button
-          onClick={onClose}
-          className="px-4 py-2 bg-slate-200 rounded-lg hover:bg-slate-300 text-sm"
-        >
-          Cerrar
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function EditProveedorModal({ entity, onClose }) {
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full">
-        <h2 className="text-lg font-bold mb-4">Editar Proveedor</h2>
-        <p className="text-sm mb-4">Editando: {entity.nombre}</p>
-        <button
-          onClick={onClose}
-          className="px-4 py-2 bg-slate-200 rounded-lg hover:bg-slate-300 text-sm"
-        >
-          Cerrar
-        </button>
-      </div>
-    </div>
-  );
-}
-
 export default function CrudEntidades() {
   const [selectedType, setSelectedType] = useState("almacenes");
   const [data, setData] = useState(entidades);
   const [itemToEdit, setItemToEdit] = useState(null);
   const [itemToDelete, setItemToDelete] = useState(null);
+  const [itemToAdd, setItemToAdd] = useState(false); // <-- Nuevo estado
+
   const currentItems = data[selectedType].data;
   const iconoEntidad = data[selectedType].icon;
   const tipoEntidad = data[selectedType].label;
 
-  const handleEdit = (item) => {
-    setItemToEdit(item);
-  };
+  const handleEdit = (item) => setItemToEdit(item);
 
   const handleDelete = (id) => {
     const updated = {
@@ -144,9 +82,8 @@ export default function CrudEntidades() {
     setItemToDelete(null);
   };
 
-  const renderEditModal = () => {
+  /* const renderEditModal = () => {
     if (!itemToEdit) return null;
-
     switch (selectedType) {
       case "almacenes":
         return <EditAlmacenModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
@@ -160,6 +97,22 @@ export default function CrudEntidades() {
         return null;
     }
   };
+
+  const renderAddModal = () => {
+    if (!itemToAdd) return null;
+    switch (selectedType) {
+      case "almacenes":
+        return <AddAlmacenModal onClose={() => setItemToAdd(false)} />;
+      case "categorias":
+        return <AddCategoriaModal onClose={() => setItemToAdd(false)} />;
+      case "compradores":
+        return <AddClienteModal onClose={() => setItemToAdd(false)} />;
+      case "proveedores":
+        return <AddProveedorModal onClose={() => setItemToAdd(false)} />;
+      default:
+        return null;
+    }
+  }; */
 
   return (
     <div className="flex h-screen relative">
@@ -184,7 +137,10 @@ export default function CrudEntidades() {
         <h1 className="text-2xl font-bold mb-6">{tipoEntidad}</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {/* Crear nuevo */}
-          <div className="flex flex-col items-center justify-center p-6 bg-slate-100 border-2 border-dashed rounded-lg cursor-pointer hover:bg-slate-200">
+          <div
+            onClick={() => setItemToAdd(true)}
+            className="flex flex-col items-center justify-center p-6 bg-slate-100 border-2 border-dashed rounded-lg cursor-pointer hover:bg-slate-200"
+          >
             <div className="w-16 h-16 bg-slate-300 rounded-full flex items-center justify-center text-3xl font-bold">
               +
             </div>
@@ -197,21 +153,18 @@ export default function CrudEntidades() {
               key={item.id}
               className="relative p-4 bg-white rounded-lg shadow hover:shadow-md transition"
             >
-              {/* Botón para editar */}
               <button
                 onClick={() => handleEdit(item)}
                 className="absolute inset-0 w-full h-full z-10 cursor-pointer"
                 title="Editar"
               />
-
-              {/* Contenido de la tarjeta */}
-                <button
-                  onClick={() => setItemToDelete(item)}
-                  className="absolute top-2 right-2 text-slate-500 hover:text-red-600 text-lg z-10"
-                  title="Eliminar"
-                >
-                  ❌
-                </button>
+              <button
+                onClick={() => setItemToDelete(item)}
+                className="absolute top-2 right-2 text-slate-500 hover:text-red-600 text-lg z-10"
+                title="Eliminar"
+              >
+                ❌
+              </button>
               <div className="relative z-0">
                 <div className="w-full h-32 bg-slate-200 rounded mb-4 flex items-center justify-center text-4xl text-slate-500">
                   {iconoEntidad}
@@ -227,9 +180,12 @@ export default function CrudEntidades() {
       </main>
 
       {/* Modal de edición */}
-      {renderEditModal()}
+     {/*  {renderEditModal()} */}
 
-      {/* Modal de confirmación */}
+      {/* Modal de creación */}
+      {/* {renderAddModal()} */}
+
+      {/* Modal de confirmación de eliminación */}
       {itemToDelete && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
