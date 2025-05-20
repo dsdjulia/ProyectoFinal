@@ -215,7 +215,7 @@ export default function CrudEntidades() {
         <div className="flex h-screen relative">
             <aside className="w-1/4 bg-white  p-4">
                 <h2 className="pt-2 text-sm font-semibold mb-4 text-slate-600">
-                    Tipos de entidad
+                    Elige el catálogo que quieres modificar
                 </h2>
                 <hr />
                 <br />

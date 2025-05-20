@@ -25,7 +25,7 @@ export function Sidebar({ active }) {
     { id: "ventas", icon: "point_of_sale", label: "Ventas", path: "ventas.index" },
     { id: "detalleProducto", icon: "info", label: "Detalle de Producto", path: "producto.default" },
     { id: "contactoProveedores", icon: "contacts", label: "Contacto proveedores", path: "proveedores.index" },
-    { id: "entidades", icon: "category", label: "Entidades", path: "entidades.index" }, // Nuevo botón
+    { id: "entidades", icon: "category", label: "Administración", path: "entidades.index" }, // Nuevo botón
   ];
 
   const handleNavigation = (path) => {

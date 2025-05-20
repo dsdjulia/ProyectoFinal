@@ -7,36 +7,39 @@ export default function ConcactoProveedores({ proveedores }) {
     const [mensaje, setMensaje] = useState("");
 
     const enviarMail = () => {
-        router.post(route('proveedor.email'), {
-            to: selectedProveedor.email,
-            subject: `Mensaje para ${selectedProveedor.nombre}`,
-            message: mensaje,
-        }, {
-            onSuccess: () => {
-                console.log('Entra aqui')
-                showModificableAlert(
-                    "Mail enviado",
-                    `Mail enviado correctamente a: ${selectedProveedor.nombre}`,
-                    "success"
-                );
+        router.post(
+            route("proveedor.email"),
+            {
+                to: selectedProveedor.email,
+                subject: `Mensaje para ${selectedProveedor.nombre}`,
+                message: mensaje,
             },
-            onError: (errors) => {
-                showModificableAlert(
-                    "Error al enviar el mail",
-                    `Error: ${JSON.stringify(errors)}`,
-                    "error"
-                );
-            },
-        });
-        setMensaje('')
-}
+            {
+                onSuccess: () => {
+                    showModificableAlert(
+                        "Mail enviado",
+                        `Mail enviado correctamente a: ${selectedProveedor.nombre}`,
+                        "success"
+                    );
+                },
+                onError: (errors) => {
+                    showModificableAlert(
+                        "Error al enviar el mail",
+                        `Error: ${JSON.stringify(errors)}`,
+                        "error"
+                    );
+                },
+            }
+        );
+        setMensaje("");
+    };
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-6 py-8 min-h-screen">
-            {/* Columna izquierda (1/3): Proveedores + Detalles */}
-            <div className="flex flex-col gap-4 col-span-2 h-full">
+            {/* Columna izquierda (2/3): Lista + Detalles */}
+            <div className="flex flex-col gap-6 col-span-1">
                 {/* Lista de proveedores */}
-                <div className="bg-white border border-slate-200 rounded-xl shadow-md p-4 flex-1 overflow-y-auto">
+                <div className="bg-white border border-slate-200 rounded-xl shadow-md p-4 overflow-y-auto">
                     <h2 className="text-lg font-semibold text-slate-700 mb-4">Proveedores</h2>
                     <ul className="divide-y divide-slate-100">
                         {proveedores.map((prov) => (
@@ -56,8 +59,7 @@ export default function ConcactoProveedores({ proveedores }) {
                 </div>
 
                 {/* Tabla de detalles */}
-                <div className="bg-white border border-slate-200 rounded-xl shadow-md p-4 flex-1 overflow-y-auto">
-
+                <div className="bg-white border border-slate-200 rounded-xl shadow-md p-4 overflow-y-auto">
                     <h2 className="text-lg font-semibold text-slate-700 mb-4">Detalles</h2>
                     <table className="min-w-full text-sm text-slate-600">
                         <thead>
@@ -80,33 +82,45 @@ export default function ConcactoProveedores({ proveedores }) {
                 </div>
             </div>
 
-            {/* Área de contacto (2/3) sin tarjeta */}
-            <div className=" flex flex-col justify-center h-full">
-                <span className="material-icons text-8xl text-slate-300 mb-4 self-center">badge</span>
-                <h2 className="text-xl font-semibold text-slate-700 mb-4">Contacto</h2>
-                {selectedProveedor ? (
-                    <>
-                        <p className="text-base text-slate-600 mb-2">
-                            Escribe un mensaje a <span className="font-medium text-slate-800">{selectedProveedor.nombre}</span>:
-                        </p>
-                        <textarea
-                            rows={12}
-                            className="w-full border border-slate-300 rounded-lg p-4 text-base text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 resize-none"
-                            placeholder="Escribe tu mensaje..."
-                            value={mensaje}
-                            onChange={(e) => setMensaje(e.target.value)}
-                        ></textarea>
-                        <button
-                            onClick={enviarMail}
-                            disabled={!mensaje}
-                            className="mt-4 bg-slate-600 hover:bg-slate-700 text-white text-sm py-2 px-6 rounded-md transition"
-                        >
-                            Enviar
-                        </button>
-                    </>
-                ) : (
-                    <p className="text-base text-slate-500">Selecciona un proveedor para contactar.</p>
-                )}
+            {/* Columna derecha (1/3): Formulario de contacto */}
+            <div className="bg-white border border-slate-200 rounded-xl shadow-md p-6 flex flex-col col-span-2 h-full">
+                <div className="flex flex-col h-full">
+                    <div className="mb-6">
+                        <span className="material-icons text-6xl text-slate-300 mb-2 self-center block text-center">
+                            badge
+                        </span>
+                        <h2 className="text-xl font-semibold text-slate-700 text-center">Contacto</h2>
+                    </div>
+
+                    {selectedProveedor ? (
+                        <>
+                            <p className="text-sm text-slate-600 mb-3">
+                                Escribe un mensaje a{" "}
+                                <span className="font-medium text-slate-800">
+                                    {selectedProveedor.nombre}
+                                </span>:
+                            </p>
+
+                            <textarea
+                                rows={10}
+                                className="flex-grow border border-slate-300 rounded-lg p-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 resize-none mb-4 "
+                                placeholder="Escribe tu mensaje..."
+                                value={mensaje}
+                                onChange={(e) => setMensaje(e.target.value)}
+                            ></textarea>
+
+                            <button
+                                onClick={enviarMail}
+                                disabled={!mensaje}
+                                className="bg-slate-600 hover:bg-slate-700 text-white text-sm py-2 px-6 rounded-md transition disabled:opacity-50"
+                            >
+                                Enviar
+                            </button>
+                        </>
+                    ) : (
+                        <p className="text-sm text-slate-500">Selecciona un proveedor para contactar.</p>
+                    )}
+                </div>
             </div>
         </div>
     );
