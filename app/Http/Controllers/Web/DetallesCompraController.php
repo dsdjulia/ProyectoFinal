@@ -331,18 +331,23 @@ class DetallesCompraController extends Controller
                 })->values();
 
                 return [
+                    'id_categoria' => $producto->categoria->id,
+                    'categoria' => $producto->categoria->nombre,
+
                     'id_producto' => $producto->id,
                     'codigo' => $producto->codigo,
                     'nombre' => $producto->nombre,
-                    'precio_unitario' => $producto->pivot->precio_unitario,
-                    'cantidad_actual' => $producto->pivot->cantidad_actual,
+                    'imagen' => $producto->imagen,
+                    'descripcion' => $producto->descripcion,
                     'fecha_entrada' => $producto->pivot->fecha_entrada,
                     'fecha_salida' => $producto->pivot->fecha_salida,
-                    'imagen' => $producto->imagen,
-                    'almacen_id' => $almacen->id,
+                    
+                    'id_almacen' => $almacen->id,
                     'almacen_nombre' => $almacen->nombre,
-                    'proveedores' => $proveedores->toArray(),
-                    'perecedero' =>$producto->perecedero,
+                    'precio_unitario' => $producto->pivot->precio_unitario,
+                    'cantidad_actual' => $producto->pivot->cantidad_actual,
+                    'fecha_vencimiento'=> $producto->pivot->fecha_vencimiento,
+                    'proveedores' => $proveedores,
                 ];
             })->toArray();
 
