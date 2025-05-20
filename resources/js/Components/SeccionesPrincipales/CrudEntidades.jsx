@@ -10,7 +10,6 @@ import EditCategoriaModal from "../Modales/EditCategoriaModal";
 import EditClienteModal from "../Modales/EditClienteModal";
 import EditProveedorModal from "../Modales/EditProveedorModal";
 
-
 const entidades = {
     almacenes: {
         label: "Almacenes",
@@ -102,95 +101,115 @@ export default function CrudEntidades() {
     };
 
     const renderEditModal = () => {
-    if (!itemToEdit) return null;
-    switch (selectedType) {
-      case "almacenes":
-        return <EditAlmacenModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
-      case "categorias":
-        return <EditCategoriaModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
-      case "clientes":
-        return <EditClienteModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
-      case "proveedores":
-        return <EditProveedorModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
-      default:
-        return null;
-    }
-  };
-const renderAddModal = () => {
-    if (!itemToAdd) return null;
-    switch (selectedType) {
-        case "almacenes":
-            return (
-                <AddAlmacenModal
-                    isOpen={true}
-                    onClose={() => setItemToAdd(false)}
-                    onAdd={(newItem) => {
-                        setData((prev) => ({
-                            ...prev,
-                            almacenes: {
-                                ...prev.almacenes,
-                                data: [...prev.almacenes.data, newItem],
-                            },
-                        }));
-                        setItemToAdd(false);
-                    }}
-                />
-            );
-        case "categorias":
-            return (
-                <AddCategoriaModal
-                    isOpen={true}
-                    onClose={() => setItemToAdd(false)}
-                    onAdd={(newItem) => {
-                        setData((prev) => ({
-                            ...prev,
-                            categorias: {
-                                ...prev.categorias,
-                                data: [...prev.categorias.data, newItem],
-                            },
-                        }));
-                        setItemToAdd(false);
-                    }}
-                />
-            );
-        case "clientes":
-            return (
-                <AddClienteModal
-                    isOpen={true}
-                    onClose={() => setItemToAdd(false)}
-                    onAdd={(newItem) => {
-                        setData((prev) => ({
-                            ...prev,
-                            clientes: {
-                                ...prev.clientes,
-                                data: [...prev.clientes.data, newItem],
-                            },
-                        }));
-                        setItemToAdd(false);
-                    }}
-                />
-            );
-        case "proveedores":
-            return (
-                <AddProveedorModal
-                    isOpen={true}
-                    onClose={() => setItemToAdd(false)}
-                    onAdd={(newItem) => {
-                        setData((prev) => ({
-                            ...prev,
-                            proveedores: {
-                                ...prev.proveedores,
-                                data: [...prev.proveedores.data, newItem],
-                            },
-                        }));
-                        setItemToAdd(false);
-                    }}
-                />
-            );
-        default:
-            return null;
-    }
-};
+        if (!itemToEdit) return null;
+        switch (selectedType) {
+            case "almacenes":
+                return (
+                    <EditAlmacenModal
+                        entity={itemToEdit}
+                        onClose={() => setItemToEdit(null)}
+                    />
+                );
+            case "categorias":
+                return (
+                    <EditCategoriaModal
+                        entity={itemToEdit}
+                        onClose={() => setItemToEdit(null)}
+                    />
+                );
+            case "clientes":
+                return (
+                    <EditClienteModal
+                        entity={itemToEdit}
+                        onClose={() => setItemToEdit(null)}
+                    />
+                );
+            case "proveedores":
+                return (
+                    <EditProveedorModal
+                        entity={itemToEdit}
+                        onClose={() => setItemToEdit(null)}
+                    />
+                );
+            default:
+                return null;
+        }
+    };
+    const renderAddModal = () => {
+        if (!itemToAdd) return null;
+        switch (selectedType) {
+            case "almacenes":
+                return (
+                    <AddAlmacenModal
+                        isOpen={true}
+                        onClose={() => setItemToAdd(false)}
+                        onAdd={(newItem) => {
+                            setData((prev) => ({
+                                ...prev,
+                                almacenes: {
+                                    ...prev.almacenes,
+                                    data: [...prev.almacenes.data, newItem],
+                                },
+                            }));
+                            setItemToAdd(false);
+                        }}
+                    />
+                );
+            case "categorias":
+                return (
+                    <AddCategoriaModal
+                        isOpen={true}
+                        onClose={() => setItemToAdd(false)}
+                        onAdd={(newItem) => {
+                            setData((prev) => ({
+                                ...prev,
+                                categorias: {
+                                    ...prev.categorias,
+                                    data: [...prev.categorias.data, newItem],
+                                },
+                            }));
+                            setItemToAdd(false);
+                        }}
+                    />
+                );
+            case "clientes":
+                return (
+                    <AddClienteModal
+                        isOpen={true}
+                        onClose={() => setItemToAdd(false)}
+                        onAdd={(newItem) => {
+                            setData((prev) => ({
+                                ...prev,
+                                clientes: {
+                                    ...prev.clientes,
+                                    data: [...prev.clientes.data, newItem],
+                                },
+                            }));
+                            setItemToAdd(false);
+                        }}
+                    />
+                );
+            case "proveedores":
+                return (
+                    <AddProveedorModal
+                        isOpen={true}
+                        onClose={() => setItemToAdd(false)}
+                        onAdd={(newItem) => {
+                            setData((prev) => ({
+                                ...prev,
+                                proveedores: {
+                                    ...prev.proveedores,
+                                    data: [...prev.proveedores.data, newItem],
+                                },
+                            }));
+                            setItemToAdd(false);
+                        }}
+                    />
+                );
+            default:
+                return null;
+        }
+    };
 
     return (
         <div className="flex h-screen relative">
@@ -235,23 +254,9 @@ const renderAddModal = () => {
                     {currentItems.map((item) => (
                         <div
                             key={item.id}
-                            className="relative p-4 bg-white rounded-lg shadow hover:shadow-md transition"
+                            className="relative p-4 bg-white rounded-lg shadow hover:shadow-md transition flex flex-col justify-between"
                         >
-                            <button
-                                onClick={() => handleEdit(item)}
-                                className="absolute inset-0 w-full h-full z-10 cursor-pointer"
-                                title="Editar"
-                            />
-                            <button
-                                onClick={() => setItemToDelete(item)}
-                                className="absolute top-2 right-2 z-10 text-red-500 hover:text-red-700"
-                                title="Eliminar"
-                            >
-                                <span className="material-icons text-2x1">
-                                    delete
-                                </span>
-                            </button>
-                            <div className="relative z-0">
+                            <div>
                                 <div className="w-full h-32 bg-slate-200 rounded mb-4 flex items-center justify-center text-4xl text-slate-500">
                                     {iconoEntidad}
                                 </div>
@@ -266,13 +271,33 @@ const renderAddModal = () => {
                                         ""}
                                 </p>
                             </div>
+
+                            {/* Botones con íconos en esquina inferior derecha */}
+                            <div className="flex justify-end gap-3 mt-4">
+                                <button
+                                    onClick={() => handleEdit(item)}
+                                    className="text-slate-600 hover:text-slate-800"
+                                    title="Editar"
+                                >
+                                    <span className="material-icons">edit</span>
+                                </button>
+                                <button
+                                    onClick={() => setItemToDelete(item)}
+                                    className="text-red-600 hover:text-red-800"
+                                    title="Eliminar"
+                                >
+                                    <span className="material-icons">
+                                        delete
+                                    </span>
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>
             </main>
 
             {/* Modal de edición */}
-             {renderEditModal()}
+            {renderEditModal()}
 
             {/* Modal de creación */}
             {renderAddModal()}

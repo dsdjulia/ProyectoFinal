@@ -185,7 +185,7 @@ export default function InventarioTabla({ props }) {
 
                 {/* Cabecera tabla */}
                 <div className="grid grid-cols-8 items-center bg-slate-100 font-semibold text-gray-700 py-2 px-8 gap-2 mt-8 mb-4">
-                    <div className="text-start">ID Producto</div>
+                    <div className="text-start">Código Producto</div>
                     <div className="text-start pl-4 col-span-2">Artículo</div>
                     <div className="text-center">Precio</div>
                     <div className="text-center">Cantidad</div>
