@@ -16,7 +16,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
 		cantidad_actual: producto.cantidad_actual,
 		perecedero: producto.fecha_vencimiento ? true : false,
 		fecha_vencimiento: producto.fecha_vencimiento ?? "",
-		id_proveedor: producto.id_proveedor,
+		id_proveedor: producto.proveedores[0].id,
 		nombre_proveedor: producto.proveedores[0].nombre,
 		id_detalle: producto.id_detalle ? producto.id_detalle : 1 ,
 		telefono: producto.proveedores[0].telefono ,
@@ -28,7 +28,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
 
 	const [mostrarNuevaCategoria, setMostrarNuevaCategoria] = useState(false);
 	const [mostrarNuevoProveedor, setMostrarNuevoProveedor] = useState(false);
-	const [mostrarFoto, setMostrarFoto] = useState(producto.imagen ?? "");
+	const [mostrarFoto, setMostrarFoto] = useState({url: producto.imagen ?? ""});
 	const [imagenUpload, setImagenUpload] = useState("");
 	const inputFileRef = useRef(null);
 	const [isReady, setIsReady] = useState(false);
@@ -52,18 +52,6 @@ export default function EditproductoModal({ producto, onClose, context, almacene
 		setFormData(prev => ({ ...prev, id_proveedor: value === "nuevo" ? "" : value }));
 	};
 
-	// const handleSubmit = (e) => {
-	//   e.preventDefault();
-	//   router.patch(route("pedidos.patchInventario"), formData, {
-	//     onSuccess: () => {
-	//       showModificableAlert("Pedido actualizado", `El producto ${producto.nombre} se ha actualizado.`, "success");
-	//       onClose();
-	//       router.visit(route("pedidos.index"), { preserveScroll: true });
-	//     },
-	//     onError: (error) =>
-	//       showModificableAlert("Error al actualizar el producto", `Error: ${JSON.stringify(error)}`, "error"),
-	//   });
-	// };
 
 	if (producto.estado) {
 		showModificableAlert("Pedido ya recibido", `No se puede editar un producto ya recibido`, "error");
@@ -77,8 +65,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
 		const urlImagen = foto.target.files[0];
 		// setMostrarFoto(URL.createObjectURL(urlImagen))
 		setMostrarFoto({
-			url: URL.createObjectURL(urlImagen),
-			nombre: urlImagen.name,
+			url: URL.createObjectURL(urlImagen)
 		});
 		setImagenUpload(urlImagen);
 		console.log(URL.createObjectURL(urlImagen));
@@ -368,7 +355,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
                   </label>
                   <div className="relative inline-block bg-white border-black border b-2 rounded-md shadow-md p-2 mt-6">
                       <img
-                          src={mostrarFoto}
+                          src={mostrarFoto.url}
                           alt={"Imagen del producto"}
                           className="h-52 w-auto object-cover rounded-md"
                       />
