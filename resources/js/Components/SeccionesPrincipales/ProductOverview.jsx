@@ -147,18 +147,20 @@ if (!producto) {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-12 bg-slate-100 px-12 mb-20 ">
+    <div className="flex flex-col lg:flex-row gap-12 w-5/6 mt-10 ">
       {/* Tarjeta del producto con imagen y detalles */}
-      <div className="w-full lg:w-2/5 bg-transparent p-4 flex flex-col items-center justify-around pt-20">
-        <div className="text-center">
+      <div className="w-1/3  p-4 flex flex-col items-center justify-between">
+        <div className="text-left w-full">
           <h1 className="text-xl font-bold">{producto.nombre}</h1>
           <p className="text-gray-600 text-sm mt-1">{producto.descripcion}</p>
         </div>
+        <div className="h-full w-full rounded-md mb-4 flex items-center justify-center align-center">
         <img
           src={producto.imagen}
           alt={producto.nombre}
-          className="w-full max-w-xs object-contain rounded-md mb-4"
+          className="w-full h-auto object-contain rounded-md mb-4"
         />
+        </div>
       </div>
 
       {/* Gráficos y estadísticas */}
