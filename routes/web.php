@@ -10,6 +10,7 @@ use App\Http\Controllers\Web\InventarioController;
 use App\Http\Controllers\Web\ProveedoresController;
 use App\Http\Controllers\Web\DetallesVentaController;
 use App\Http\Controllers\Web\DetallesCompraController;
+use App\Http\Controllers\Web\EntidadesController;
 use App\Http\Controllers\Web\SendEmaillController;
 use App\Models\Proveedor;
 
@@ -34,6 +35,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/detalles', [ProductoController::class ,'defaultIndex'])->name('producto.default');
     Route::get('/detalles/{id}', [ProductoController::class ,'index'])->name('producto.index');
     Route::get('/proveedores', [ProveedoresController::class ,'index'])->name('proveedores.index'); 
+
+    Route::get('/entidades', [EntidadesController::class ,'index'])->name('entidades.index'); 
 });
 
 // CRUD DE ALMACENES

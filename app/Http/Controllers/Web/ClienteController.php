@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Web;
 
+use Inertia\Inertia;
 use App\Models\Comprador;
+use App\Models\DetalleVenta;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -69,5 +71,37 @@ class ClienteController extends Controller
         $cliente->direccion = $datos['direccion'];
         $cliente->tipo_comprador = $datos['tipo_comprador'];
 
+    }
+
+    public function renderClientes($user){
+        $detallesVentasRaw = DetalleVenta::with(['producto', 'venta.comprador'])
+            ->whereHas('venta', function ($query) use ($user) {
+                $query->where('id_user', $user->id);
+            })
+            ->get();
+
+        $detallesVentas = $detallesVentasRaw->map(function ($detalle) {
+            return [
+                'id_detalle' => $detalle->id,
+                'producto_id' => $detalle->id_producto,
+                'codigo' => $detalle->producto->codigo,
+                'nombre' => $detalle->producto->nombre,
+                'precio_unitario' => $detalle->precio_unitario,
+                'cantidad' => $detalle->cantidad,
+                'fecha_venta' => optional($detalle->venta)->fecha_venta,
+                'cliente' => optional($detalle->venta->comprador)->nombre,
+            ];
+        });
+
+        $allClientes = $detallesVentasRaw
+            ->pluck('venta.comprador') 
+            ->filter() 
+            ->unique('id') 
+            ->values();
+
+        return Inertia::render('Clientes' , [
+            'all_clientes' => $allClientes,
+            'detalles_ventas' => $detallesVentas
+        ]);
     }
 }
