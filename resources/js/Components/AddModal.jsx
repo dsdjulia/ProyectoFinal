@@ -34,12 +34,10 @@ export default function AddModal({
     const [mostrarNuevaCategoria, setMostrarNuevaCategoria] = useState(false);
     const [mostrarNuevoProveedor, setMostrarNuevoProveedor] = useState(false);
     const [mostrarFecha, setMostrarFecha] = useState(false);
-    const [mostrarFoto, setMostrarFoto] = useState('');
-    const [imagenUpload, setImagenUpload] = useState('');
+    const [mostrarFoto, setMostrarFoto] = useState("");
+    const [imagenUpload, setImagenUpload] = useState("");
     const inputFileRef = useRef(null);
     const [isReady, setIsReady] = useState(false);
-
-
 
     useEffect(() => {
         if (!isOpen) {
@@ -95,21 +93,24 @@ export default function AddModal({
         }));
     };
 
-    const mostrarFotoSeleccionada = (foto) => { // Esto muestra las fotos subidas en la pagina
-        const urlImagen = foto.target.files[0]
+    const mostrarFotoSeleccionada = (foto) => {
+        // Esto muestra las fotos subidas en la pagina
+        const urlImagen = foto.target.files[0];
         // setMostrarFoto(URL.createObjectURL(urlImagen))
-        setMostrarFoto({url: URL.createObjectURL(urlImagen), nombre: urlImagen.name})
-        setImagenUpload(urlImagen)
-        console.log(URL.createObjectURL(urlImagen))
-    }
+        setMostrarFoto({
+            url: URL.createObjectURL(urlImagen),
+            nombre: urlImagen.name,
+        });
+        setImagenUpload(urlImagen);
+        console.log(URL.createObjectURL(urlImagen));
+    };
 
     const handleDeletePhoto = () => {
-        setMostrarFoto("")
-        inputFileRef.current.value = "";  // Reseteas el input file
-    }
+        setMostrarFoto("");
+        inputFileRef.current.value = ""; // Reseteas el input file
+    };
 
     const handleUpload = async () => {
-
         if (!mostrarFoto) {
             console.log("No hay imagen para subir");
             setIsReady(true);
@@ -120,47 +121,54 @@ export default function AddModal({
 
         const uploadToCloudinary = async (image) => {
             uploadData.append("file", image);
-            uploadData.append("upload_preset", 'default');
+            uploadData.append("upload_preset", "default");
 
             try {
-            const response = await fetch(`https://api.cloudinary.com/v1_1/dcdvxqsxn/image/upload`, {
-                method: "POST",
-                body: uploadData,
-            });
+                const response = await fetch(
+                    `https://api.cloudinary.com/v1_1/dcdvxqsxn/image/upload`,
+                    {
+                        method: "POST",
+                        body: uploadData,
+                    }
+                );
 
-            const data = await response.json();
+                const data = await response.json();
 
-            if (response.ok) {
-                console.log("Imagen subida con éxito:", [data, data.url, data.public_id, data.original_filename]);
-                return data; // Devolvemos los datos de la subida
-            } else {
-                console.error("Error al subir imagen:", data.error.message);
-                showModificableAlert(
-                    "Error",
-                    `Error: ${JSON.stringify(data.error.message)}`,
-                    "error"
-                ); 
-            }
+                if (response.ok) {
+                    console.log("Imagen subida con éxito:", [
+                        data,
+                        data.url,
+                        data.public_id,
+                        data.original_filename,
+                    ]);
+                    return data; // Devolvemos los datos de la subida
+                } else {
+                    console.error("Error al subir imagen:", data.error.message);
+                    showModificableAlert(
+                        "Error",
+                        `Error: ${JSON.stringify(data.error.message)}`,
+                        "error"
+                    );
+                }
             } catch (error) {
-            console.error("Error al conectar con Cloudinary:", error);
+                console.error("Error al conectar con Cloudinary:", error);
             }
             return null;
         };
 
         const result = await uploadToCloudinary(imagenUpload);
 
-        console.log(result)
+        console.log(result);
 
         if (result !== null) {
             setFormData((prev) => ({
-            ...prev,
-            imagen: result.secure_url, // Guardamos la info de la imagen subida
+                ...prev,
+                imagen: result.secure_url, // Guardamos la info de la imagen subida
             }));
             setIsReady(true);
         }
     };
 
-    
     const handleSubmit = (e) => {
         e.preventDefault();
         handleUpload();
@@ -168,32 +176,32 @@ export default function AddModal({
 
     // Enviar los datos solo cuando form haya actualizado los datos
     useEffect(() => {
-            if(isReady){
-                router.post(route("pedidos.store"), formData, {
-                    onSuccess: () => {
-                        showModificableAlert(
-                            "Pedido añadido",
-                            "Se agregó el pedido correctamente.",
-                            "success"
-                        );
-                        onAdd && onAdd(formData);
-                        onClose();
-                        router.visit(route("pedidos.index"), {
-                            preserveScroll: true,
-                        });
-                    },
-                    onError: (errors) => {
-                        showModificableAlert(
-                            "Error al añadir el producto",
-                            `Error: ${JSON.stringify(errors)}`,
-                            "error"
-                        );
-                    },
-                });
-                setIsReady(false)
-            }
-    }, [isReady])
-    
+        if (isReady) {
+            router.post(route("pedidos.store"), formData, {
+                onSuccess: () => {
+                    showModificableAlert(
+                        "Pedido añadido",
+                        "Se agregó el pedido correctamente.",
+                        "success"
+                    );
+                    onAdd && onAdd(formData);
+                    onClose();
+                    router.visit(route("pedidos.index"), {
+                        preserveScroll: true,
+                    });
+                },
+                onError: (errors) => {
+                    showModificableAlert(
+                        "Error al añadir el producto",
+                        `Error: ${JSON.stringify(errors)}`,
+                        "error"
+                    );
+                },
+            });
+            setIsReady(false);
+        }
+    }, [isReady]);
+
     return (
         <Dialog
             open={isOpen}
@@ -202,7 +210,6 @@ export default function AddModal({
         >
             <div className="fixed inset-0 bg-black bg-opacity-25" />
             <div className="bg-white rounded-lg shadow-lg p-6 w-2/3 mx-auto mt-20 mb-10 z-50 relative">
-
                 {/* Botón de cerrar */}
                 <button
                     type="button"
@@ -266,9 +273,6 @@ export default function AddModal({
                             placeholder="Descripción del producto"
                         />
                     </div>
-
-
-
 
                     {/* Categoría */}
                     <div>
@@ -379,30 +383,48 @@ export default function AddModal({
                         </div>
                     )}
 
-                    {/* Proveedor */}
-                    <div className="md:col-span-1">
-                        <label className="block text-sm font-medium text-gray-700">
-                            Proveedor
-                        </label>
-                        <select
-                            name="id_proveedor"
-                            value={formData.id_proveedor}
-                            onChange={handleProveedorChange}
-                            className="w-full border rounded-lg py-2 px-4"
-                        >
-                            <option value="">Seleccionar proveedor</option>
-                            <option value="nuevo">Nuevo proveedor</option>
-                            {proveedores.map((p) => (
-                                <option key={p.id} value={p.id}>
-                                    {p.nombre}
-                                </option>
-                            ))}
-                        </select>
+                    {/* Proveedor + Imagen en la misma fila */}
+                    <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* Proveedor */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">
+                                Proveedor
+                            </label>
+                            <select
+                                name="id_proveedor"
+                                value={formData.id_proveedor}
+                                onChange={handleProveedorChange}
+                                className="w-full border rounded-lg py-2 px-4"
+                            >
+                                <option value="">Seleccionar proveedor</option>
+                                <option value="nuevo">Nuevo proveedor</option>
+                                {proveedores.map((p) => (
+                                    <option key={p.id} value={p.id}>
+                                        {p.nombre}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Imagen */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">
+                                Imagen (subir archivo)
+                            </label>
+                            <input
+                                type="file"
+                                name="imagen"
+                                accept="image/*"
+                                ref={inputFileRef}
+                                onChange={(e) => mostrarFotoSeleccionada(e)}
+                                className="w-full border rounded-lg py-2 px-4"
+                            />
+                        </div>
                     </div>
 
-                    {/* Nuevo proveedor */}
+                    {/* Datos de nuevo proveedor (si se muestra) */}
                     {mostrarNuevoProveedor && (
-                        <div className="md:col-span-2 space-y-2">
+                        <div className="md:col-span-2 space-y-2 mt-2">
                             <input
                                 type="text"
                                 name="nombre_proveedor"
@@ -430,40 +452,30 @@ export default function AddModal({
                         </div>
                     )}
 
-                    {/* Imagen */}
-                    <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700">
-                        Imagen (subir archivo)
-                    </label>
-                    <input
-                        type="file"
-                        name="imagen"
-                        accept="image/*"
-                        ref={inputFileRef}
-                        onChange={(e) => {mostrarFotoSeleccionada(e)}}
-                        className="w-full border rounded-lg py-2 px-4"
-                    />
-                    </div>
-
-                    <div className="mt-4 flex flex-wrap gap-4" id="containerImages">
-                        <div className="mt-4 flex flex-wrap gap-4">
-                            {/* Aqui voy añadiendo las nuevas fotos.*/}
-                            <div className="relative w-auto h-32 inline-block">
+                    {/* Vista previa de imagen si existe */}
+                    {mostrarFoto && mostrarFoto.url && (
+                        <div className="md:col-span-2 mt-4">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Vista previa
+                            </label>
+                            <div className="relative inline-block bg-white border-black border b-2 rounded-md shadow-md p-2 mt-6">
                                 <img
                                     src={mostrarFoto.url}
-                                    name={mostrarFoto.nombre}
-                                    className="w-auto h-32 object-cover rounded-lg"
+                                    alt={mostrarFoto.nombre}
+                                    className="h-52 w-auto object-cover rounded-md"
                                 />
                                 <button
                                     type="button"
-                                    className="font-extrabold absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-700 w-6 h-6 text-center flex items-center justify-center cursor-pointer"
                                     onClick={handleDeletePhoto}
+                                    className="absolute -top-4 -right-4 text-red-500  hover:text-red-600 rounded-full  flex items-center justify-center "
                                 >
-                                    ✕
+                                    <span className="material-icons text-4xl">
+                                        delete
+                                    </span>
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    )}
 
                     {/* Botón */}
                     <div className="md:col-span-2 text-right mt-4">
