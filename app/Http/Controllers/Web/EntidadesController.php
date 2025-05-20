@@ -13,7 +13,7 @@ class EntidadesController extends Controller
 
     public function index(){
         $user = Auth::user();
-        $this->renderEntidades($user);
+        return $this->renderEntidades($user);
     }
 
     public function renderEntidades(){
