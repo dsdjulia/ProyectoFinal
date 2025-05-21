@@ -26,7 +26,7 @@ export default function AddAlmacenModal({ isOpen, onClose, onAdd }) {
             onClose(); // Cierra el modal
 
             // Envía los datos usando Inertia
-            router.post(route("inventario.store"), form, {
+            router.post(route("entidad.almacen.store"), form, {
                 onSuccess: () => {
                     // Muestra alerta de éxito
                     showModificableAlert(
@@ -35,7 +35,7 @@ export default function AddAlmacenModal({ isOpen, onClose, onAdd }) {
                         "success"
                     );
                     // Redirige o refresca la vista del inventario sin perder el scroll
-                    router.visit(route("inventario.index"), { preserveScroll: true });
+                    router.visit(route("entidades.index"), { preserveScroll: true });
 
                     // Llama a la función onAdd si fue proporcionada por el componente padre
                     if (onAdd) onAdd(form);

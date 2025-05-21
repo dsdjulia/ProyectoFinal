@@ -68,15 +68,13 @@ export default function CrudEntidades({ props }) {
                 data: data[selectedType].data.filter((item) => item.id !== idEntidad),
             },
         };
-        //setData(updated);
-        //setItemToDelete(null);
+        setData(updated);
+        setItemToDelete(null);
 
         switch (selectedType) {
             case "almacenes":
-                // onDelete(selected);
-                // onClose();
-                router.delete(route('inventario.delete'), {
-                    data: { id: idEntidad, redireccion: false },
+                router.delete(route('entidad.almacen.delete'), {
+                    data: { id: idEntidad},
                     onSuccess: () => {
                         showModificableAlert('Almacén eliminado', `Almacén eliminado del inventario.`, 'success');
                         // router.visit(route('entidades.index'), { preserveScroll: true });
@@ -88,7 +86,7 @@ export default function CrudEntidades({ props }) {
                 
                 break
             case "categorias":
-                router.delete(route('XXXXXXXXXXXXXXXXXXXXXXXXXXXX'), {
+                router.delete(route('entidad.categoria.delete'), {
                     data: { id_categoria: idEntidad, redireccion: false},
                     onSuccess: () => {
                         showModificableAlert('Categoria eliminada', `Categoria eliminada del sistema.`, 'success');
