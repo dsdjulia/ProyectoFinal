@@ -45,11 +45,21 @@ class ClienteController extends Controller
         $user = Auth::user();
 
         $datos = $request->validate([
-            'id_cliente' => 'required| exists:compradores,id',
+            'id_cliente' => 'required|exists:compradores,id',
         ]);
 
-        $cliente = Comprador::where('id',$datos['id_cliente'])->first();
-        
+        $cliente = Comprador::find($datos['id_cliente']);
+
+        // Verificar si el cliente tiene ventas
+        $tieneVentas = $cliente->ventas()->where('id_user', $user->id)->exists();
+
+        if ($tieneVentas) {
+            return redirect()->back()->with([
+                'status' => false,
+                'message' => 'No se puede eliminar el cliente porque tiene ventas registradas.'
+            ]);
+        }
+
         $cliente->delete();
 
         return $this->renderEntidades($user);

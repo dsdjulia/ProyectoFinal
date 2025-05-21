@@ -42,16 +42,26 @@ class ProveedoresController extends Controller
     public function destroy (Request $request){
 
         $user = Auth::user();
-        
+
         $datos = $request->validate([
             'id_proveedor' => 'required|exists:proveedores,id'
         ]);
 
-        $proveedor = Proveedor::where('id',$datos['id_proveedor'])->first();
+        $proveedor = Proveedor::find($datos['id_proveedor']);
+
+        // Verifica si tiene compras asociadas
+        $tieneCompras = $proveedor->compras()->where('id_user', $user->id)->exists();
+
+        if ($tieneCompras) {
+            return redirect()->back()->with([
+                'status' => false,
+                'message' => 'No se puede eliminar el proveedor porque tiene compras asociadas.'
+            ]);
+        }
+
         $proveedor->delete();
 
-        $entidadesController = new EntidadesController();
-        return $entidadesController->renderEntidades($user);
+        return (new EntidadesController)->renderEntidades($user);
     }
 
     public function patch(Request $request){
