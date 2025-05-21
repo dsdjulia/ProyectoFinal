@@ -7,14 +7,14 @@ import DeleteProductModal from "@/Components/Modales/DeleteProductModal";
 import { router } from "@inertiajs/react";
 
 export default function ProductTableRow({
-    product,
-    context,
+    product, /* este product le llega de InventarioTabla o de OrdenesCompra */
+    context, /* indica si se va a comportar como un row de inventario o de pedidos */
     almacenes = [],
     onUpdate,
     categorias,
     proveedores = [],
     onCantidadClick,
-    clickable,
+    clickable, /* Esto va a indicar si el row debe ser boton o no */
     props,
 }) {
     const [isEditModalOpen, setEditModalOpen] = useState(false);
@@ -46,7 +46,7 @@ export default function ProductTableRow({
             <div
                 className={`relative group grid grid-cols-8 items-center bg-white rounded-sm border border-slate-200 p-2 gap-4 transition-all
                 ${
-                    clickable
+                    clickable 
                         ? "hover:px-1 hover:border-slate-600 hover:border-2 cursor-pointer"
                         : "cursor-default"
                 }`}
