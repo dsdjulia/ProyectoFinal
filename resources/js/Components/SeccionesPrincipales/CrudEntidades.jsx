@@ -10,6 +10,8 @@ import EditAlmacenModal from "../Modales/EditAlmacenModal";
 import EditCategoriaModal from "../Modales/EditCategoriaModal";
 import EditClienteModal from "../Modales/EditClienteModal";
 import EditProveedorModal from "../Modales/EditProveedorModal";
+import { router } from "@inertiajs/react";
+import { showModificableAlert } from "@/utils/alerts";
 
 // Componente principal para gestionar entidades (almacenes, categorías, clientes, proveedores)
 export default function CrudEntidades({ props }) {
@@ -57,16 +59,43 @@ export default function CrudEntidades({ props }) {
     const handleEdit = (item) => setItemToEdit(item);
 
     // Función para eliminar una entidad del listado (solo visualmente)
-    const handleDelete = (id) => {
+    const handleDelete = (idAlmacen) => {
+
         const updated = {
             ...data,
             [selectedType]: {
                 ...data[selectedType],
-                data: data[selectedType].data.filter((item) => item.id !== id),
+                data: data[selectedType].data.filter((item) => item.id !== idAlmacen),
             },
         };
         setData(updated);
         setItemToDelete(null);
+
+        switch (selectedType) {
+            case "almacenes":
+                // onDelete(selected);
+                // onClose();
+                router.delete(route('inventario.delete'), {
+                    data: { id: idAlmacen, redireccion: false },
+                    onSuccess: () => {
+                        showModificableAlert('Almacén eliminado', `Almacén eliminado del inventario.`, 'success');
+                        // router.visit(route('entidades.index'), { preserveScroll: true });
+                    },
+                    onError: (errors) => {
+                        showModificableAlert('Error al eliminar el almacén', `${JSON.stringify(errors)}`, 'error');
+                    }
+                });
+                
+                break
+            case "categorias":
+                return <EditCategoriaModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
+            case "clientes":
+                return <EditClienteModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
+            case "proveedores":
+                return <EditProveedorModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
+            default:
+                return null;
+        }
     };
 
     // Renderiza el modal correspondiente para editar según el tipo seleccionado
