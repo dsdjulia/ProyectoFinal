@@ -31,16 +31,24 @@ class AlmacenController extends Controller
 
     public function delete(Request $request)
     {
-        $data = $request->validate(['id' => 'required|integer']);
+        $data = $request->validate([
+            'id' => 'required|integer',
+            'redireccion' => 'nullable|boolean',
+        ]);
 
         $almacen = $this->findUserAlmacen($data['id']);
         
         Inventario::where('id_almacen', $almacen->id)->delete();
         DetalleCompra::where('id_almacen', $almacen->id)->delete();
-        
         $almacen->delete();
+
+        if ($data['redireccion'] == false) {
+            return Inertia::render(component: 'Entidades');
+        }
+
         return $this->renderInventario(Auth::user());
     }
+
 
     public function update(Request $request)
     {
