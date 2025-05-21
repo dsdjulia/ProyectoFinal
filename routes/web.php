@@ -1,18 +1,20 @@
 <?php
 
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Route;
+use App\Models\Proveedor;
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoriasController;
 use App\Http\Controllers\Web\AlmacenController;
+use App\Http\Controllers\Web\ClienteController;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\ProductoController;
+use App\Http\Controllers\Web\EntidadesController;
 use App\Http\Controllers\Web\InventarioController;
+use App\Http\Controllers\Web\SendEmaillController;
 use App\Http\Controllers\Web\ProveedoresController;
 use App\Http\Controllers\Web\DetallesVentaController;
 use App\Http\Controllers\Web\DetallesCompraController;
-use App\Http\Controllers\Web\EntidadesController;
-use App\Http\Controllers\Web\SendEmaillController;
-use App\Models\Proveedor;
 
 // EDIT PROFILE
 Route::middleware('auth')->group(function () {
@@ -47,8 +49,23 @@ Route::middleware('auth')->group(function () {
 
 // CRUD DE ENTIDADES
 Route::middleware('auth')->group(function () {
-    Route::delete('/entidades/almacen', [AlmacenController::class ,' deleteEntidades'])->name('entidad.almacen.delete');
-    Route::post('/entidades/almacen', [AlmacenController::class ,' storeEntidades'])->name('entidad.almacen.store');
+
+    Route::put('/entidades/almacen', [AlmacenController::class ,'update'])->name('entidad.almacen.update');
+    Route::post('/entidades/almacen', [AlmacenController::class ,'storeEntidades'])->name('entidad.almacen.store');
+    Route::delete('/entidades/almacen', [AlmacenController::class ,'deleteEntidades'])->name('entidad.almacen.delete');
+
+    Route::put('/entidades/categoria', [CategoriasController::class ,'store'])->name('entidad.categoria.update');
+    Route::post('/entidades/categoria', [CategoriasController::class ,'patch'])->name('entidad.categoria.store');
+    Route::delete('/entidades/categoria', [CategoriasController::class ,'destroy'])->name('entidad.categoria.delete');
+
+    Route::put('/entidades/cliente', [ClienteController::class ,'store'])->name('entidad.cliente.update');
+    Route::post('/entidades/cliente', [ClienteController::class ,'patch'])->name('entidad.cliente.store');
+    Route::delete('/entidades/cliente', [ClienteController::class ,'destroy'])->name('entidad.cliente.delete');
+
+    Route::put('/entidades/proveedor', [ProveedoresController::class ,'store'])->name('entidad.proveedor.update');
+    Route::post('/entidades/proveedor', [ProveedoresController::class ,'patch'])->name('entidad.proveedor.store');
+    Route::delete('/entidades/proveedor', [ProveedoresController::class ,'destroy'])->name('entidad.proveedor.delete');
+
 });
 
 
