@@ -68,8 +68,8 @@ export default function CrudEntidades({ props }) {
                 data: data[selectedType].data.filter((item) => item.id !== idEntidad),
             },
         };
-        setData(updated);
-        setItemToDelete(null);
+        //setData(updated);
+        //setItemToDelete(null);
 
         switch (selectedType) {
             case "almacenes":
