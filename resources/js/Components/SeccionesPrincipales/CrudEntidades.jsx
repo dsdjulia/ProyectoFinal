@@ -89,14 +89,14 @@ export default function CrudEntidades({ props }) {
                 router.delete(route('entidad.categoria.delete'), {
                     data: { id_categoria: idEntidad, redireccion: false},
                     onSuccess: () => {
-                        showModificableAlert('Categoria eliminada', `Categoria eliminada del sistema.`, 'success');
-                        // router.visit(route('entidades.index'), { preserveScroll: true });
+                        showModificableAlert('Categoría eliminada', `Categoría eliminada del sistema.`, 'success');
                     },
                     onError: (errors) => {
-                        showModificableAlert('Error al eliminar la cateogria', `${JSON.stringify(errors)}`, 'error');
+                        const msg = errors.message || "Error al eliminar la categoría";
+                        showModificableAlert('Error', msg, 'error');
                     }
                 });
-                break
+                break;
             case "clientes":
                 router.delete(route('XXXXXXXXXXXXXXXXXXXXXXX'), {
                     data: { id_cliente: idEntidad, redireccion: false},

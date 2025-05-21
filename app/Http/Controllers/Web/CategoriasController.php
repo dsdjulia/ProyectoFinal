@@ -32,6 +32,7 @@ class CategoriasController extends Controller
     }   
 
     public function destroy (Request $request){
+
         $user = Auth::user();
 
         $datos = $request->validate([
@@ -40,14 +41,13 @@ class CategoriasController extends Controller
 
         $categoria = Categoria::where('id', $datos['id_categoria'])
             ->where('id_user', $user->id)
-            ->withCount('productos') // <-- contar productos relacionados
+            ->withCount('productos')
             ->first();
 
         if ($categoria->productos_count > 0) {
-            return redirect()->back()->with([
-                'status' => false,
+            return response()->json([
                 'message' => 'No se puede eliminar la categoría porque tiene productos relacionados.'
-            ]);
+            ], 422);
         }
 
         $categoria->delete();
