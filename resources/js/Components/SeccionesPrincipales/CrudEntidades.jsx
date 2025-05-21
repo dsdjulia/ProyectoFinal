@@ -307,7 +307,7 @@ export default function CrudEntidades() {
                 <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
                         <h2 className="text-lg font-bold mb-4">
-                            ¿Eliminar {tipoEntidad.slice(0, -1)}?
+                            ¿Eliminar {tipoEntidad.slice(0, -2)}?
                         </h2>
                         <p className="text-sm mb-6 text-slate-600">
                             ¿Estás seguro que quieres eliminar{" "}
