@@ -34,7 +34,9 @@ class ProveedoresController extends Controller
             'email' => $datos['email'],
         ]);
 
-        $this->renderProveedores($user);
+        
+        $entidadesController = new EntidadesController();
+        return $entidadesController->renderEntidades($user);
     }
 
     public function destroy (Request $request){
@@ -45,9 +47,11 @@ class ProveedoresController extends Controller
             'id_proveedor' => 'required|exists:proveedores,id'
         ]);
 
-        Proveedor::where('id',$datos['id_proveedor'])->first()->delete();
+        $proveedor = Proveedor::where('id',$datos['id_proveedor'])->first();
+        $proveedor->delete();
 
-        $this->renderProveedores($user);
+        $entidadesController = new EntidadesController();
+        return $entidadesController->renderEntidades($user);
     }
 
     public function patch(Request $request){
@@ -67,7 +71,8 @@ class ProveedoresController extends Controller
 
         $proveedor->save();
 
-        $this->renderProveedores($user);
+        $entidadesController = new EntidadesController();
+        return $entidadesController->renderEntidades($user);
     }
 
     public function renderProveedores($user){

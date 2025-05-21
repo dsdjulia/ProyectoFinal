@@ -29,24 +29,50 @@ class AlmacenController extends Controller
         return $this->renderInventario(Auth::user());
     }
 
+    public function storeEntidades(Request $request)
+    {
+        $user = Auth::user();
+        $data = $this->validateAlmacen($request);
+
+        Almacen::create([
+            'id_user' => Auth::id(),
+            'nombre' => $data['nombre'],
+            'direccion' => $data['direccion'],
+        ]);
+
+        $entidadesController = new EntidadesController();
+        return $entidadesController->renderEntidades($user);
+    }
+
     public function delete(Request $request)
     {
+        $user = Auth::user();
         $data = $request->validate([
-            'id' => 'required|integer',
-            'redireccion' => 'nullable|boolean',
+            'id' => 'required|integer', 
         ]);
 
         $almacen = $this->findUserAlmacen($data['id']);
         
         Inventario::where('id_almacen', $almacen->id)->delete();
-        DetalleCompra::where('id_almacen', $almacen->id)->delete();
         $almacen->delete();
 
-        if ($data['redireccion'] == false) {
-            return Inertia::render(component: 'Entidades');
-        }
+        return $this->renderInventario($user);
+    }
 
-        return $this->renderInventario(Auth::user());
+    public function deleteEntidades(Request $request)
+    {
+        $user = Auth::user();
+        $data = $request->validate([
+            'id' => 'required|integer', 
+        ]);
+
+        $almacen = $this->findUserAlmacen($data['id']);
+        
+        Inventario::where('id_almacen', $almacen->id)->delete();
+        $almacen->delete();
+
+        $entidadesController = new EntidadesController();
+        return $entidadesController->renderEntidades($user);
     }
 
 
@@ -68,7 +94,8 @@ class AlmacenController extends Controller
         $almacen->direccion = $datos['direccion'];
         $almacen->save();
 
-        return $this->renderInventario($user); 
+        $entidadesController = new EntidadesController();
+        return $entidadesController->renderEntidades($user); 
     }
 
     private function validateAlmacen(Request $request)
@@ -104,7 +131,7 @@ class AlmacenController extends Controller
         return $stats;
     }
 
-    private function renderInventario($user, $almacenesIds = null)
+    public function renderInventario($user, $almacenesIds = null)
     {
         $almacenes = $this->obtenerAlmacenesConProductos($user->id, $almacenesIds);
         $stats = $this->calcularStockStats($almacenes);
