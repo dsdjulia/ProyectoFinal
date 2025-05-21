@@ -257,7 +257,7 @@ export default function CrudEntidades() {
                             className="relative p-4 bg-white rounded-lg shadow hover:shadow-md transition flex flex-col justify-between"
                         >
                             <div>
-                                <div className="w-full h-32 bg-slate-200 rounded mb-4 flex items-center justify-center text-4xl text-slate-500">
+                                <div className="w-full h-32 bg-slate-200 rounded mb-4 flex items-center justify-center text-7xl text-slate-500">
                                     {iconoEntidad}
                                 </div>
                                 <h2 className="text-sm font-bold mb-1">

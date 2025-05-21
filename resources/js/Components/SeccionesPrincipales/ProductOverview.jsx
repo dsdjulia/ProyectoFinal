@@ -148,9 +148,9 @@ if (!producto) {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-12 w-5/6 mt-10 ">
+    <div className="flex flex-col lg:flex-row gap-12 w-full mt-4 border border-slate-200 rounded-lg b-2 p-4 ">
       {/* Tarjeta del producto con imagen y detalles */}
-      <div className="w-1/3  p-4 flex flex-col items-center justify-around">
+      <div className="w-2/3  p-4 flex flex-col items-center justify-around bg-slate-50 rounded-lg">
         <div className="text-center w-full">
           <h1 className="text-xl font-bold">{producto.nombre}</h1>
           <p className="text-gray-600 text-sm mt-1">{producto.descripcion}</p>

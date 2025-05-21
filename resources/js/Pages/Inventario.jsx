@@ -1,5 +1,4 @@
 import Sidebar from "@/Components/Sidebar";
-import Header from "@/Components/Header";
 import { usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Footer from "@/Components/Footer";
