@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use Inertia\Inertia;
 use App\Models\Proveedor;
+use App\Models\DetalleVenta;
 use Illuminate\Http\Request;
 use App\Models\DetalleCompra;
 use App\Http\Controllers\Controller;
@@ -70,13 +71,27 @@ class ProveedoresController extends Controller
     }
 
     public function renderProveedores($user){
+        // CLIENTES RELACIONADOS CON LAS VENTAS REALIZADAS
+        $detallesVentasRaw = DetalleVenta::with(['producto', 'venta.comprador'])
+            ->whereHas('venta', function ($query) use ($user) {
+                $query->where('id_user', $user->id);
+            })
+            ->get();
+
+        $clientes = $detallesVentasRaw
+            ->pluck('venta.comprador') 
+            ->filter() 
+            ->unique('id') 
+            ->values();
+
+        // PROVEEDORES RELACIONADOS CON PEDIDOS DEL USUARIO
         $detallesComprasRaw = DetalleCompra::with(['producto', 'compra.proveedor'])
             ->whereHas('compra', function ($query) use ($user){
                 $query->where('id_user', $user->id);
             })
             ->get();
 
-        $all_proveedores = $detallesComprasRaw
+        $proveedores = $detallesComprasRaw
             ->pluck('compra.proveedor')
             ->filter()
             ->unique('id')
@@ -84,8 +99,9 @@ class ProveedoresController extends Controller
 
         return Inertia::render('Proveedores', [
             'status' => true,
-            'mensaje' => 'Proveedores encontrados',
-            'proveedores' => $all_proveedores
+            'mensaje' => 'Proveedores y clientes encontrados',
+            'proveedores' => $proveedores,
+            'clientes'=> $clientes,
         ]);
     }
 }
