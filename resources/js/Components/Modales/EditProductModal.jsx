@@ -10,7 +10,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
 		descripcion: producto.descripcion,
 		imagen: producto.imagen,
 		id_categoria: producto.id_categoria,
-		nombre_categoria: producto.nombre_categoria,
+		nombre_categoria: producto.categoria,
 		id_almacen: producto.id_almacen,
 		precio_unitario: producto.precio_unitario,
 		cantidad_actual: producto.cantidad_actual,
@@ -294,7 +294,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
               onChange={handleProveedorChange}
               className="w-full border border-slate-300 rounded p-1.5 mt-1 bg-white focus:ring-2 focus:ring-slate-400 focus:outline-none text-black"
             >
-              <option value="">Seleccionar proveedor</option>
+              <option value={formData.id_proveedor}>{formData.nombre_proveedor}</option>
               <option value="nuevo">Nuevo proveedor</option>
               {proveedores.map(p => (
                 <option key={p.id} value={p.id}>{p.nombre}</option>
