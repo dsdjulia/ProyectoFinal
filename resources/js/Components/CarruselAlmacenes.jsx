@@ -72,7 +72,7 @@ function DeleteAlmacenModal({ isOpen, onClose, almacenes, onDelete }) {
             onDelete(selected);
             onClose();
             router.delete(route('inventario.delete'), {
-                data: { id: selected },
+                data: { id: selected, redireccion: true },
                 onSuccess: () => {
                     showModificableAlert('Almacén eliminado', `Almacén eliminado del inventario.`, 'success');
                     router.visit(route('inventario.index'), { preserveScroll: true });
