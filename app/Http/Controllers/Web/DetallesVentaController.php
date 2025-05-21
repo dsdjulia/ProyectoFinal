@@ -118,7 +118,6 @@ class DetallesVentaController extends Controller
             return redirect()->back()->withErrors('No hay suficiente stock disponible para este producto.');
         }
 
-
         $venta = Venta::create([
             'id_user' => $user->id,
             'id_comprador' => $comprador->id,
