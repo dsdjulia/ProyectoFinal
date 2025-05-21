@@ -59,13 +59,13 @@ export default function CrudEntidades({ props }) {
     const handleEdit = (item) => setItemToEdit(item);
 
     // Función para eliminar una entidad del listado (solo visualmente)
-    const handleDelete = (idAlmacen) => {
+    const handleDelete = (idEntidad) => {
 
         const updated = {
             ...data,
             [selectedType]: {
                 ...data[selectedType],
-                data: data[selectedType].data.filter((item) => item.id !== idAlmacen),
+                data: data[selectedType].data.filter((item) => item.id !== idEntidad),
             },
         };
         setData(updated);
@@ -76,7 +76,7 @@ export default function CrudEntidades({ props }) {
                 // onDelete(selected);
                 // onClose();
                 router.delete(route('inventario.delete'), {
-                    data: { id: idAlmacen, redireccion: false },
+                    data: { id: idEntidad, redireccion: false },
                     onSuccess: () => {
                         showModificableAlert('Almacén eliminado', `Almacén eliminado del inventario.`, 'success');
                         // router.visit(route('entidades.index'), { preserveScroll: true });
@@ -88,11 +88,41 @@ export default function CrudEntidades({ props }) {
                 
                 break
             case "categorias":
-                return <EditCategoriaModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
+                router.delete(route('XXXXXXXXXXXXXXXXXXXXXXXXXXXX'), {
+                    data: { id_categoria: idEntidad, redireccion: false},
+                    onSuccess: () => {
+                        showModificableAlert('Categoria eliminada', `Categoria eliminada del sistema.`, 'success');
+                        // router.visit(route('entidades.index'), { preserveScroll: true });
+                    },
+                    onError: (errors) => {
+                        showModificableAlert('Error al eliminar la cateogria', `${JSON.stringify(errors)}`, 'error');
+                    }
+                });
+                break
             case "clientes":
-                return <EditClienteModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
+                router.delete(route('XXXXXXXXXXXXXXXXXXXXXXX'), {
+                    data: { id_cliente: idEntidad, redireccion: false},
+                    onSuccess: () => {
+                        showModificableAlert('Cliente eliminado', `Cliente eliminado del sistema.`, 'success');
+                        // router.visit(route('entidades.index'), { preserveScroll: true });
+                    },
+                    onError: (errors) => {
+                        showModificableAlert('Error al eliminar el cliente', `${JSON.stringify(errors)}`, 'error');
+                    }
+                });
+                break
             case "proveedores":
-                return <EditProveedorModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
+                router.delete(route('proveedor.destroy'), {
+                    data: { id_proveedor: idEntidad, redireccion: false},
+                    onSuccess: () => {
+                        showModificableAlert('Proveedor eliminado', `Proveedor eliminado del sistema.`, 'success');
+                        // router.visit(route('entidades.index'), { preserveScroll: true });
+                    },
+                    onError: (errors) => {
+                        showModificableAlert('Error al eliminar el proveedor', `${JSON.stringify(errors)}`, 'error');
+                    }
+                });
+                break
             default:
                 return null;
         }
