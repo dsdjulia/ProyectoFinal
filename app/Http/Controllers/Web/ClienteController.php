@@ -54,7 +54,6 @@ class ClienteController extends Controller
 
         return $this->renderEntidades($user);
 
-
     }
 
 

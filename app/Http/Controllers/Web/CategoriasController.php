@@ -44,10 +44,10 @@ class CategoriasController extends Controller
             ->first();
 
         if ($categoria->productos_count > 0) {
-            return response()->json([
+            return redirect()->back()->with([
                 'status' => false,
                 'message' => 'No se puede eliminar la categoría porque tiene productos relacionados.'
-            ], 409);
+            ]);
         }
 
         $categoria->delete();
