@@ -17,7 +17,7 @@ export default function Index() {
                 </div>
                 <AuthenticatedLayout>
                     <div className=" bg-slate-100  min-h-screen">
-                        <CrudEntidades/>
+                        <CrudEntidades props={props}/>
                     </div>
                     <Footer/>
                 </AuthenticatedLayout>
