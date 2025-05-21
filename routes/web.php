@@ -4,7 +4,7 @@ use Inertia\Inertia;
 use App\Models\Proveedor;
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CategoriasController;
+use App\Http\Controllers\Web\CategoriasController;
 use App\Http\Controllers\Web\AlmacenController;
 use App\Http\Controllers\Web\ClienteController;
 use App\Http\Controllers\Web\ProfileController;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
 use Inertia\Inertia;
 use App\Models\Almacen;
@@ -9,6 +9,7 @@ use App\Models\DetalleVenta;
 use Illuminate\Http\Request;
 use App\Models\DetalleCompra;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 
 class CategoriasController extends Controller
 {
