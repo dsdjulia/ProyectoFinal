@@ -19,7 +19,7 @@ export default function AddProveedorModal({ isOpen, onClose, onAdd }) {
         if (form.nombre && form.email) {
             onClose();
 
-            router.post(route("proveedores.store"), form, {
+            router.post(route("proveedor.store"), form, {
                 onSuccess: () => {
                     showModificableAlert("Proveedor añadido", `${form.nombre} registrado correctamente.`, "success");
                     router.visit(route("proveedores.index"), { preserveScroll: true });
