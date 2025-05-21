@@ -16,7 +16,7 @@ export default function Index() {
                     <Sidebar active={"Entidades"}/>
                 </div>
                 <AuthenticatedLayout>
-                    <div className=" bg-slate-100  min-h-screen">
+                    <div className=" bg-slate-100  h-[76vh]">
                         <CrudEntidades props={props}/>
                     </div>
                     <Footer/>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+// Importamos los modales para agregar y editar cada tipo de entidad
 import AddAlmacenModal from "../Modales/AddAlmacenModal";
 import AddCategoriaModal from "../Modales/AddCategoriaModal";
 import AddClienteModal from "../Modales/AddClienteModal";
@@ -10,48 +11,52 @@ import EditCategoriaModal from "../Modales/EditCategoriaModal";
 import EditClienteModal from "../Modales/EditClienteModal";
 import EditProveedorModal from "../Modales/EditProveedorModal";
 
-
+// Componente principal para gestionar entidades (almacenes, categorías, clientes, proveedores)
 export default function CrudEntidades({ props }) {
-
+    // Definimos las entidades disponibles con sus etiquetas, íconos y datos
     const entidades = {
-    almacenes: {
-        label: "Almacenes",
-        icon: "📦",
-        data: props.all_almacenes,
-    },
-    categorias: {
-        label: "Categorías",
-        icon: "🗂️",
-        data: props.all_categorias,
-    },
-    clientes: {
-        label: "Clientes",
-        icon: "🧑‍💼",
-        data: props.all_clientes,
-    },
-    proveedores: {
-        label: "Proveedores",
-        icon: "🚚",
-        data: props.all_proveedores,
-    },
-};
+        almacenes: {
+            label: "Almacenes",
+            icon: "📦",
+            data: props.all_almacenes,
+        },
+        categorias: {
+            label: "Categorías",
+            icon: "🗂️",
+            data: props.all_categorias,
+        },
+        clientes: {
+            label: "Clientes",
+            icon: "🧑‍💼",
+            data: props.all_clientes,
+        },
+        proveedores: {
+            label: "Proveedores",
+            icon: "🚚",
+            data: props.all_proveedores,
+        },
+    };
 
-
-
+    // Estado para saber qué tipo de entidad está seleccionada
     const [selectedType, setSelectedType] = useState("almacenes");
+
+    // Estado con los datos de todas las entidades (se puede actualizar al agregar o eliminar)
     const [data, setData] = useState(entidades);
+
+    // Estados para controlar acciones: editar, eliminar o agregar
     const [itemToEdit, setItemToEdit] = useState(null);
     const [itemToDelete, setItemToDelete] = useState(null);
-    const [itemToAdd, setItemToAdd] = useState(false); // <-- Nuevo estado
+    const [itemToAdd, setItemToAdd] = useState(false); // Si se está agregando una nueva entidad
 
+    // Accedemos a los datos actuales de la entidad seleccionada
     const currentItems = data[selectedType].data;
     const iconoEntidad = data[selectedType].icon;
     const tipoEntidad = data[selectedType].label;
-    
-    console.log(props)
 
+    // Función para iniciar la edición de una entidad
     const handleEdit = (item) => setItemToEdit(item);
 
+    // Función para eliminar una entidad del listado (solo visualmente)
     const handleDelete = (id) => {
         const updated = {
             ...data,
@@ -64,125 +69,63 @@ export default function CrudEntidades({ props }) {
         setItemToDelete(null);
     };
 
+    // Renderiza el modal correspondiente para editar según el tipo seleccionado
     const renderEditModal = () => {
         if (!itemToEdit) return null;
+
         switch (selectedType) {
             case "almacenes":
-                return (
-                    <EditAlmacenModal
-                        entity={itemToEdit}
-                        onClose={() => setItemToEdit(null)}
-                    />
-                );
+                return <EditAlmacenModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
             case "categorias":
-                return (
-                    <EditCategoriaModal
-                        entity={itemToEdit}
-                        onClose={() => setItemToEdit(null)}
-                    />
-                );
+                return <EditCategoriaModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
             case "clientes":
-                return (
-                    <EditClienteModal
-                        entity={itemToEdit}
-                        onClose={() => setItemToEdit(null)}
-                    />
-                );
+                return <EditClienteModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
             case "proveedores":
-                return (
-                    <EditProveedorModal
-                        entity={itemToEdit}
-                        onClose={() => setItemToEdit(null)}
-                    />
-                );
+                return <EditProveedorModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
             default:
                 return null;
         }
     };
+
+    // Renderiza el modal correspondiente para agregar según el tipo seleccionado
     const renderAddModal = () => {
         if (!itemToAdd) return null;
+
+        const closeAndAdd = (typeKey, newItem) => {
+            setData((prev) => ({
+                ...prev,
+                [typeKey]: {
+                    ...prev[typeKey],
+                    data: [...prev[typeKey].data, newItem],
+                },
+            }));
+            setItemToAdd(false);
+        };
+
         switch (selectedType) {
             case "almacenes":
-                return (
-                    <AddAlmacenModal
-                        isOpen={true}
-                        onClose={() => setItemToAdd(false)}
-                        onAdd={(newItem) => {
-                            setData((prev) => ({
-                                ...prev,
-                                almacenes: {
-                                    ...prev.almacenes,
-                                    data: [...prev.almacenes.data, newItem],
-                                },
-                            }));
-                            setItemToAdd(false);
-                        }}
-                    />
-                );
+                return <AddAlmacenModal isOpen={true} onClose={() => setItemToAdd(false)} onAdd={(item) => closeAndAdd("almacenes", item)} />;
             case "categorias":
-                return (
-                    <AddCategoriaModal
-                        isOpen={true}
-                        onClose={() => setItemToAdd(false)}
-                        onAdd={(newItem) => {
-                            setData((prev) => ({
-                                ...prev,
-                                categorias: {
-                                    ...prev.categorias,
-                                    data: [...prev.categorias.data, newItem],
-                                },
-                            }));
-                            setItemToAdd(false);
-                        }}
-                    />
-                );
+                return <AddCategoriaModal isOpen={true} onClose={() => setItemToAdd(false)} onAdd={(item) => closeAndAdd("categorias", item)} />;
             case "clientes":
-                return (
-                    <AddClienteModal
-                        isOpen={true}
-                        onClose={() => setItemToAdd(false)}
-                        onAdd={(newItem) => {
-                            setData((prev) => ({
-                                ...prev,
-                                clientes: {
-                                    ...prev.clientes,
-                                    data: [...prev.clientes.data, newItem],
-                                },
-                            }));
-                            setItemToAdd(false);
-                        }}
-                    />
-                );
+                return <AddClienteModal isOpen={true} onClose={() => setItemToAdd(false)} onAdd={(item) => closeAndAdd("clientes", item)} />;
             case "proveedores":
-                return (
-                    <AddProveedorModal
-                        isOpen={true}
-                        onClose={() => setItemToAdd(false)}
-                        onAdd={(newItem) => {
-                            setData((prev) => ({
-                                ...prev,
-                                proveedores: {
-                                    ...prev.proveedores,
-                                    data: [...prev.proveedores.data, newItem],
-                                },
-                            }));
-                            setItemToAdd(false);
-                        }}
-                    />
-                );
+                return <AddProveedorModal isOpen={true} onClose={() => setItemToAdd(false)} onAdd={(item) => closeAndAdd("proveedores", item)} />;
             default:
                 return null;
         }
     };
 
     return (
-        <div className="flex h-screen relative">
-            <aside className="w-1/4 bg-white  p-4">
+        <div className="flex h-[75.5vh] relative">
+            {/* Menú lateral para seleccionar tipo de entidad */}
+            <aside className="w-1/5 bg-white p-4">
                 <h2 className="pt-2 text-sm font-semibold mb-4 text-slate-600">
                     Elige el catálogo que quieres modificar
                 </h2>
                 <hr />
                 <br />
+                {/* Botones por cada tipo de entidad */}
                 {Object.entries(data).map(([key, val]) => (
                     <button
                         key={key}
@@ -198,10 +141,13 @@ export default function CrudEntidades({ props }) {
                 ))}
             </aside>
 
+            {/* Panel principal */}
             <main className="flex-1 p-6 overflow-y-auto">
                 <h1 className="text-2xl font-bold mb-6">{tipoEntidad}</h1>
+
+                {/* Grid de tarjetas */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {/* Crear nuevo */}
+                    {/* Tarjeta para crear nueva entidad */}
                     <div
                         onClick={() => setItemToAdd(true)}
                         className="flex flex-col items-center justify-center p-6 bg-slate-100 border-2 border-dashed rounded-lg cursor-pointer hover:bg-slate-200"
@@ -214,16 +160,19 @@ export default function CrudEntidades({ props }) {
                         </p>
                     </div>
 
-                    {/* Listado de entidades */}
+                    {/* Tarjetas de entidades existentes */}
                     {currentItems.map((item) => (
                         <div
                             key={item.id}
                             className="relative p-4 bg-white rounded-lg shadow hover:shadow-md transition flex flex-col justify-between"
                         >
                             <div>
+                                {/* Icono grande representativo */}
                                 <div className="w-full h-32 bg-slate-200 rounded mb-4 flex items-center justify-center text-7xl text-slate-500">
                                     {iconoEntidad}
                                 </div>
+
+                                {/* Título y descripción */}
                                 <h2 className="text-sm font-bold mb-1">
                                     {item.nombre || item.email || "Elemento"}
                                 </h2>
@@ -236,7 +185,7 @@ export default function CrudEntidades({ props }) {
                                 </p>
                             </div>
 
-                            {/* Botones con íconos en esquina inferior derecha */}
+                            {/* Botones para editar y eliminar */}
                             <div className="flex justify-end gap-3 mt-4">
                                 <button
                                     onClick={() => handleEdit(item)}
@@ -250,9 +199,7 @@ export default function CrudEntidades({ props }) {
                                     className="text-red-600 hover:text-red-800"
                                     title="Eliminar"
                                 >
-                                    <span className="material-icons">
-                                        delete
-                                    </span>
+                                    <span className="material-icons">delete</span>
                                 </button>
                             </div>
                         </div>
@@ -260,13 +207,13 @@ export default function CrudEntidades({ props }) {
                 </div>
             </main>
 
-            {/* Modal de edición */}
+            {/* Modal para editar entidad */}
             {renderEditModal()}
 
-            {/* Modal de creación */}
+            {/* Modal para crear nueva entidad */}
             {renderAddModal()}
 
-            {/* Modal de confirmación de eliminación */}
+            {/* Modal de confirmación para eliminar entidad */}
             {itemToDelete && (
                 <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
