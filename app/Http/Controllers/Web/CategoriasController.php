@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use App\Models\Almacen;
 use App\Models\Categoria;
@@ -9,7 +10,6 @@ use App\Models\DetalleVenta;
 use Illuminate\Http\Request;
 use App\Models\DetalleCompra;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
 
 class CategoriasController extends Controller
 {
@@ -38,9 +38,17 @@ class CategoriasController extends Controller
             'id_categoria' => 'required|exists:categorias,id'
         ]);
 
-        $categoria = Categoria::where('id',$datos['id_categoria'])
-        ->where('id_user',$user->id)
-        ->first();
+        $categoria = Categoria::where('id', $datos['id_categoria'])
+            ->where('id_user', $user->id)
+            ->withCount('productos') // <-- contar productos relacionados
+            ->first();
+
+        if ($categoria->productos_count > 0) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No se puede eliminar la categoría porque tiene productos relacionados.'
+            ], 409);
+        }
 
         $categoria->delete();
 
