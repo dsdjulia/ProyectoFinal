@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Web;
 
 use Inertia\Inertia;
+use App\Models\Almacen;
+use App\Models\Categoria;
 use App\Models\Comprador;
 use App\Models\DetalleVenta;
 use Illuminate\Http\Request;
+use App\Models\DetalleCompra;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,6 +36,9 @@ class ClienteController extends Controller
             'direccion' =>$datos['direccion'] ,
             'tipo_comprador' => $datos['tipo_comprador'],
         ]);
+
+        return $this->renderEntidades($user);
+
     }
 
     public function destroy(Request $request){
@@ -45,6 +51,9 @@ class ClienteController extends Controller
         $cliente = Comprador::where('id',$datos['id_cliente'])->first();
         
         $cliente->delete();
+
+        return $this->renderEntidades($user);
+
 
     }
 
@@ -71,37 +80,48 @@ class ClienteController extends Controller
         $cliente->direccion = $datos['direccion'];
         $cliente->tipo_comprador = $datos['tipo_comprador'];
 
+        $cliente->save();
+
+        return $this->renderEntidades($user);
     }
 
-    public function renderClientes($user){
+
+    public function renderEntidades($user){
+    
+        $categorias = Categoria::where('id_user', $user->id)->with('productos')->get();
+        $almacenes = Almacen::where('id_user', $user->id)->get();
+
+        // CLIENTES RELACIONADOS CON LAS VENTAS REALIZADAS
         $detallesVentasRaw = DetalleVenta::with(['producto', 'venta.comprador'])
             ->whereHas('venta', function ($query) use ($user) {
                 $query->where('id_user', $user->id);
             })
             ->get();
 
-        $detallesVentas = $detallesVentasRaw->map(function ($detalle) {
-            return [
-                'id_detalle' => $detalle->id,
-                'producto_id' => $detalle->id_producto,
-                'codigo' => $detalle->producto->codigo,
-                'nombre' => $detalle->producto->nombre,
-                'precio_unitario' => $detalle->precio_unitario,
-                'cantidad' => $detalle->cantidad,
-                'fecha_venta' => optional($detalle->venta)->fecha_venta,
-                'cliente' => optional($detalle->venta->comprador)->nombre,
-            ];
-        });
-
-        $allClientes = $detallesVentasRaw
+        $clientes = $detallesVentasRaw
             ->pluck('venta.comprador') 
             ->filter() 
             ->unique('id') 
             ->values();
 
-        return Inertia::render('Clientes' , [
-            'all_clientes' => $allClientes,
-            'detalles_ventas' => $detallesVentas
+        // PROVEEDORES RELACIONADOS CON PEDIDOS DEL USUARIO
+        $detallesComprasRaw = DetalleCompra::with(['producto', 'compra.proveedor'])
+            ->whereHas('compra', function ($query) use ($user){
+                $query->where('id_user', $user->id);
+            })
+            ->get();
+
+        $proveedores = $detallesComprasRaw
+            ->pluck('compra.proveedor')
+            ->filter()
+            ->unique('id')
+            ->values();
+            
+        return Inertia::render('Entidades' , [
+            'all_almacenes' => $almacenes,
+            'all_categorias' => $categorias,
+            'all_clientes' => $clientes,
+            'all_proveedores' => $proveedores,
         ]);
     }
 }

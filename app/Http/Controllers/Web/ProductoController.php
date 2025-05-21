@@ -184,7 +184,7 @@ class ProductoController extends Controller
             'precio_unitario' => 'required|numeric'
         ]);
 
-        $inventario =Inventario::where('id_producto',$datos['id_producto'])
+        $inventario = Inventario::where('id_producto',$datos['id_producto'])
             ->where('id_almacen',$datos['id_almacen'])
             ->where('precio_unitario',$datos['precio_unitario'])
             ->first();
@@ -205,7 +205,6 @@ class ProductoController extends Controller
             'nombre' => 'required|string',
             'descripcion' => 'required|string',
             'imagen' => 'required|image|mimes:png,jpeg,jpg|max:2048',
-
             //datos para crear inventario
             'id_almacen' => 'required|exists:almacenes,id',
             'cantidad_actual' => 'required|integer|min:1',
@@ -229,13 +228,17 @@ class ProductoController extends Controller
             ]);
         }
 
-        $producto = Producto::create([
-            'id_categoria' => $data['id_categoria'] ? $data['id_categoria'] : $newCategoria->id,
-            'codigo' => $data['codigo'],
-            'nombre'=> $data['nombre'],
-            'descripcion'=> $data['descripcion'],
-            'imagen'=> $data['imagen']
-        ]);
+        $producto = Producto::where('codigo',$data['codigo'])->where('nombre',$data['nombre'])->first();
+        
+        if(!$producto){
+            $producto = Producto::create([
+                'id_categoria' => $data['id_categoria'] ? $data['id_categoria'] : $newCategoria->id,
+                'codigo' => $data['codigo'],
+                'nombre'=> $data['nombre'],
+                'descripcion'=> $data['descripcion'],
+                'imagen'=> $data['imagen']
+            ]);
+        }
 
         Inventario::create([
             'id_producto' => $producto->id,

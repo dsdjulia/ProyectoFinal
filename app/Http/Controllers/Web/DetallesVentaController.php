@@ -111,14 +111,12 @@ class DetallesVentaController extends Controller
         // Buscar inventario suficiente
         $inventario = Inventario::where('id_producto', $producto->id)
             ->where('id_almacen', $almacen->id)
-            ->where('cantidad_actual', '>=', $datos['cantidad_vendida'])
             ->orderByDesc('fecha_entrada')
             ->first();
 
         if (!$inventario) {
             return redirect()->back()->withErrors('No hay suficiente stock disponible para este producto.');
         }
-
 
         $venta = Venta::create([
             'id_user' => $user->id,

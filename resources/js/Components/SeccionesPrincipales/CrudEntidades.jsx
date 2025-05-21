@@ -10,72 +10,34 @@ import EditCategoriaModal from "../Modales/EditCategoriaModal";
 import EditClienteModal from "../Modales/EditClienteModal";
 import EditProveedorModal from "../Modales/EditProveedorModal";
 
-const entidades = {
+
+export default function CrudEntidades({ props }) {
+
+    const entidades = {
     almacenes: {
         label: "Almacenes",
         icon: "📦",
-        data: [
-            {
-                id: 1,
-                nombre: "Almacén Central",
-                direccion: "Av. Principal 123",
-            },
-            { id: 2, nombre: "Depósito Norte", direccion: "Calle 45 Norte" },
-        ],
+        data: props.all_almacenes,
     },
     categorias: {
         label: "Categorías",
         icon: "🗂️",
-        data: [
-            { id: 1, nombre: "Electrónica" },
-            { id: 2, nombre: "Ropa" },
-        ],
+        data: props.all_categorias,
     },
     clientes: {
         label: "Clientes",
         icon: "🧑‍💼",
-        data: [
-            {
-                id: 1,
-                nombre: "Juan Pérez",
-                identificacion: "123456789",
-                telefono: "555-1234",
-                email: "juan@example.com",
-                direccion: "Calle Falsa 123",
-                tipo_comprador: "Mayorista",
-            },
-            {
-                id: 2,
-                nombre: "Ana Gómez",
-                identificacion: "987654321",
-                telefono: "555-5678",
-                email: "ana@example.com",
-                direccion: "Av. Las Flores 321",
-                tipo_comprador: "Minorista",
-            },
-        ],
+        data: props.all_clientes,
     },
     proveedores: {
         label: "Proveedores",
         icon: "🚚",
-        data: [
-            {
-                id: 1,
-                nombre: "Proveedor Uno",
-                telefono: "555-7890",
-                email: "prov1@example.com",
-            },
-            {
-                id: 2,
-                nombre: "Proveedor Dos",
-                telefono: "555-6789",
-                email: "prov2@example.com",
-            },
-        ],
+        data: props.all_proveedores,
     },
 };
 
-export default function CrudEntidades() {
+
+
     const [selectedType, setSelectedType] = useState("almacenes");
     const [data, setData] = useState(entidades);
     const [itemToEdit, setItemToEdit] = useState(null);
@@ -85,6 +47,8 @@ export default function CrudEntidades() {
     const currentItems = data[selectedType].data;
     const iconoEntidad = data[selectedType].icon;
     const tipoEntidad = data[selectedType].label;
+    
+    console.log(props)
 
     const handleEdit = (item) => setItemToEdit(item);
 

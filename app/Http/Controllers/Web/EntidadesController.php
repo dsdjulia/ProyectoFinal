@@ -49,8 +49,7 @@ class EntidadesController extends Controller
             ->filter()
             ->unique('id')
             ->values();
-
-
+            
         return Inertia::render('Entidades' , [
             'all_almacenes' => $almacenes,
             'all_categorias' => $categorias,

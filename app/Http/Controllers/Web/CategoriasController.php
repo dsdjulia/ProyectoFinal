@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categoria;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use App\Models\Almacen;
+use App\Models\Categoria;
+use App\Models\DetalleVenta;
+use Illuminate\Http\Request;
+use App\Models\DetalleCompra;
+use Illuminate\Support\Facades\Auth;
 
 class CategoriasController extends Controller
 {
@@ -23,7 +26,7 @@ class CategoriasController extends Controller
             'nombre' => $datos['nombre'],
         ]);
 
-        return redirect()->route('inventario.index');
+        return $this->renderEntidades($user);
 
     }   
 
@@ -40,7 +43,7 @@ class CategoriasController extends Controller
 
         $categoria->delete();
 
-        return redirect()->route('inventario.index');
+        return $this->renderEntidades($user);
 
     }
 
@@ -58,13 +61,46 @@ class CategoriasController extends Controller
 
         $categoria->nombre = $datos['nombre'];
         $categoria->save();
+
+        return $this->renderEntidades($user);
     }
 
-    public function renderCategorias($user){
+    public function renderEntidades($user){
+    
         $categorias = Categoria::where('id_user', $user->id)->with('productos')->get();
+        $almacenes = Almacen::where('id_user', $user->id)->get();
 
-        return Inertia::render('Categorias', [
-            'all_categorias' => $categorias
+        // CLIENTES RELACIONADOS CON LAS VENTAS REALIZADAS
+        $detallesVentasRaw = DetalleVenta::with(['producto', 'venta.comprador'])
+            ->whereHas('venta', function ($query) use ($user) {
+                $query->where('id_user', $user->id);
+            })
+            ->get();
+
+        $clientes = $detallesVentasRaw
+            ->pluck('venta.comprador') 
+            ->filter() 
+            ->unique('id') 
+            ->values();
+
+        // PROVEEDORES RELACIONADOS CON PEDIDOS DEL USUARIO
+        $detallesComprasRaw = DetalleCompra::with(['producto', 'compra.proveedor'])
+            ->whereHas('compra', function ($query) use ($user){
+                $query->where('id_user', $user->id);
+            })
+            ->get();
+
+        $proveedores = $detallesComprasRaw
+            ->pluck('compra.proveedor')
+            ->filter()
+            ->unique('id')
+            ->values();
+            
+        return Inertia::render('Entidades' , [
+            'all_almacenes' => $almacenes,
+            'all_categorias' => $categorias,
+            'all_clientes' => $clientes,
+            'all_proveedores' => $proveedores,
         ]);
     }
 }

@@ -71,10 +71,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/proveedor', [ProveedoresController::class ,'store'])->name('proveedor.store');
     Route::delete('/proveedor', [ProveedoresController::class ,'destroy'])->name('proveedor.destroy');
     Route::patch('/proveedor', [ProveedoresController::class ,'patch'])->name('proveedor.patch');
+    Route::post('/proveedor/email', [SendEmaillController::class, 'sendEmail'])->name('proveedor.email');
 });
 
 //TEST EMAIL
-Route::post('/proveedor/email', [SendEmaillController::class, 'sendEmail'])->name('proveedor.email');
 
 
 require __DIR__ . '/auth.php';
