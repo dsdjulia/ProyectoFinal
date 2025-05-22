@@ -235,7 +235,7 @@ class DetallesCompraController extends Controller
 
         $detalle->delete();
 
-        if ($compra->detallesCompras()->count() === 0) {
+        if ($compra->detalleCompras()->count() === 0) {
             $compra->delete();
         }
 
