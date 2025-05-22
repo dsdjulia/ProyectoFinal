@@ -69,8 +69,6 @@ Route::middleware('auth')->group(function () {
 });
 
 
-
-
 // CRUD DE PRODUCTOS AÑADIR Y BORRAR
 Route::middleware('auth')->group(function () {
     Route::delete('/inventario/producto', [ProductoController::class ,'delete'])->name('producto.delete');

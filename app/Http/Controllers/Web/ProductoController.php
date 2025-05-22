@@ -260,6 +260,8 @@ class ProductoController extends Controller
             'codigo' => 'nullable|string|unique:productos,codigo',
             'nombre' => 'nullable|string',
             'descripcion' => 'nullable|string',
+            'fecha_vencimiento' => 'nullable|string',
+            'perecedero' => 'nullable|boolean',
             
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             //datos para crear inventario
@@ -269,12 +271,30 @@ class ProductoController extends Controller
             //datos para la categoria
             'id_categoria' => 'nullable|exists:categorias,id',
             'nombre_categoria' => 'nullable|string',
-            'perecedero' => 'nullable|boolean'
         ]);
 
         $producto = Producto::find($request->id);
         if ($producto) {
-            $producto->update($validated);
+            $producto->update([
+                'codigo' => $validated['codigo'] ?? $producto->codigo,
+                'nombre' => $validated['nombre'] ?? $producto->nombre,
+                'descripcion' => $validated['descripcion'] ?? $producto->descripcion,
+                'imagen' => $validated['imagen'] ?? $producto->imagen,
+                'id_categoria' => $validated['id_categoria'] ?? $producto->id_categoria,
+            ]);
+        }
+
+        $inventario = Inventario::where('id_producto', $producto->id)
+            ->where('id_almacen', $validated['id_almacen'])
+            ->first();
+
+        if ($inventario) {
+            $inventario->update([
+                'cantidad_actual' => $validated['cantidad_actual'] ?? $inventario->cantidad_actual,
+                'precio_unitario' => $validated['precio_unitario'] ?? $inventario->precio_unitario,
+                'id_almacen' => $validated['id_almacen'] ?? $inventario->id_almacen,
+                'fecha_vencimiento' => $validated['fecha_vencimiento'] ?? $inventario->fecha_vencimiento,
+            ]);
         }
 
         return redirect()->route('inventario.index');
