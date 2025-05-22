@@ -12,7 +12,8 @@ export default function EditproductoModal({ producto, onClose, context, almacene
 		imagen: producto.imagen,
 		id_categoria: producto.id_categoria,
 		nombre_categoria: producto.categoria ?? producto.nombre_categoria,
-		id_almacen: producto.id_almacen,
+    id_almacen: producto.id_almacen,
+    id_almacen_antiguo: producto.id_almacen,
 		precio_unitario: producto.precio_unitario,
 		cantidad_actual: producto.cantidad_actual,
 		perecedero: producto.fecha_vencimiento ? true : false,
@@ -26,6 +27,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
 		almacen: context === "stock" ? producto.almacen_nombre : undefined,
 	});
 	console.log(producto)
+  console.log(almacenes)
 
 	const [mostrarNuevaCategoria, setMostrarNuevaCategoria] = useState(false);
 	const [mostrarNuevoProveedor, setMostrarNuevoProveedor] = useState(false);
@@ -44,6 +46,10 @@ export default function EditproductoModal({ producto, onClose, context, almacene
 		setFormData(prev => ({ ...prev, [name]: inputValue, fecha_vencimiento: "" }));
 		} else {
 		setFormData(prev => ({ ...prev, [name]: inputValue }));
+		}
+
+    if (name === "id_almacen") {
+		setFormData(prev => ({ ...prev, [name]: Number(inputValue)}));
 		}
 	};
 
