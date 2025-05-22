@@ -118,6 +118,8 @@ class AlmacenController extends Controller
         return $entidadesController->renderEntidades($user); 
     }
 
+    
+
     private function validateAlmacen(Request $request)
     {
         return $request->validate([
