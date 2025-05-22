@@ -97,7 +97,7 @@ export default function OrdenesCompra({ props }) {
 
     return (
         <div className="w-full flex flex-col align-middle justify-start p-12 pt-0 pb-34">
-            <div className="bg-white rounded-lg overflow-hidden shadow-lg mt-4">
+            <div className="bg-white rounded-lg overflow-hidden shadow-lg mt-4 pb-4">
                 <div className="flex justify-between items-center mb-4 p-6">
                     <h2 className="text-xl font-semibold text-gray-700">
                         Pedidos
@@ -120,7 +120,7 @@ export default function OrdenesCompra({ props }) {
                     />
                 </div>
 
-                <div className="grid grid-cols-8 items-center bg-slate-100 font-semibold text-gray-700 py-2 px-8 gap-2 mb-6 mt-4">
+                <div className="grid grid-cols-8 items-center bg-slate-100 font-semibold text-gray-700 py-2 px-8 gap-2 mb-6 mt-4 ">
                     <div className="text-start">Código Producto</div>
                     <div className="text-start pl-4 col-span-2">Artículo</div>
                     <div className="text-center">Precio</div>
@@ -130,7 +130,7 @@ export default function OrdenesCompra({ props }) {
                     <div className="text-center">Acciones</div>
                 </div>
 
-                <div className="grid grid-cols-1 px-4 pb-4">
+                <div className="grid grid-cols-1 px-4 pb-4 "> {/* h-[65vh] overflow-y-auto */}
                     {compras
                         .filter((compra) =>
                             compra.nombre
