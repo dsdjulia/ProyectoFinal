@@ -83,7 +83,7 @@ export default function CrudEntidades({ props }) {
                         showModificableAlert('Error al eliminar el almacén', `${JSON.stringify(errors)}`, 'error');
                     }
                 });
-                
+
                 break
             case "categorias":
                 router.delete(route('entidad.categoria.delete'), {
@@ -174,7 +174,7 @@ export default function CrudEntidades({ props }) {
     };
 
     return (
-        <div className="flex h-[75.5vh] relative">
+        <div className="flex h-full relative">
             {/* Menú lateral para seleccionar tipo de entidad */}
             <aside className="w-1/5 bg-white p-4">
                 <h2 className="pt-2 text-sm font-semibold mb-4 text-slate-600">
@@ -205,7 +205,7 @@ export default function CrudEntidades({ props }) {
                 {/* Grid de tarjetas */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {/* Tarjeta para crear nueva entidad */}
-                    <div
+                   {/*  <div
                         onClick={() => setItemToAdd(true)}
                         className="flex flex-col items-center justify-center p-6 bg-slate-100 border-2 border-dashed rounded-lg cursor-pointer hover:bg-slate-200"
                     >
@@ -215,13 +215,14 @@ export default function CrudEntidades({ props }) {
                         <p className="mt-4 text-sm font-medium text-slate-600">
                             Crear nuevo
                         </p>
-                    </div>
+                    </div> */}
 
                     {/* Tarjetas de entidades existentes */}
                     {currentItems.map((item) => (
                         <div
                             key={item.id}
-                            className="relative p-4 bg-white rounded-lg shadow hover:shadow-md transition flex flex-col justify-between"
+                            className="relative p-4 bg-white rounded-lg shadow hover:shadow-md transition flex flex-col justify-between hover:cursor-pointer"
+                            onClick={() => handleEdit(item)}
                         >
                             <div>
                                 {/* Icono grande representativo */}
@@ -243,7 +244,7 @@ export default function CrudEntidades({ props }) {
                             </div>
 
                             {/* Botones para editar y eliminar */}
-                            <div className="flex justify-end gap-3 mt-4">
+                         {/*    <div className="flex justify-end gap-3 mt-4">
                                 <button
                                     onClick={() => handleEdit(item)}
                                     className="text-slate-600 hover:text-slate-800"
@@ -258,7 +259,7 @@ export default function CrudEntidades({ props }) {
                                 >
                                     <span className="material-icons">delete</span>
                                 </button>
-                            </div>
+                            </div> */}
                         </div>
                     ))}
                 </div>

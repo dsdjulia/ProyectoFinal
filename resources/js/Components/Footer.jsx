@@ -2,7 +2,7 @@ import logoMedac from "../../images/logoMedac.png";
 
 export default function Footer() {
     return (
-        <footer className="bg-white py-4 px-8 text-sm text-gray-600 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <footer className="bg-white py-4 px-8 text-sm text-gray-600 flex flex-col sm:flex-row items-center justify-between gap-4 ">
             {/* Sección izquierda */}
             <div className="text-center text-md font-bold sm:text-left">
                 <p>Sistema de Facturación e Inventario Web</p>
