@@ -155,7 +155,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
 	// Enviar los datos solo cuando form haya actualizado los datos
 	useEffect(() => {
 		if (isReady) {
-		router.patch(route(rutaPatch), formData, {
+		router.put(route(rutaPatch), formData, {
 			onSuccess: () => {
 			showModificableAlert("Pedido actualizado", `El producto ${producto.nombre} se ha actualizado.`, "success");
 			onClose();

@@ -85,7 +85,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/pedidos/add', [DetallesCompraController::class ,'addInventario'])->name('pedidos.addInventario');
     Route::delete('/pedidos', [DetallesCompraController::class ,'destroy'])->name('pedidos.destroy');
-    Route::patch('/pedidos/patch', [DetallesCompraController::class ,'patch'])->name('pedidos.patchInventario');
+    Route::put('/pedidos/patch', [DetallesCompraController::class ,'patch'])->name('pedidos.patchInventario');
     Route::post('/pedidos', [DetallesCompraController::class ,'store'])->name('pedidos.store');
 });
 
