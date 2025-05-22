@@ -257,7 +257,7 @@ class ProductoController extends Controller
     {
         $validated = $request->validate([
             // datos para crear producto
-            'codigo' => 'nullable|string|unique:productos,codigo',
+            'codigo' => 'nullable|string',
             'nombre' => 'nullable|string',
             'descripcion' => 'nullable|string',
             'fecha_vencimiento' => 'nullable|string',

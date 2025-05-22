@@ -45,7 +45,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/inventario', [AlmacenController::class ,'delete'])->name('inventario.delete');
     Route::post('/inventario', [AlmacenController::class ,'store'])->name('inventario.store');
     Route::patch('inventario/almacen', [AlmacenController::class ,'update'])->name('almacen.patch');
+    
+    Route::patch('inventario/producto', [ProductoController::class ,'update'])->name('producto.edit');
+    Route::patch('inventario/producto', [ProductoController::class ,'patch'])->name('producto.reduce');
+    
 });
+
 
 // CRUD DE ENTIDADES
 Route::middleware('auth')->group(function () {
