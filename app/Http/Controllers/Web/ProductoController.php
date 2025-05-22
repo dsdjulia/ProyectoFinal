@@ -268,6 +268,8 @@ class ProductoController extends Controller
             'id_almacen' => 'required|exists:almacenes,id',
             'id_almacen_antiguo' => 'required|exists:almacenes,id',
 
+            'id_producto' => 'required|exists:productos,id',
+
             'cantidad_actual' => 'nullable|integer|min:1',
             'precio_unitario' => 'nullable|numeric|min:1',
             //datos para la categoria
@@ -275,7 +277,7 @@ class ProductoController extends Controller
             'nombre_categoria' => 'nullable|string',
         ]);
 
-        $producto = Producto::find($request->id);
+        $producto = Producto::find($validated['id_producto']);
         if ($producto) {
             $producto->update([
                 'id_categoria' => $validated['id_categoria'] ?? $producto->id_categoria,
@@ -296,7 +298,7 @@ class ProductoController extends Controller
             $inventario->update([
                 'cantidad_actual' => $validated['cantidad_actual'] ?? $inventario->cantidad_actual,
                 'precio_unitario' => $validated['precio_unitario'] ?? $inventario->precio_unitario,
-                'id_almacen' => $validated['id_almacen_antiguo'] ?? $inventario->id_almacen,
+                'id_almacen' => $validated['id_almacen'] ?? $inventario->id_almacen,
                 'fecha_vencimiento' => $validated['fecha_vencimiento'] ?? $inventario->fecha_vencimiento,
             ]);
         }

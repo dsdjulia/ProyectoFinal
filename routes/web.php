@@ -46,7 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/inventario', [AlmacenController::class ,'store'])->name('inventario.store');
     Route::patch('inventario/almacen', [AlmacenController::class ,'update'])->name('almacen.patch');
     
-    Route::put('inventario/producto', [ProductoController::class ,'update'])->name('producto.edit');
+    Route::put('inventario/producto', [ProductoController::class ,'update'])->name('producto.editar');
     Route::patch('inventario/producto', [ProductoController::class ,'patch'])->name('producto.reduce');
     
 });
