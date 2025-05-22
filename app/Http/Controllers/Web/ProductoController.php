@@ -266,6 +266,8 @@ class ProductoController extends Controller
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             //datos para crear inventario
             'id_almacen' => 'required|exists:almacenes,id',
+            'id_almacen_antiguo' => 'required|exists:almacenes,id',
+
             'cantidad_actual' => 'nullable|integer|min:1',
             'precio_unitario' => 'nullable|numeric|min:1',
             //datos para la categoria
@@ -285,17 +287,16 @@ class ProductoController extends Controller
             ]);
         }
 
-        $idAlmacen = intval($validated['id_almacen']);
 
         $inventario = Inventario::where('id_producto', $producto->id)
-            ->where('id_almacen', $idAlmacen)
+            ->where('id_almacen', $validated['id_almacen_antiguo'])
             ->first();
 
         if ($inventario) {
             $inventario->update([
                 'cantidad_actual' => $validated['cantidad_actual'] ?? $inventario->cantidad_actual,
                 'precio_unitario' => $validated['precio_unitario'] ?? $inventario->precio_unitario,
-                'id_almacen' => $validated['id_almacen'] ?? $inventario->id_almacen,
+                'id_almacen' => $validated['id_almacen_antiguo'] ?? $inventario->id_almacen,
                 'fecha_vencimiento' => $validated['fecha_vencimiento'] ?? $inventario->fecha_vencimiento,
             ]);
         }
