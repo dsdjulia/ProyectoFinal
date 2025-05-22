@@ -37,7 +37,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
 	const [isReady, setIsReady] = useState(false);
 
   // const rutaDelete = context === 'orders' ? 'pedidos.patchInventario' : 'producto.delete';
-  const rutaPatch = context === 'orders' ? 'pedidos.patchInventario' : 'producto.patch';
+  const rutaPatch = context === 'orders' ? 'pedidos.patchInventario' : 'producto.edit';
   const rutaRedirect = context === 'orders' ? 'pedidos.index' : 'inventario.index';
 
 	const handleInputChange = ({ target: { name, value, type, checked } }) => {
