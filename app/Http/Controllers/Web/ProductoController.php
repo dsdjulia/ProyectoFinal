@@ -332,20 +332,6 @@ class ProductoController extends Controller
 
     }
 
-    private function validateAlmacen(Request $request)
-    {
-        return $request->validate([
-            'nombre' => 'required|string|max:255',
-            'direccion' => 'required|string|max:255',
-        ]);
-    }
-
-    private function findUserAlmacen($id)
-    {
-        return Almacen::where('id_user', Auth::id())
-            ->where('id', $id)
-            ->first();
-    }
 
     private function calcularStockStats($almacenes)
     {
