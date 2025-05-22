@@ -72,7 +72,7 @@ export default function InventarioTabla({ props }) {
 
     if (!almacenes || almacenes.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center text-center gap-6 relative z-10">
+            <div className="flex flex-col items-center justify-center text-center gap-6 relative z-10 pb-32 h-screen">
                 <span className="material-icons text-slate-400 text-7xl">warehouse</span>
                 <h1 className="text-3xl font-bold text-gray-700">
                     ¡Primero debes ingresar tu primer almacén!

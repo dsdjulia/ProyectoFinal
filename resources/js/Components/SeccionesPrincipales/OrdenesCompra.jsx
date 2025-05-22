@@ -72,7 +72,7 @@ export default function OrdenesCompra({ props }) {
 
     if (!almacenes || almacenes.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-screen h-full text-center gap-6">
+            <div className="flex flex-col items-center justify-center min-h-screen  pb-32 h-screen text-center gap-6">
                 <span className="material-icons text-slate-400 text-7xl">
                     warehouse
                 </span>
@@ -130,7 +130,7 @@ export default function OrdenesCompra({ props }) {
                     <div className="text-center">Acciones</div>
                 </div>
 
-                <div className="grid grid-cols-1 px-4 pb-4 "> {/* h-[65vh] overflow-y-auto */}
+                <div className="grid grid-cols-1 px-4 pb-4  "> {/* h-[65vh] overflow-y-auto */}
                     {compras
                         .filter((compra) =>
                             compra.nombre
