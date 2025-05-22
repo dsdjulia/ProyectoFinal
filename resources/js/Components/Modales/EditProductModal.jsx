@@ -10,7 +10,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
 		descripcion: producto.descripcion,
 		imagen: producto.imagen,
 		id_categoria: producto.id_categoria,
-		nombre_categoria: producto.categoria,
+		nombre_categoria: producto.categoria ?? producto.nombre_categoria,
 		id_almacen: producto.id_almacen,
 		precio_unitario: producto.precio_unitario,
 		cantidad_actual: producto.cantidad_actual,
