@@ -149,7 +149,6 @@ class ProductoController extends Controller
                     'cantidad_actual' => $producto->pivot->cantidad_actual,
                     'fecha_entrada' => $producto->pivot->fecha_entrada,
                     'fecha_salida' => $producto->pivot->fecha_salida,
-                    'imagen' => $producto->imagen,
                     'almacen_id' => $almacen->id,
                     'almacen_nombre' => $almacen->nombre,
                     'proveedores' => $proveedores->toArray(),
