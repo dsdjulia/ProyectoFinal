@@ -23,15 +23,15 @@ export default function DeleteProductModal({ product, totalAmount, onClose, cont
         },
         onSuccess: () => {
           showModificableAlert(
-            "Producto eliminado",
-            `${product.nombre} eliminado del inventario.`,
+            "Elemento eliminado",
+            `${product.nombre} eliminado del sistema.`,
             "success"
           );
           router.visit(route(rutaRedirect));
         },
         onError: (error) =>
           showModificableAlert(
-            "Error al eliminar el producto",
+            `Error al eliminar ${product.nombre}`,
             `Error: ${JSON.stringify(error)}`,
             "error"
           ),
@@ -60,7 +60,7 @@ export default function DeleteProductModal({ product, totalAmount, onClose, cont
           },
           onError: (error) =>
             showModificableAlert(
-              "Error al reducir la cantidad del producto",
+              `Error al reducir la cantidad de ${product.nombre}.`,
               `Error: ${JSON.stringify(error)}`,
               "error"
             ),
