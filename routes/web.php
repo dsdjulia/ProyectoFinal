@@ -51,18 +51,18 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
 
     Route::post('/entidades/almacen', [AlmacenController::class ,'storeEntidades'])->name('entidad.almacen.store');
-    Route::put('/entidades/almacen', [AlmacenController::class ,'update'])->name('entidad.almacen.update');
+    Route::patch('/entidades/almacen', [AlmacenController::class ,'update'])->name('entidad.almacen.update');
     Route::delete('/entidades/almacen', [AlmacenController::class ,'deleteEntidades'])->name('entidad.almacen.delete');
 
-    Route::put('/entidades/categoria', [CategoriasController::class ,'store'])->name('entidad.categoria.store');
+    Route::patch('/entidades/categoria', [CategoriasController::class ,'store'])->name('entidad.categoria.store');
     Route::post('/entidades/categoria', [CategoriasController::class ,'patch'])->name('entidad.categoria.update');
     Route::delete('/entidades/categoria', [CategoriasController::class ,'destroy'])->name('entidad.categoria.delete');
 
-    Route::put('/entidades/cliente', [ClienteController::class ,'store'])->name('entidad.cliente.store');
+    Route::patch('/entidades/cliente', [ClienteController::class ,'store'])->name('entidad.cliente.store');
     Route::post('/entidades/cliente', [ClienteController::class ,'patch'])->name('entidad.cliente.update');
     Route::delete('/entidades/cliente', [ClienteController::class ,'destroy'])->name('entidad.cliente.delete');
 
-    Route::put('/entidades/proveedor', [ProveedoresController::class ,'store'])->name('entidad.proveedor.store');
+    Route::patch('/entidades/proveedor', [ProveedoresController::class ,'store'])->name('entidad.proveedor.store');
     Route::post('/entidades/proveedor', [ProveedoresController::class ,'patch'])->name('entidad.proveedor.update');
     Route::delete('/entidades/proveedor', [ProveedoresController::class ,'destroy'])->name('entidad.proveedor.delete');
 

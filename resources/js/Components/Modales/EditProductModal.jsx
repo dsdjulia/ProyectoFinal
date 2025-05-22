@@ -8,6 +8,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
 		codigo: producto.codigo,
 		nombre: producto.nombre,
 		descripcion: producto.descripcion,
+    id_producto: producto.id_producto,
 		imagen: producto.imagen,
 		id_categoria: producto.id_categoria,
 		nombre_categoria: producto.categoria ?? producto.nombre_categoria,
@@ -32,6 +33,10 @@ export default function EditproductoModal({ producto, onClose, context, almacene
 	const [imagenUpload, setImagenUpload] = useState("");
 	const inputFileRef = useRef(null);
 	const [isReady, setIsReady] = useState(false);
+
+  // const rutaDelete = context === 'orders' ? 'pedidos.patchInventario' : 'producto.delete';
+  const rutaPatch = context === 'orders' ? 'pedidos.patchInventario' : 'producto.patch';
+  const rutaRedirect = context === 'orders' ? 'pedidos.index' : 'inventario.index';
 
 	const handleInputChange = ({ target: { name, value, type, checked } }) => {
 		const inputValue = type === "checkbox" ? checked : value;
@@ -144,11 +149,11 @@ export default function EditproductoModal({ producto, onClose, context, almacene
 	// Enviar los datos solo cuando form haya actualizado los datos
 	useEffect(() => {
 		if (isReady) {
-		router.patch(route("pedidos.patchInventario"), formData, {
+		router.patch(route(rutaPatch), formData, {
 			onSuccess: () => {
 			showModificableAlert("Pedido actualizado", `El producto ${producto.nombre} se ha actualizado.`, "success");
 			onClose();
-			router.visit(route("pedidos.index"), { preserveScroll: true });
+			router.visit(route(rutaRedirect), { preserveScroll: true });
 			},
 			onError: (error) =>
 			showModificableAlert("Error al actualizar el producto", `Error: ${JSON.stringify(error)}`, "error"),
@@ -207,7 +212,6 @@ export default function EditproductoModal({ producto, onClose, context, almacene
               onChange={handleCategoriaChange}
               className="w-full border border-slate-300 rounded p-1.5 mt-1 bg-white focus:ring-2 focus:ring-slate-400 focus:outline-none text-black"
             >
-              <option value={formData.id_categoria}>{formData.nombre_categoria}</option>
               <option value="nueva">Nueva categoría</option>
               {categorias.map(c => (
                 <option key={c.id} value={c.id}>{c.nombre}</option>
@@ -294,7 +298,6 @@ export default function EditproductoModal({ producto, onClose, context, almacene
               onChange={handleProveedorChange}
               className="w-full border border-slate-300 rounded p-1.5 mt-1 bg-white focus:ring-2 focus:ring-slate-400 focus:outline-none text-black"
             >
-              <option value={formData.id_proveedor}>{formData.nombre_proveedor}</option>
               <option value="nuevo">Nuevo proveedor</option>
               {proveedores.map(p => (
                 <option key={p.id} value={p.id}>{p.nombre}</option>
