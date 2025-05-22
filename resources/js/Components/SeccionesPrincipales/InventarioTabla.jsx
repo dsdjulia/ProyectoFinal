@@ -209,6 +209,7 @@ export default function InventarioTabla({ props }) {
                                 props={props}
                                 almacenes={almacenes}
                                 categorias={categorias}
+                                proveedores={proveedores}
                                 clickable={true}
                                 onDelete={() => handleDeleteProduct(product)}
                                 onCantidadClick={(tipo) => {
