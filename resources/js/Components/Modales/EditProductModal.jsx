@@ -181,6 +181,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
             <input
               type="text"
               name="codigo"
+              readOnly
               value={formData.codigo}
               onChange={handleInputChange}
               className="w-full border border-slate-300 rounded p-1.5 mt-1 bg-white focus:ring-2 focus:ring-slate-400 focus:outline-none text-black"
@@ -192,6 +193,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
             <input
               type="text"
               name="nombre"
+              readOnly
               value={formData.nombre}
               onChange={handleInputChange}
               className="w-full border border-slate-300 rounded p-1.5 mt-1 bg-white focus:ring-2 focus:ring-slate-400 focus:outline-none text-black"
@@ -203,6 +205,7 @@ export default function EditproductoModal({ producto, onClose, context, almacene
             <textarea
               name="descripcion"
               value={formData.descripcion}
+              readOnly
               onChange={handleInputChange}
               rows={2}
               className="w-full border border-slate-300 rounded p-1.5 mt-1 bg-white focus:ring-2 focus:ring-slate-400 focus:outline-none text-black"
