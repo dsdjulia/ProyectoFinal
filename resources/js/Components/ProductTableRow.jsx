@@ -28,7 +28,7 @@ export default function ProductTableRow({
     };
 
     const detalleProducto = () => {
-        router.get(route("producto.index", { id: product.id }), {
+        router.get(route("producto.index", { id: product.id_producto }), {
             onSuccess: () => {},
             onError: (errors) => {
                 showModificableAlert(
