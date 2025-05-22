@@ -263,7 +263,7 @@ class ProductoController extends Controller
             'fecha_vencimiento' => 'nullable|string',
             'perecedero' => 'nullable|boolean',
             
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'imagen' => 'nullable|string',
             //datos para crear inventario
             'id_almacen' => 'required|exists:almacenes,id',
             'id_almacen_antiguo' => 'required|exists:almacenes,id',
