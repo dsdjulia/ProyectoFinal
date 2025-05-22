@@ -5,40 +5,47 @@ import { showModificableAlert } from "@/utils/alerts";
 export default function DeleteProductModal({ product, totalAmount, onClose, contexto }) {
   const [reduceAmount, setReduceAmount] = useState(0);
     console.log(product)
+    console.log(contexto)
+  const rutaDelete = contexto === 'orders' ? 'pedidos.destroy' : 'producto.delete';
+  const rutaPatch = contexto === 'orders' ? 'pedidos.patchInventario' : 'producto.patch';
+    
+
   const handleDeleteAll = () => { 
-    onClose();
-    router.delete(route("producto.delete"), {
-      data: {
-        id_producto: product.id_producto,
-        id_almacen: product.id_almacen,
-        precio_unitario: product.precio_unitario,
-      },
-      onSuccess: () => {
-        showModificableAlert(
-          "Producto eliminado",
-          `${product.nombre} eliminado del inventario.`,
-          "success"
-        );
-        router.visit(route("inventario.index"));
-      },
-      onError: (error) =>
-        showModificableAlert(
-          "Error al eliminar el producto",
-          `Error: ${JSON.stringify(error)}`,
-          "error"
-        ),
-    });
+      onClose();
+      router.delete(route(rutaDelete), {
+        data: {
+          id_producto: product.id_producto,
+          id_almacen: product.id_almacen,
+          precio_unitario: product.precio_unitario,
+          id_detalle: product.id_detalle ?? ""
+        },
+        onSuccess: () => {
+          showModificableAlert(
+            "Producto eliminado",
+            `${product.nombre} eliminado del inventario.`,
+            "success"
+          );
+          router.visit(route("inventario.index"));
+        },
+        onError: (error) =>
+          showModificableAlert(
+            "Error al eliminar el producto",
+            `Error: ${JSON.stringify(error)}`,
+            "error"
+          ),
+      });
   };
 
   const handleDeletePartial = () => {
     if (reduceAmount <= product.cantidad_actual) {
       onClose();
       router.patch(
-        route("producto.patch"),
+        route(rutaPatch),
         {
           id_almacen: product.id_almacen,
           id_producto: product.id_producto,
           cantidad_actual: product.cantidad_actual - reduceAmount,
+          id_detalle: product.id_detalle ?? ""
         },
         {
           onSuccess: () => {
