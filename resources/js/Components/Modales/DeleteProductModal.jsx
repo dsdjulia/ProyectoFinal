@@ -8,6 +8,8 @@ export default function DeleteProductModal({ product, totalAmount, onClose, cont
     console.log(contexto)
   const rutaDelete = contexto === 'orders' ? 'pedidos.destroy' : 'producto.delete';
   const rutaPatch = contexto === 'orders' ? 'pedidos.patchInventario' : 'producto.patch';
+  const rutaRedirect = contexto === 'orders' ? 'pedidos.index' : 'inventario.index';
+
     
 
   const handleDeleteAll = () => { 
@@ -25,7 +27,7 @@ export default function DeleteProductModal({ product, totalAmount, onClose, cont
             `${product.nombre} eliminado del inventario.`,
             "success"
           );
-          router.visit(route("inventario.index"));
+          router.visit(route(rutaRedirect));
         },
         onError: (error) =>
           showModificableAlert(
@@ -54,7 +56,7 @@ export default function DeleteProductModal({ product, totalAmount, onClose, cont
               `Cantidad de ${product.nombre} actualizada.`,
               "success"
             );
-            router.visit(route("inventario.index"));
+            router.visit(route(rutaRedirect));
           },
           onError: (error) =>
             showModificableAlert(
