@@ -276,16 +276,19 @@ class ProductoController extends Controller
         $producto = Producto::find($request->id);
         if ($producto) {
             $producto->update([
+                'id_categoria' => $validated['id_categoria'] ?? $producto->id_categoria,
                 'codigo' => $validated['codigo'] ?? $producto->codigo,
                 'nombre' => $validated['nombre'] ?? $producto->nombre,
                 'descripcion' => $validated['descripcion'] ?? $producto->descripcion,
                 'imagen' => $validated['imagen'] ?? $producto->imagen,
-                'id_categoria' => $validated['id_categoria'] ?? $producto->id_categoria,
+                'perecedero'=>$validated['perecedero'] ?? $producto->perecedero
             ]);
         }
 
+        $idAlmacen = intval($validated['id_almacen']);
+
         $inventario = Inventario::where('id_producto', $producto->id)
-            ->where('id_almacen', $validated['id_almacen'])
+            ->where('id_almacen', $idAlmacen)
             ->first();
 
         if ($inventario) {
