@@ -17,6 +17,8 @@ export default function AddAlmacenModal({ isOpen, onClose, onAdd }) {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
+    
+
     // Función que maneja el envío del formulario
     const handleSubmit = (e) => {
         e.preventDefault();
