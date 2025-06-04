@@ -37,11 +37,11 @@ export default function VentasTable({ props }) {
             </div>
 
             {filteredVentas.length > 0 ? (
-                <div className="divide-y divide-gray-200">
+                <div className="divide-y divide-gray-200 ">
                     {filteredVentas.map((venta, index) => (
                         <div
                             key={index}
-                            className="grid grid-cols-7 py-3 px-6 text-sm text-gray-700 hover:bg-gray-50"
+                            className="grid grid-cols-7 py-3 px-6 text-sm text-gray-700 hover:bg-gray-50 "
                         >
                             <div>{venta.producto_id}</div>
                             <div className="col-span-2">{venta.nombre}</div>
@@ -52,6 +52,27 @@ export default function VentasTable({ props }) {
                             <button className="text-center" onClick={() => generarFactura(venta)}>Imprimir factura</button>
                         </div>
                     ))}
+
+                     {/* paginacion */}
+                    <div className="flex justify-center items-center mt-6 gap-4 pt-12">
+                        <button
+                            onClick={""}
+                            className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                        >
+                             <span className="material-icons text-gray-700">chevron_left</span>
+                        </button>
+
+                        <span className="text-sm text-gray-600">
+                            Página {"1"} de {"5"}
+                        </span>
+
+                        <button
+                            onClick={""}
+                            className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                        >
+                             <span className="material-icons text-gray-700">chevron_right</span>
+                        </button>
+                    </div>
                 </div>
             ) : (
                 <div className="text-center py-8 text-gray-400">No se encontraron ventas</div>
