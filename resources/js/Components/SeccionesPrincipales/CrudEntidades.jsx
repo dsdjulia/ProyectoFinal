@@ -10,11 +10,12 @@ import EditAlmacenModal from "../Modales/EditAlmacenModal";
 import EditCategoriaModal from "../Modales/EditCategoriaModal";
 import EditClienteModal from "../Modales/EditClienteModal";
 import EditProveedorModal from "../Modales/EditProveedorModal";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { showModificableAlert } from "@/utils/alerts";
 
 // Componente principal para gestionar entidades (almacenes, categorías, clientes, proveedores)
 export default function CrudEntidades({ props }) {
+    console.log(props);
     // Definimos las entidades disponibles con sus etiquetas, íconos y datos
     const entidades = {
         almacenes: {
@@ -40,7 +41,7 @@ export default function CrudEntidades({ props }) {
     };
 
     // Estado para saber qué tipo de entidad está seleccionada
-    const [selectedType, setSelectedType] = useState(props.selectedType || "almacenes");
+    const [selectedType, setSelectedType] = useState(props.selectedType ?? "almacenes");
 
     // Estado con los datos de todas las entidades (se puede actualizar al agregar o eliminar)
     const [data, setData] = useState(entidades);

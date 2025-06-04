@@ -65,7 +65,7 @@ class CategoriasController extends Controller
         ]);
 
         $categoria = Categoria::where('id_user',$user->id)
-            ->where('nombre',$datos['nombre'])
+            ->where('id',$datos['id_categoria'])
             ->first();
 
         $categoria->nombre = $datos['nombre'];
@@ -110,6 +110,8 @@ class CategoriasController extends Controller
             'all_categorias' => $categorias,
             'all_clientes' => $clientes,
             'all_proveedores' => $proveedores,
+            'selectedType' => 'categorias',
+
         ]);
     }
 }

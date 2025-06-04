@@ -17,7 +17,7 @@ export default function EditAlmacenModal({ entity, onClose }) {
     e.preventDefault();
 
     if (form.nombre && form.direccion) {
-      router.patch(route("almacen.patch", entity.id), form, {
+      router.patch(route("entidad.almacen.update", entity.id), form, {
         preserveScroll: true,
         onSuccess: () => {
           showModificableAlert("Almacén actualizado", `${form.nombre} modificado correctamente.`, "success");
