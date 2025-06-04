@@ -40,7 +40,7 @@ export default function CrudEntidades({ props }) {
     };
 
     // Estado para saber qué tipo de entidad está seleccionada
-    const [selectedType, setSelectedType] = useState("almacenes");
+    const [selectedType, setSelectedType] = useState(props.selectedType || "almacenes");
 
     // Estado con los datos de todas las entidades (se puede actualizar al agregar o eliminar)
     const [data, setData] = useState(entidades);

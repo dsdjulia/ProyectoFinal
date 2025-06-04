@@ -8,6 +8,9 @@ export default function VentasTable({ props }) {
     const filteredVentas = ventas.filter((venta) =>
         venta.nombre.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    const generarFactura = (e) => {
+        console.log(e);
+    }
 
     return (
         <div className="w-full flex flex-col align-middle justify-start p-12 pt-0npm r pb-34 h-full">
@@ -46,6 +49,7 @@ export default function VentasTable({ props }) {
                             <div className="text-center">{venta.cantidad}</div>
                             <div className="text-center">{venta.fecha_venta}</div>
                             <div className="text-center">{venta.cliente || "N/A"}</div>
+                            <button className="text-center" onClick={() => generarFactura(venta)}>Imprimir factura</button>
                         </div>
                     ))}
                 </div>

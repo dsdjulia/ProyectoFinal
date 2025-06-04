@@ -107,7 +107,7 @@ class AlmacenController extends Controller
         ]);
         
         $almacen = Almacen::where('id_user',$user->id)
-        ->where('id_almacen',$datos['id_almacen'])
+        ->where('id',$datos['id_almacen'])
         ->first();
 
         $almacen->nombre = $datos['nombre'];
