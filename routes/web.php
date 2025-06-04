@@ -59,8 +59,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/entidades/almacen', [AlmacenController::class ,'update'])->name('entidad.almacen.update');
     Route::delete('/entidades/almacen', [AlmacenController::class ,'deleteEntidades'])->name('entidad.almacen.delete');
 
-    Route::patch('/entidades/categoria', [CategoriasController::class ,'store'])->name('entidad.categoria.store');
-    Route::post('/entidades/categoria', [CategoriasController::class ,'patch'])->name('entidad.categoria.update');
+    Route::post('/entidades/categoria', [CategoriasController::class ,'store'])->name('entidad.categoria.store');
+    Route::patch('/entidades/categoria', [CategoriasController::class ,'patch'])->name('entidad.categoria.update');
     Route::delete('/entidades/categoria', [CategoriasController::class ,'destroy'])->name('entidad.categoria.delete');
 
     Route::patch('/entidades/cliente', [ClienteController::class ,'store'])->name('entidad.cliente.store');
