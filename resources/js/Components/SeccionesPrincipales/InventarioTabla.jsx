@@ -73,7 +73,9 @@ export default function InventarioTabla({ props }) {
     if (!almacenes || almacenes.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center text-center gap-6 relative z-10 pb-32 h-screen">
-                <span className="material-icons text-slate-400 text-7xl">warehouse</span>
+                <span className="material-icons text-slate-400 text-7xl">
+                    warehouse
+                </span>
                 <h1 className="text-3xl font-bold text-gray-700">
                     ¡Primero debes ingresar tu primer almacén!
                 </h1>
@@ -100,10 +102,14 @@ export default function InventarioTabla({ props }) {
                 <div className="flex items-center border-r justify-start align-middle w-1/3">
                     <div className="flex items-center">
                         <div className="flex items-center justify-center w-14 h-14 bg-blue-100 rounded-full">
-                            <span className="material-icons text-blue-500 text-2xl">euro</span>
+                            <span className="material-icons text-blue-500 text-2xl">
+                                euro
+                            </span>
                         </div>
                         <div className="flex flex-col pl-4 justify-center">
-                            <p className="mt-2 text-gray-500 text-sm">PRECIO TOTAL INVENTARIO</p>
+                            <p className="mt-2 text-gray-500 text-sm">
+                                PRECIO TOTAL INVENTARIO
+                            </p>
                             <p className="text-xl font-bold text-gray-800">
                                 {props.total_precio.toFixed(2)}€
                             </p>
@@ -121,25 +127,35 @@ export default function InventarioTabla({ props }) {
                     </div>
                     <div className="flex flex-col pl-6 justify-center relative">
                         <p className="text-lg font-semibold text-gray-800">
-                            {props.total_productos} producto{props.total_productos !== 1 ? "s" : ""}
+                            {props.total_productos} producto
+                            {props.total_productos !== 1 ? "s" : ""}
                         </p>
                         <div className="flex items-center mt-2 space-x-4">
                             <div className="flex items-center">
                                 <span className="w-3 h-3 rounded-full bg-teal-500 mr-2"></span>
                                 <p className="text-sm text-gray-500">
-                                    Disponible: <span className="text-gray-800 font-medium">{props.disponible}</span>
+                                    Disponible:{" "}
+                                    <span className="text-gray-800 font-medium">
+                                        {props.disponible}
+                                    </span>
                                 </p>
                             </div>
                             <div className="flex items-center">
                                 <span className="w-3 h-3 rounded-full bg-orange-500 mr-2"></span>
                                 <p className="text-sm text-gray-500">
-                                    Stock bajo: <span className="text-gray-800 font-medium">{props.lowStock}</span>
+                                    Stock bajo:{" "}
+                                    <span className="text-gray-800 font-medium">
+                                        {props.lowStock}
+                                    </span>
                                 </p>
                             </div>
                             <div className="flex items-center">
                                 <span className="w-3 h-3 rounded-full bg-red-500 mr-2"></span>
                                 <p className="text-sm text-gray-500">
-                                    Agotado: <span className="text-gray-800 font-medium">{props.agotado}</span>
+                                    Agotado:{" "}
+                                    <span className="text-gray-800 font-medium">
+                                        {props.agotado}
+                                    </span>
                                 </p>
                             </div>
                         </div>
@@ -149,7 +165,9 @@ export default function InventarioTabla({ props }) {
 
             {/* Inventario Table Section */}
             <div className="bg-white rounded-lg overflow-hidden shadow-lg mt-4 p-4">
-                <h2 className="text-xl font-semibold text-gray-700 mb-4">Inventario</h2>
+                <h2 className="text-xl font-semibold text-gray-700 mb-4">
+                    Inventario
+                </h2>
 
                 {/* Buscar */}
                 <div className="flex flex-col justify-start items-left gap-2 mb-5">
@@ -168,7 +186,7 @@ export default function InventarioTabla({ props }) {
                             className="mr-2 bg-red-100 text-red-600 px-4 py-1 rounded-md text-sm hover:bg-red-400 hover:text-white transition"
                             onClick={limpiarFiltros}
                         >
-                              Limpiar Filtros
+                            Limpiar Filtros
                         </button>
                     </div>
                 </div>
@@ -180,7 +198,6 @@ export default function InventarioTabla({ props }) {
                         selected={selected}
                         setSelected={setSelected}
                     />
-
                 </div>
 
                 {/* Cabecera tabla */}
@@ -197,9 +214,13 @@ export default function InventarioTabla({ props }) {
                 {/* Filas */}
                 <div className="grid grid-cols-1 px-4 pb-4">
                     {products
-                        .filter((product) =>
-                            product.nombre.toLowerCase().includes(searchTerm.toLowerCase()) &&
-                            (selected.length === 0 || selected.includes(product.id_almacen)) // Filtro por almacenes
+                        .filter(
+                            (product) =>
+                                product.nombre
+                                    .toLowerCase()
+                                    .includes(searchTerm.toLowerCase()) &&
+                                (selected.length === 0 ||
+                                    selected.includes(product.id_almacen)) // Filtro por almacenes
                         )
                         .map((product, index) => (
                             <ProductTableRow
@@ -219,8 +240,28 @@ export default function InventarioTabla({ props }) {
                                 }}
                             />
                         ))}
-                </div>
 
+                    {/* paginacion */}
+                    <div className="flex justify-center items-center mt-6 gap-4">
+                        <button
+                            onClick={""}
+                            className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                        >
+                             <span className="material-icons text-gray-700">chevron_left</span>
+                        </button>
+
+                        <span className="text-sm text-gray-600">
+                            Página {"1"} de {"5"}
+                        </span>
+
+                        <button
+                            onClick={""}
+                            className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                        >
+                             <span className="material-icons text-gray-700">chevron_right</span>
+                        </button>
+                    </div>
+                </div>
 
                 {/* Modals */}
                 <AddModal
