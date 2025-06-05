@@ -67,8 +67,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/entidades/cliente', [ClienteController::class ,'patch'])->name('entidad.cliente.update');
     Route::delete('/entidades/cliente', [ClienteController::class ,'destroy'])->name('entidad.cliente.delete');
 
-    Route::patch('/entidades/proveedor', [ProveedoresController::class ,'store'])->name('entidad.proveedor.store');
-    Route::post('/entidades/proveedor', [ProveedoresController::class ,'patch'])->name('entidad.proveedor.update');
+    Route::post('/entidades/proveedor', [ProveedoresController::class ,'store'])->name('entidad.proveedor.store');
+    Route::patch('/entidades/proveedor', [ProveedoresController::class ,'patch'])->name('entidad.proveedor.update');
     Route::delete('/entidades/proveedor', [ProveedoresController::class ,'destroy'])->name('entidad.proveedor.delete');
 
 });
