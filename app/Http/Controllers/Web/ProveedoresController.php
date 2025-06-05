@@ -117,6 +117,7 @@ class ProveedoresController extends Controller
             'mensaje' => 'Proveedores y clientes encontrados',
             'proveedores' => $proveedores,
             'clientes'=> $clientes,
+            'selectedType' => 'proveedores',
         ]);
     }
 }

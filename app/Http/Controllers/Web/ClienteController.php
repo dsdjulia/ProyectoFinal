@@ -131,6 +131,7 @@ class ClienteController extends Controller
             'all_categorias' => $categorias,
             'all_clientes' => $clientes,
             'all_proveedores' => $proveedores,
+            'selectedType' => 'clientes',
         ]);
     }
 }

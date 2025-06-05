@@ -17,17 +17,11 @@ export default function EditCategoriaModal({ entity, onClose }) {
     e.preventDefault();
 
     if (form.nombre) {
-      router.patch(route("entidad.categoria.update", entity.id), form, {
+      router.patch(route("entidad.categoria.update"), form, {
         preserveScroll: true,
         onSuccess: () => {
           showModificableAlert("Categoría actualizada", `${form.nombre} modificada correctamente.`, "success");
           onClose();
-
-          // Redirige sin mostrar en la URL el selectedType
-          // router.visit(route("entidades.index"), {
-          //   data: {
-          //     selectedType: "categorias",
-          //   }});
         },
         onError: (errors) => {
           showModificableAlert("Error al editar categoría", `Error: ${JSON.stringify(errors)}`, "error");

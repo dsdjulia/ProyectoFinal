@@ -63,8 +63,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/entidades/categoria', [CategoriasController::class ,'patch'])->name('entidad.categoria.update');
     Route::delete('/entidades/categoria', [CategoriasController::class ,'destroy'])->name('entidad.categoria.delete');
 
-    Route::patch('/entidades/cliente', [ClienteController::class ,'store'])->name('entidad.cliente.store');
-    Route::post('/entidades/cliente', [ClienteController::class ,'patch'])->name('entidad.cliente.update');
+    Route::post('/entidades/cliente', [ClienteController::class ,'store'])->name('entidad.cliente.store');
+    Route::patch('/entidades/cliente', [ClienteController::class ,'patch'])->name('entidad.cliente.update');
     Route::delete('/entidades/cliente', [ClienteController::class ,'destroy'])->name('entidad.cliente.delete');
 
     Route::patch('/entidades/proveedor', [ProveedoresController::class ,'store'])->name('entidad.proveedor.store');
