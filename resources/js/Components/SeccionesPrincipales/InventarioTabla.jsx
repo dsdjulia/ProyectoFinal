@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductTableRow from "../ProductTableRow";
 import CarruselAlmacenes from "../CarruselAlmacenes";
 import AddModal from "../Modales/AddModal";
@@ -24,6 +24,37 @@ export default function InventarioTabla({ props }) {
 
     const [isCantidadModalOpen, setCantidadModalOpen] = useState(false);
     const [tipoOperacion, setTipoOperacion] = useState("");
+
+    const [pagActual, setpagActual] = useState(1);
+    const [cantPag, setcantPag] = useState(1); // Se ajusta dinámicamente
+    const [productosFiltrados, setProductosFiltrados] = useState([]);
+
+    useEffect(() => {
+        const filtrados = props.all_productos.filter(
+            (product) =>
+                product.nombre.toLowerCase().includes(searchTerm.toLowerCase()) &&
+                (selected.length === 0 || selected.includes(product.id_almacen))
+        );
+
+        setProductosFiltrados(filtrados);
+        setcantPag(Math.ceil(filtrados.length / 10));
+        setpagActual(1); // Reinicia la página cuando cambia el filtro
+    }, [searchTerm, selected, props.all_productos]);
+
+    const arrayProductos = productosFiltrados.slice((pagActual - 1) * 10, pagActual * 10);
+
+    const pageUp = () => {
+        if (pagActual < cantPag) {
+            setpagActual(pagActual + 1);
+        }
+    };
+
+    const pageDown = () => {
+        if (pagActual > 1) {
+            setpagActual(pagActual - 1);
+        }
+    };
+
 
     console.log(selected);
 
@@ -213,33 +244,26 @@ export default function InventarioTabla({ props }) {
 
                 {/* Filas */}
                 <div className="grid grid-cols-1 px-4 pb-4">
-                    {products
-                        .filter(
-                            (product) =>
-                                product.nombre
-                                    .toLowerCase()
-                                    .includes(searchTerm.toLowerCase()) &&
-                                (selected.length === 0 ||
-                                    selected.includes(product.id_almacen)) // Filtro por almacenes
-                        )
-                        .map((product, index) => (
-                            <ProductTableRow
-                                key={index}
-                                product={product}
-                                context="stock"
-                                props={props}
-                                almacenes={almacenes}
-                                categorias={categorias}
-                                proveedores={proveedores}
-                                clickable={true}
-                                onDelete={() => handleDeleteProduct(product)}
-                                onCantidadClick={(tipo) => {
-                                    setSelectedProduct(product);
-                                    setTipoOperacion(tipo);
-                                    setCantidadModalOpen(true);
-                                }}
-                            />
-                        ))}
+                    {arrayProductos.map((product, index) => (
+                        <ProductTableRow
+                            key={index}
+                            product={product}
+                            context="stock"
+                            props={props}
+                            almacenes={almacenes}
+                            categorias={categorias}
+                            proveedores={proveedores}
+                            clickable={true}
+                            onDelete={() => handleDeleteProduct(product)}
+                            onCantidadClick={(tipo) => {
+                                setSelectedProduct(product);
+                                setTipoOperacion(tipo);
+                                setCantidadModalOpen(true);
+                            }}
+                        />
+                    ))}
+
+
 
                     {/* paginacion */}
                     <div className="flex justify-center items-center mt-6 gap-4">
@@ -247,18 +271,18 @@ export default function InventarioTabla({ props }) {
                             onClick={""}
                             className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
                         >
-                             <span className="material-icons text-gray-700">chevron_left</span>
+                            <span className="material-icons text-gray-700">chevron_left</span>
                         </button>
 
                         <span className="text-sm text-gray-600">
-                            Página {"1"} de {"5"}
+                            Página {pagActual} de {cantPag}
                         </span>
 
                         <button
                             onClick={""}
                             className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
                         >
-                             <span className="material-icons text-gray-700">chevron_right</span>
+                            <span className="material-icons text-gray-700">chevron_right</span>
                         </button>
                     </div>
                 </div>

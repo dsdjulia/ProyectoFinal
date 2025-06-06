@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductTableRow from "../ProductTableRow";
 import AddModal from "../Modales/AddModal";
 import DeleteProductModal from "../Modales/DeleteProductModal";
@@ -20,6 +20,35 @@ export default function OrdenesCompra({ props }) {
 
     const [isCantidadModalOpen, setCantidadModalOpen] = useState(false);
     const [tipoOperacion, setTipoOperacion] = useState(""); // "venta" o "recepcion"
+    const [pagActual, setpagActual] = useState(1);
+    const [cantPag, setcantPag] = useState(1); // Se ajusta dinámicamente
+    const [productosFiltrados, setProductosFiltrados] = useState([]);
+
+    // useEffect(() => {
+    //     const filtrados = props.all_productos.filter(
+    //         (product) =>
+    //             product.nombre.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    //             (selected.length === 0 || selected.includes(product.id_almacen))
+    //     );
+
+    //     setProductosFiltrados(filtrados);
+    //     setcantPag(Math.ceil(filtrados.length / 10));
+    //     setpagActual(1); // Reinicia la página cuando cambia el filtro
+    // }, [searchTerm, selected, props.all_productos]);
+
+    const arrayProductos = compras.slice((pagActual - 1) * 10, pagActual * 10);
+
+    const pageUp = () => {
+        if (pagActual < cantPag) {
+            setpagActual(pagActual + 1);
+        }
+    };
+
+    const pageDown = () => {
+        if (pagActual > 1) {
+            setpagActual(pagActual - 1);
+        }
+    };
 
     console.log(props);
 
@@ -165,7 +194,7 @@ export default function OrdenesCompra({ props }) {
                         </button>
 
                         <span className="text-sm text-gray-600">
-                            Página {"1"} de {"5"}
+                            Página {pagActual} de {cantPag}
                         </span>
 
                         <button
