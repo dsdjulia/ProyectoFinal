@@ -35,19 +35,15 @@ export default function Login({ status, canResetPassword }) {
 
             <form onSubmit={submit}>
                 <div>
-                      <div className="mt-6 flex justify-center pb-12">
-                    <button
-                        type="button"
-                        onClick={""}
-                        className="w-full border flex items-center gap-3 rounded-lg bg-white px-5 py-2 text-sm font-medium text-gray-700 shadow-md transition hover:shadow-sm"
-                    >
-                        <img
-                            src={logoGoogle}
-                            alt="Google"
-                            className="h-5 w-5"
-                        />
-                        Iniciar sesión con Google
-                    </button>
+                    <div className="mt-6 flex justify-center pb-12">
+                <button
+                    type="button"
+                    onClick={() => window.location.href = route("google.redirect")}
+                    className="w-full border flex items-center gap-3 rounded-lg bg-white px-5 py-2 text-sm font-medium text-gray-700 shadow-md transition hover:shadow-sm"
+                >
+                    <img src={logoGoogle} alt="Google" className="h-5 w-5" />
+                    Iniciar sesión con Google
+                </button>
                 </div>
                     <InputLabel htmlFor="email" value="Email" />
 

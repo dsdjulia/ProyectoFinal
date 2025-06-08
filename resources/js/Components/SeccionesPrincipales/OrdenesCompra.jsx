@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import ProductTableRow from "../ProductTableRow";
 import AddModal from "../Modales/AddModal";
 import DeleteProductModal from "../Modales/DeleteProductModal";
-import CantidadModal from "../Modales/CantidadModal"; // 👈 Importación del nuevo modal
+import CantidadModal from "../Modales/CantidadModal";
 import { router } from "@inertiajs/react";
 import AddAlmacenModal from "../Modales/AddAlmacenModal";
 
@@ -12,31 +12,33 @@ export default function OrdenesCompra({ props }) {
     const [categorias, setCategorias] = useState(props.categorias);
     const [proveedores, setProveedores] = useState(props.all_proveedores);
     const [compras, setCompras] = useState(props.detalles_compras);
+
     const [isAlmacenModalOpen, setIsAlmacenModalOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [selectedPedido, setselectedPedido] = useState(null);
-
     const [isCantidadModalOpen, setCantidadModalOpen] = useState(false);
-    const [tipoOperacion, setTipoOperacion] = useState(""); // "venta" o "recepcion"
+
+    const [selectedPedido, setselectedPedido] = useState(null);
+    const [tipoOperacion, setTipoOperacion] = useState("");
+
+    const [searchTerm, setSearchTerm] = useState("");
     const [pagActual, setpagActual] = useState(1);
-    const [cantPag, setcantPag] = useState(1); // Se ajusta dinámicamente
+    const [cantPag, setcantPag] = useState(1);
     const [productosFiltrados, setProductosFiltrados] = useState([]);
 
-    // useEffect(() => {
-    //     const filtrados = props.all_productos.filter(
-    //         (product) =>
-    //             product.nombre.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    //             (selected.length === 0 || selected.includes(product.id_almacen))
-    //     );
+    useEffect(() => {
+        const filtrados = compras.filter((product) =>
+            product.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setProductosFiltrados(filtrados);
+        setcantPag(Math.ceil(filtrados.length / 10) || 1);
+        setpagActual(1);
+    }, [searchTerm, compras]);
 
-    //     setProductosFiltrados(filtrados);
-    //     setcantPag(Math.ceil(filtrados.length / 10));
-    //     setpagActual(1); // Reinicia la página cuando cambia el filtro
-    // }, [searchTerm, selected, props.all_productos]);
-
-    const arrayProductos = compras.slice((pagActual - 1) * 10, pagActual * 10);
+    const arrayProductos = productosFiltrados.slice(
+        (pagActual - 1) * 10,
+        pagActual * 10
+    );
 
     const pageUp = () => {
         if (pagActual < cantPag) {
@@ -50,12 +52,9 @@ export default function OrdenesCompra({ props }) {
         }
     };
 
-    console.log(props);
-
     const handleAddProduct = (newProduct) => {
         setProducts([...products, newProduct]);
     };
-
 
     const handleAddAlmacen = (newAlmacen) => {
         setAlmacenes([...almacenes, newAlmacen]);
@@ -67,41 +66,35 @@ export default function OrdenesCompra({ props }) {
     };
 
     const handleConfirm = (cantidad) => {
-        console.log(
-            `Cantidad ${tipoOperacion}:`,
-            cantidad,
-            "de",
-            selectedPedido?.nombre
+        router.post(
+            route("pedidos.destroy"),
+            { id_detalle: selectedPedido.id },
+            {
+                onSuccess: () => {
+                    showModificableAlert(
+                        "Pedido eliminado",
+                        "Se eliminó el pedido correctamente.",
+                        "success"
+                    );
+                    setIsDeleteModalOpen(false);
+                    router.visit(route("pedidos.index"), {
+                        preserveScroll: true,
+                    });
+                },
+                onError: (errors) => {
+                    showModificableAlert(
+                        "Error al eliminar el pedido",
+                        `Error: ${JSON.stringify(errors)}`,
+                        "error"
+                    );
+                },
+            }
         );
-
-        // Aquí podrías usar router.post o router.put para actualizar backend:
-        router.post(route('pedidos.destroy'), {
-            id_detalle: selectedPedido.id,
-        },{
-            onSuccess: () => {
-                showModificableAlert(
-                    "Pedido eliminado",
-                    "Se elimino el pedido correctamente.",
-                    "success"
-                );
-                onClose();
-                router.visit(route("pedidos.index"), {
-                    preserveScroll: true,
-                });
-            },
-            onError: (errors) => {
-                showModificableAlert(
-                    "Error al eliminar el pedido",
-                    `Error: ${JSON.stringify(errors)}`,
-                    "error"
-                );
-            },
-        });
     };
 
     if (!almacenes || almacenes.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-screen  pb-32 h-screen text-center gap-6">
+            <div className="flex flex-col items-center justify-center min-h-screen pb-32 h-screen text-center gap-6">
                 <span className="material-icons text-slate-400 text-7xl">
                     warehouse
                 </span>
@@ -159,38 +152,35 @@ export default function OrdenesCompra({ props }) {
                     <div className="text-center">Acciones</div>
                 </div>
 
-                <div className="grid grid-cols-1 px-4 pb-4  "> {/* h-[65vh] overflow-y-auto */}
-                    {compras
-                        .filter((compra) =>
-                            compra.nombre
-                                .toLowerCase()
-                                .includes(searchTerm.toLowerCase())
-                        )
-                        .map((compra, index) => (
-                            <ProductTableRow
-                                key={index}
-                                product={compra}
-                                categorias={categorias}
-                                context="orders"
-                                almacenes={almacenes}
-                                proveedores={proveedores}
-                                clickable={false}
-                                onDelete={() => handleDeleteProduct(compra)}
-                                onCantidadClick={(tipo) => {
-                                    setselectedPedido(compra);
-                                    setTipoOperacion(tipo); // "recepcion"
-                                    setCantidadModalOpen(true);
-                                }}
-                            />
-                        ))}
+                <div className="grid grid-cols-1 px-4 pb-4">
+                    {arrayProductos.map((compra, index) => (
+                        <ProductTableRow
+                            key={index}
+                            product={compra}
+                            categorias={categorias}
+                            context="orders"
+                            almacenes={almacenes}
+                            proveedores={proveedores}
+                            clickable={false}
+                            onDelete={() => handleDeleteProduct(compra)}
+                            onCantidadClick={(tipo) => {
+                                setselectedPedido(compra);
+                                setTipoOperacion(tipo);
+                                setCantidadModalOpen(true);
+                            }}
+                        />
+                    ))}
 
-                         {/* paginacion */}
+                    {/* Paginación */}
                     <div className="flex justify-center items-center mt-6 gap-4">
                         <button
-                            onClick={""}
+                            onClick={pageDown}
+                            disabled={pagActual === 1}
                             className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
                         >
-                             <span className="material-icons text-gray-700">chevron_left</span>
+                            <span className="material-icons text-gray-700">
+                                chevron_left
+                            </span>
                         </button>
 
                         <span className="text-sm text-gray-600">
@@ -198,10 +188,13 @@ export default function OrdenesCompra({ props }) {
                         </span>
 
                         <button
-                            onClick={""}
+                            onClick={pageUp}
+                            disabled={pagActual === cantPag}
                             className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
                         >
-                             <span className="material-icons text-gray-700">chevron_right</span>
+                            <span className="material-icons text-gray-700">
+                                chevron_right
+                            </span>
                         </button>
                     </div>
                 </div>
@@ -221,7 +214,6 @@ export default function OrdenesCompra({ props }) {
                         product={selectedPedido}
                         totalAmount={selectedPedido.existencias}
                         onClose={() => setIsDeleteModalOpen(false)}
-
                     />
                 )}
 
@@ -232,6 +224,7 @@ export default function OrdenesCompra({ props }) {
                     producto={selectedPedido}
                     tipo={tipoOperacion}
                 />
+
                 <AddAlmacenModal
                     isOpen={isAlmacenModalOpen}
                     onClose={() => setIsAlmacenModalOpen(false)}

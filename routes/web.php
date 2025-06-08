@@ -4,12 +4,13 @@ use Inertia\Inertia;
 use App\Models\Proveedor;
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Web\CategoriasController;
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Web\AlmacenController;
 use App\Http\Controllers\Web\ClienteController;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\ProductoController;
 use App\Http\Controllers\Web\EntidadesController;
+use App\Http\Controllers\Web\CategoriasController;
 use App\Http\Controllers\Web\InventarioController;
 use App\Http\Controllers\Web\SendEmaillController;
 use App\Http\Controllers\Web\ProveedoresController;
@@ -103,7 +104,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/proveedor/email', [SendEmaillController::class, 'sendEmail'])->name('proveedor.email');
 });
 
-//TEST EMAIL
+//TEST INICIO DE SESION CON GOOGLE
+Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('google.redirect');
+Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
 
 
 require __DIR__ . '/auth.php';
