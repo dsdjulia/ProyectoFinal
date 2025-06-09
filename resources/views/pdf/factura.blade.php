@@ -5,12 +5,14 @@
     <title>Factura #{{ $venta->id }} | Inventar.io</title>
     <style>
         body {
-            background-color: #0f172a;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             color: #e2e8f0;
+            min-height: 100vh;
         }
+
         .invoice-container {
             max-width: 700px;
             margin: 40px auto;
@@ -27,9 +29,13 @@
         }
         .header h1 {
             margin: 0;
-            font-size: 22px;
-            font-weight: 600;
-            color: #38bdf8;
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
         }
         .header p {
             margin: 4px 0 0;
