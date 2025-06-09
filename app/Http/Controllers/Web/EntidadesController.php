@@ -19,7 +19,8 @@ class EntidadesController extends Controller
         return $this->renderEntidades($user);
     }
 
-    public function renderAlmacenes($user){
+    public function renderAlmacenes(){
+        $user = Auth::user();
         $categorias = Categoria::where('id_user', $user->id)->with('productos')->get();
         $almacenes = Almacen::where('id_user', $user->id)->get();
 
@@ -59,7 +60,8 @@ class EntidadesController extends Controller
         ]);
     }
 
-    public function renderCategorias($user){
+    public function renderCategorias(){
+        $user = Auth::user();
         $categorias = Categoria::where('id_user', $user->id)->with('productos')->get();
         $almacenes = Almacen::where('id_user', $user->id)->get();
 
@@ -99,7 +101,9 @@ class EntidadesController extends Controller
         ]);
     }
 
-    public function renderClientes($user){
+    public function renderClientes(){
+
+        $user = Auth::user();
         $categorias = Categoria::where('id_user', $user->id)->with('productos')->get();
         $almacenes = Almacen::where('id_user', $user->id)->get();
 
@@ -139,7 +143,8 @@ class EntidadesController extends Controller
     }
 
     # routeget
-    public function renderProveedores($user){
+    public function renderProveedores(){
+        $user = Auth::user();
         $categorias = Categoria::where('id_user', $user->id)->with('productos')->get();
         $almacenes = Almacen::where('id_user', $user->id)->get();
 
@@ -179,8 +184,9 @@ class EntidadesController extends Controller
         ]);
     }
 
-    public function renderEntidades($user){
-    
+    public function renderEntidades(){
+        
+        $user = Auth::user();
         $categorias = Categoria::where('id_user', $user->id)->with('productos')->get();
         $almacenes = Almacen::where('id_user', $user->id)->get();
 
