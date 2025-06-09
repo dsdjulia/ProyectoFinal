@@ -4,6 +4,7 @@ use Inertia\Inertia;
 use App\Models\Proveedor;
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FacturaPDFController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Web\AlmacenController;
 use App\Http\Controllers\Web\ClienteController;
@@ -16,7 +17,6 @@ use App\Http\Controllers\Web\SendEmaillController;
 use App\Http\Controllers\Web\ProveedoresController;
 use App\Http\Controllers\Web\DetallesVentaController;
 use App\Http\Controllers\Web\DetallesCompraController;
-use App\Http\Controllers\Web\FacturaController;
 
 // EDIT PROFILE
 Route::middleware('auth')->group(function () {
@@ -99,7 +99,6 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/ventas', [DetallesVentaController::class ,'store'])->name('ventas.store');
     Route::delete('/ventas', [DetallesVentaController::class ,'destroy'])->name('ventas.destroy');
-    Route::get('/factura/{id}', [FacturaController::class, 'generar'])->name('factura.generar');
 });
 
 //CRUD DE PROVEEDORES
@@ -114,5 +113,7 @@ Route::middleware('auth')->group(function () {
 Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('google.redirect');
 Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
 
+//TEST PDF
+Route::get('/factura/{id}', [FacturaPDFController::class, 'generar'])->name('factura.generar');
 
 require __DIR__ . '/auth.php';

@@ -8,11 +8,6 @@ export default function VentasTable({ props }) {
     const filteredVentas = ventas.filter((venta) =>
         venta.nombre.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    const generarFactura = (venta) => {
-        const url = `/factura/${venta.id}`;
-        window.open(url, '_blank');
-    };
-
 
     return (
         <div className="w-full flex flex-col align-middle justify-start p-12 pt-0npm r pb-34 h-full">
@@ -65,13 +60,10 @@ export default function VentasTable({ props }) {
                                 <a
                                     href={`/factura/${venta.id}`}
                                     target="_blank"
-                                    className="flex items-center justify-center w-full"
+                                    className="text-center flex items-center justify-center w-full hover:text-slate-600"
+                                    title="Imprimir factura"
                                 >
-                                    <button className="text-center w-full">
-                                        <span className="material-icons text-center">
-                                            print
-                                        </span>
-                                    </button>
+                                    <span className="material-icons">print</span>
                                 </a>
                             </div>
                         ))}
