@@ -8,9 +8,11 @@ export default function VentasTable({ props }) {
     const filteredVentas = ventas.filter((venta) =>
         venta.nombre.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    const generarFactura = (e) => {
-        console.log(e);
+    const generarFactura = (venta) => {
+        const url = `/factura/${venta.id}`;
+        window.open(url, '_blank');
     };
+
 
     return (
         <div className="w-full flex flex-col align-middle justify-start p-12 pt-0npm r pb-34 h-full">
