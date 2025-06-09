@@ -74,6 +74,7 @@ class CategoriasController extends Controller
         return $this->renderEntidades($user);
     }
 
+    
     public function renderEntidades($user){
     
         $categorias = Categoria::where('id_user', $user->id)->with('productos')->get();
