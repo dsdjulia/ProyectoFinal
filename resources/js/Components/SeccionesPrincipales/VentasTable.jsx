@@ -63,16 +63,16 @@ export default function VentasTable({ props }) {
                                     {venta.cliente || "N/A"}
                                 </div>
                                 <a
-    href={`/factura/${venta.id}`}
-    target="_blank"
-    className="flex items-center justify-center w-full"
->
-    <button className="text-center w-full">
-        <span className="material-icons text-center">
-            print
-        </span>
-    </button>
-</a>
+                                    href={`/factura/${venta.id}`}
+                                    target="_blank"
+                                    className="flex items-center justify-center w-full"
+                                >
+                                    <button className="text-center w-full">
+                                        <span className="material-icons text-center">
+                                            print
+                                        </span>
+                                    </button>
+                                </a>
                             </div>
                         ))}
 
