@@ -46,7 +46,7 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 25px;
-            padding: 20px 0;
+            padding: 5px 0;
             border-bottom: 1px solid #334155;
         }
         .invoice-info-section {
