@@ -58,8 +58,7 @@ export default function VentasTable({ props }) {
                                     {venta.cliente || "N/A"}
                                 </div>
                                 <a
-                                    href={`/factura/${venta.id}`}
-                                    target="_blank"
+                                    href={`/factura/${venta.id}`} target="_blank"
                                     className="text-center flex items-center justify-center w-full hover:text-slate-600"
                                     title="Imprimir factura"
                                 >
