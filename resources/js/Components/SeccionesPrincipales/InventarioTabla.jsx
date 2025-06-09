@@ -38,7 +38,7 @@ export default function InventarioTabla({ props }) {
 
         setProductosFiltrados(filtrados);
         setcantPag(Math.ceil(filtrados.length / 10));
-        setpagActual(1); // Reinicia la página cuando cambia el filtro
+        setpagActual(1); // Vuelvo a la primera pagina cuando cambio el filtro
     }, [searchTerm, selected, props.all_productos]);
 
     const arrayProductos = productosFiltrados.slice((pagActual - 1) * 10, pagActual * 10);
@@ -54,11 +54,6 @@ export default function InventarioTabla({ props }) {
             setpagActual(pagActual - 1);
         }
     };
-
-
-    console.log(selected);
-
-    console.log(props);
 
     const handleAddProduct = (newProduct) => {
         setProducts([...products, newProduct]);
@@ -263,28 +258,29 @@ export default function InventarioTabla({ props }) {
                         />
                     ))}
 
+                {/* paginacion */}
+                <div className="flex justify-center items-center mt-6 gap-4">
+                    <button
+                        onClick={pageDown}
+                        disabled={pagActual === 1}
+                        className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                    >
+                        <span className="material-icons text-gray-700">chevron_left</span>
+                    </button>
 
+                    <span className="text-sm text-gray-600">
+                        Página {pagActual} de {cantPag}
+                    </span>
 
-                    {/* paginacion */}
-                    <div className="flex justify-center items-center mt-6 gap-4">
-                        <button
-                            onClick={""}
-                            className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
-                        >
-                            <span className="material-icons text-gray-700">chevron_left</span>
-                        </button>
+                    <button
+                        onClick={pageUp}
+                        disabled={pagActual === cantPag || cantPag === 0}
+                        className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                    >
+                        <span className="material-icons text-gray-700">chevron_right</span>
+                    </button>
+                </div>
 
-                        <span className="text-sm text-gray-600">
-                            Página {pagActual} de {cantPag}
-                        </span>
-
-                        <button
-                            onClick={""}
-                            className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
-                        >
-                            <span className="material-icons text-gray-700">chevron_right</span>
-                        </button>
-                    </div>
                 </div>
 
                 {/* Modals */}

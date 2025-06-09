@@ -16,19 +16,24 @@ class ContactoProveedorMail extends Mailable
 
     public $subject;
     public $messageBody;
+    public $sender;
 
     // Recibe asunto y mensaje en el constructor
-    public function __construct($subject, $messageBody)
+    public function __construct($subject, $messageBody,$sender)
     {
         $this->subject = $subject;
         $this->messageBody = $messageBody;
+        $this->sender = $sender;
     }
 
     public function build()
     {
         return $this->subject($this->subject)
                     ->view('emails')
-                    ->with(['messageBody' => $this->messageBody]);
+                    ->with([
+                        'messageBody' => $this->messageBody,
+                        'sender' => $this->sender, // pasa a la vista también
+                    ]);
     }
 
 

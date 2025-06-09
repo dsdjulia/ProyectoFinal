@@ -79,7 +79,7 @@
         </div>
         <div class="body">
             <p>Hola equipo de Inventar.io,</p>
-            <p>Se ha recibido un nuevo mensaje desde la aplicación:</p>
+            <p>Se ha recibido un nuevo mensaje desde la aplicación de <strong>{{ $sender }}</strong>:</p>
 
             <blockquote>
                 {!! nl2br(e($messageBody)) !!}
@@ -92,7 +92,7 @@
         </div>
         <div class="footer">
             © {{ date('Y') }} Inventar.io. Todos los derechos reservados. <br>
-            <a href({{ route('inventario.index', ['id'=>1]) }})>www.inventar.io</a>
+            <a href="{{ route('inventario.index', ['id'=>1]) }}">www.inventar.io</a>
         </div>
     </div>
 </body>

@@ -118,6 +118,7 @@ class ProveedoresController extends Controller
             'proveedores' => $proveedores,
             'clientes'=> $clientes,
             'selectedType' => 'proveedores',
+            'user' => $user
         ]);
     }
 }

@@ -18,12 +18,13 @@ class SendEmaillController extends Controller
         try {
             $request->validate([
                 'to' => 'required|email',
+                'sender' => 'required|string',
                 'subject' => 'required|string',
                 'message' => 'required|string',
             ]);
 
             Mail::to($request->to)->send(
-                new ContactoProveedorMail($request->subject, $request->message)
+                new ContactoProveedorMail($request->subject, $request->message, $request->sender)
             );
 
             return redirect()->back()->with('success', 'Correo enviado con éxito');

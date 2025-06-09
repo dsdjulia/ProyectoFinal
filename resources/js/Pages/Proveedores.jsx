@@ -17,7 +17,7 @@ export default function Index() {
                 </div>
                 <AuthenticatedLayout>
                     <div className=" bg-slate-100  min-h-screen">
-                        <ConcactoProveedores proveedores={props.proveedores} />
+                        <ConcactoProveedores proveedores={props.proveedores} usuario = {props.user}/>
                     </div>
                     <Footer/>
                 </AuthenticatedLayout>

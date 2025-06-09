@@ -2,12 +2,13 @@ import { useState, useRef, useEffect } from "react";
 import { router } from "@inertiajs/react";
 import { showModificableAlert } from "@/utils/alerts";
 
-export default function ConcactoProveedores({ proveedores }) {
+export default function ConcactoProveedores({ proveedores,usuario}) {
     const [selectedProveedor, setSelectedProveedor] = useState(
         proveedores[0] ?? null
     );
     const [mensaje, setMensaje] = useState("");
     const textareaRef = useRef(null);
+    const sender = usuario
 
     useEffect(() => {
         if (textareaRef.current) {
@@ -21,6 +22,7 @@ export default function ConcactoProveedores({ proveedores }) {
             route("proveedor.email"),
             {
                 to: selectedProveedor.email,
+                sender : sender.name,
                 subject: `Mensaje para ${selectedProveedor.nombre}`,
                 message: mensaje,
             },
