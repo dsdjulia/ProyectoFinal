@@ -32,28 +32,29 @@ export default function Index() {
                 <AuthenticatedLayout>
                     <div className="overflow-y-auto flex flex-col items-center w-full mt-8 px-6 gap-6 min-h-screen">
                         {/* Formulario de búsqueda */}
-                        <div className="w-full  flex justify-start h-[24px]">
-                            <form
-                                onSubmit={handleBuscar}
-                                className="w-full max-w-sm flex gap-2 items-center h-full"
-                            >
-                                <input
-                                    type="text"
-                                    placeholder="Buscar producto..."
-                                    className="flex-1 px-3 py-1.5 text-sm rounded border border-slate-300 shadow-sm  focus:border-slate-400 h-full"
-                                    value={busqueda}
-                                    onChange={(e) =>
-                                        setBusqueda(e.target.value)
-                                    }
-                                />
-                                <button
-                                    type="submit"
-                                    className="px-2 text-sm bg-slate-400 text-white rounded hover:bg-slate-700 transition h-full"
+                        {!props.producto && ( // Si existe el producto, quitamos el  buscador
+                            <div className="w-full flex justify-start h-[24px]">
+                                <form
+                                    onSubmit={handleBuscar}
+                                    className="w-full max-w-sm flex gap-2 items-center h-full"
                                 >
-                                    Buscar
-                                </button>
-                            </form>
-                        </div>
+                                    <input
+                                        type="text"
+                                        placeholder="Buscar producto..."
+                                        className="flex-1 px-3 py-1.5 text-sm rounded border border-slate-300 shadow-sm focus:border-slate-400 h-full"
+                                        value={busqueda}
+                                        onChange={(e) => setBusqueda(e.target.value)}
+                                    />
+                                    <button
+                                        type="submit"
+                                        className="px-2 text-sm bg-slate-400 text-white rounded hover:bg-slate-700 transition h-full"
+                                    >
+                                        Buscar
+                                    </button>
+                                </form>
+                            </div>
+                        )}
+
 
                         {/* Vista del producto */}
                         <ProductOverview
