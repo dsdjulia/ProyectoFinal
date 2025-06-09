@@ -14,7 +14,6 @@ class FacturaPDFController extends Controller
 
        $total = $venta->detalleVentas->sum(fn($d) => $d->precio_unitario * $d->cantidad);
 
-
         $pdf = PDF::loadView('pdf.factura', compact('venta', 'total'))
             ->setOptions(['isRemoteEnabled' => true]);
 
