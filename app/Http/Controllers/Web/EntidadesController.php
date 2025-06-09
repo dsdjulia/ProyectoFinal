@@ -138,6 +138,7 @@ class EntidadesController extends Controller
         ]);
     }
 
+    # routeget
     public function renderProveedores($user){
         $categorias = Categoria::where('id_user', $user->id)->with('productos')->get();
         $almacenes = Almacen::where('id_user', $user->id)->get();
