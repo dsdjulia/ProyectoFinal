@@ -57,12 +57,12 @@ Route::middleware('auth')->group(function () {
 // CRUD DE ENTIDADES
 Route::middleware('auth')->group(function () {
 
-    Route::get('/entidades/almacen', [EntidadesController::class ,'renderAlamacenes'])->name('entidad.almacen.index');
+    Route::get('/entidades/almacen', [EntidadesController::class ,'renderAlmacenes'])->name('entidad.almacen.index');
     Route::post('/entidades/almacen', [AlmacenController::class ,'storeEntidades'])->name('entidad.almacen.store');
     Route::patch('/entidades/almacen', [AlmacenController::class ,'update'])->name('entidad.almacen.update');
     Route::delete('/entidades/almacen', [AlmacenController::class ,'deleteEntidades'])->name('entidad.almacen.delete');
 
-    Route::get('/entidades/categoria', [EntidadesController::class ,'renderCategoria'])->name('entidad.categoria.index');
+    Route::get('/entidades/categoria', [EntidadesController::class ,'renderCategorias'])->name('entidad.categoria.index');
     Route::post('/entidades/categoria', [CategoriasController::class ,'store'])->name('entidad.categoria.store');
     Route::patch('/entidades/categoria', [CategoriasController::class ,'patch'])->name('entidad.categoria.update');
     Route::delete('/entidades/categoria', [CategoriasController::class ,'destroy'])->name('entidad.categoria.delete');

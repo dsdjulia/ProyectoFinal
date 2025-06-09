@@ -22,6 +22,8 @@ export default function EditCategoriaModal({ entity, onClose }) {
         onSuccess: () => {
           showModificableAlert("Categoría actualizada", `${form.nombre} modificada correctamente.`, "success");
           onClose();
+          router.visit(route("entidad.categoria.index"));
+          
         },
         onError: (errors) => {
           showModificableAlert("Error al editar categoría", `Error: ${JSON.stringify(errors)}`, "error");

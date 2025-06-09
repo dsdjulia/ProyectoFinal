@@ -17,15 +17,12 @@ export default function EditAlmacenModal({ entity, onClose }) {
     e.preventDefault();
 
     if (form.nombre && form.direccion) {
-      router.patch(route("entidad.almacen.update", entity.id), form, {
+      router.patch(route("entidad.almacen.update"), form, {
         preserveScroll: true,
         onSuccess: () => {
           showModificableAlert("Almacén actualizado", `${form.nombre} modificado correctamente.`, "success");
           onClose();
-          router.visit(route("entidades.index"), {
-            data: {
-              selectedType: 'almacenes',
-          }});
+          router.visit(route("entidad.almacen.index"));
         },
         onError: (errors) => {
           showModificableAlert("Error al editar almacén", `Error: ${JSON.stringify(errors)}`, "error");

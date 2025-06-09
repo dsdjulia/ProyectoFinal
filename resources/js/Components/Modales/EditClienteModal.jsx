@@ -26,6 +26,8 @@ export default function EditClienteModal({ entity, onClose }) {
         onSuccess: () => {
           showModificableAlert("Cliente actualizado", `${form.nombre} modificado correctamente.`, "success");
           onClose();
+          router.visit(route("entidad.clientes.index"));
+          
         },
         onError: (errors) => {
           showModificableAlert("Error al editar cliente", `Error: ${JSON.stringify(errors)}`, "error");

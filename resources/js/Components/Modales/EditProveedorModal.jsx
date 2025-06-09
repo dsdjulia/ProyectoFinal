@@ -23,6 +23,8 @@ export default function EditProveedorModal({ entity, onClose }) {
         onSuccess: () => {
           showModificableAlert("Proveedor actualizado", `${form.nombre} modificado correctamente.`, "success");
           onClose();
+          router.visit(route("entidad.proveedores.index"));
+          
         },
         onError: (errors) => {
           showModificableAlert("Error al editar proveedor", `Error: ${JSON.stringify(errors)}`, "error");
