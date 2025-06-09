@@ -62,15 +62,17 @@ export default function VentasTable({ props }) {
                                 <div className="text-center">
                                     {venta.cliente || "N/A"}
                                 </div>
-                                <button
-                                    className="text-center flex items-center w-full"
-                                    onClick={() => generarFactura(venta)}
-                                >
-                                    <span className="material-icons text-center w-full">
-                                        print
-                                    </span>
-
-                                </button>
+                                <a
+    href={`/factura/${venta.id}`}
+    target="_blank"
+    className="flex items-center justify-center w-full"
+>
+    <button className="text-center w-full">
+        <span className="material-icons text-center">
+            print
+        </span>
+    </button>
+</a>
                             </div>
                         ))}
 
