@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { usePage } from "@inertiajs/inertia-react";
+import { usePage , router } from "@inertiajs/inertia-react";
+
+
 
 export default function VentasTable({ props }) {
     const [searchTerm, setSearchTerm] = useState("");
@@ -8,6 +10,12 @@ export default function VentasTable({ props }) {
     const filteredVentas = ventas.filter((venta) =>
         venta.nombre.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const imprimirFactura = (id) => {
+        console.log("ID recibido:", id);
+        const url = route('factura.generar', { id });
+        window.open(url, '_blank');
+    };
 
     return (
         <div className="w-full flex flex-col align-middle justify-start p-12 pt-0npm r pb-34 h-full">
@@ -57,13 +65,13 @@ export default function VentasTable({ props }) {
                                 <div className="text-center">
                                     {venta.cliente || "N/A"}
                                 </div>
-                                <a
-                                    href={`/factura/${venta.id}`} target="_blank"
+                                <button
+                                    onClick={() => imprimirFactura(venta.id_detalle)}
                                     className="text-center flex items-center justify-center w-full hover:text-slate-600"
                                     title="Imprimir factura"
                                 >
                                     <span className="material-icons">print</span>
-                                </a>
+                                </button>
                             </div>
                         ))}
 

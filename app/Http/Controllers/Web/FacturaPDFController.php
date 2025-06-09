@@ -10,9 +10,8 @@ class FacturaPDFController extends Controller
 {
     public function generar($id)
     {
-        $venta = Venta::with(['detalleVentas', 'user', 'comprador'])->findOrFail($id);
-
-       $total = $venta->detalleVentas->sum(fn($d) => $d->precio_unitario * $d->cantidad);
+        $venta = Venta::with(['detalleVentas.producto', 'user', 'comprador'])->findOrFail($id);
+        $total = $venta->detalleVentas->sum(fn($d) => $d->precio_unitario * $d->cantidad);
 
         $pdf = PDF::loadView('pdf.factura', compact('venta', 'total'))
             ->setOptions(['isRemoteEnabled' => true]);

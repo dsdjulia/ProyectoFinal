@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Factura #{{ $venta->id }}</title>
+    <title>Factura #{{ $venta->id }} | Inventar.io</title>
     <style>
         body {
             background-color: #0f172a;
@@ -11,7 +11,7 @@
             padding: 0;
             color: #e2e8f0;
         }
-        .pdf-container {
+        .invoice-container {
             max-width: 700px;
             margin: 40px auto;
             background-color: #1e293b;
@@ -27,7 +27,7 @@
         }
         .header h1 {
             margin: 0;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 600;
             color: #38bdf8;
         }
@@ -35,6 +35,22 @@
             margin: 4px 0 0;
             color: #94a3b8;
             font-size: 14px;
+        }
+        .invoice-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding: 20px 0;
+            border-bottom: 1px solid #334155;
+        }
+        .invoice-info-section {
+            flex: 1;
+        }
+        .invoice-info-section h3 {
+            color: #38bdf8;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 16px;
         }
         .body {
             padding: 30px;
@@ -49,25 +65,40 @@
             border-collapse: collapse;
             margin-top: 25px;
             font-size: 14px;
+            border-radius: 6px;
+            overflow: hidden;
         }
         .table th, .table td {
-            padding: 10px;
-            border: 1px solid #334155;
-            text-align: center;
+            padding: 12px 15px;
+            text-align: left;
         }
         .table th {
             background-color: #334155;
             color: #f1f5f9;
+            font-weight: 600;
         }
-        .table td {
+        .table tr:nth-child(even) td {
+            background-color: #283548;
+        }
+        .table tr:nth-child(odd) td {
             background-color: #1e293b;
-            color: #e2e8f0;
+        }
+        .table td:last-child, .table th:last-child {
+            text-align: right;
+        }
+        .table td:nth-child(2), .table th:nth-child(2) {
+            text-align: center;
+        }
+        .total-section {
+            margin-top: 30px;
+            border-top: 1px solid #334155;
+            padding-top: 20px;
         }
         .total {
             text-align: right;
-            margin-top: 20px;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
+            color: #38bdf8;
         }
         .footer {
             background-color: #0f172a;
@@ -77,19 +108,48 @@
             text-align: center;
             border-top: 1px solid #334155;
         }
+        .footer a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+        .thank-you {
+            text-align: center;
+            margin-top: 30px;
+            font-style: italic;
+            color: #94a3b8;
+        }
     </style>
 </head>
 <body>
-    <div class="pdf-container">
+    <div class="invoice-container">
         <div class="header">
-            <h1>Factura #{{ $venta->id }}</h1>
-            <p>Fecha de venta: {{ $venta->fecha_venta }}</p>
+            <h1>Inventar.io</h1>
+            <p>Factura #{{ $venta->id }}</p>
         </div>
 
         <div class="body">
-            <p><strong>Vendedor:</strong> {{ $venta->user->name ?? 'N/A' }}</p>
-            <p><strong>Cliente:</strong> {{ $venta->comprador->nombre ?? 'N/A' }}</p>
+            <div class="invoice-info">
+                <div class="invoice-info-section">
+                    <h3>Información de Factura</h3>
+                    <p><strong>Fecha de emisión:</strong> {{ $venta->fecha_venta }}</p>
+                </div>
+                <div class="invoice-info-section">
+                    <h3>Cliente</h3>
+                    <p><strong>Nombre:</strong> {{ $venta->comprador->nombre ?? 'N/A' }}</p>
+                    @if(isset($venta->comprador->email))
+                    <p><strong>Email:</strong> {{ $venta->comprador->email }}</p>
+                    @endif
+                </div>
+                <div class="invoice-info-section">
+                    <h3>Vendedor</h3>
+                    <p><strong>Nombre:</strong> {{ $venta->user->name ?? 'N/A' }}</p>
+                    @if(isset($venta->user->email))
+                    <p><strong>Email:</strong> {{ $venta->user->email }}</p>
+                    @endif
+                </div>
+            </div>
 
+            <h3 style="color: #38bdf8; margin-bottom: 15px;">Detalle de Productos</h3>
             <table class="table">
                 <thead>
                     <tr>
@@ -102,7 +162,7 @@
                 <tbody>
                     @foreach ($venta->detalleVentas as $detalle)
                         <tr>
-                            <td>{{ $detalle->nombre }}</td>
+                            <td>{{ $detalle->producto->nombre }}</td>
                             <td>{{ $detalle->cantidad }}</td>
                             <td>{{ number_format($detalle->precio_unitario, 2) }} €</td>
                             <td>{{ number_format($detalle->precio_unitario * $detalle->cantidad, 2) }} €</td>
@@ -111,13 +171,21 @@
                 </tbody>
             </table>
 
-            <p class="total">
-                Total: {{ number_format($total, 2) }} €
+            <div class="total-section">
+                <p class="total">
+                    Total: {{ number_format($total, 2) }} €
+                </p>
+            </div>
+
+            <p class="thank-you">
+                Gracias por confiar en Inventar.io para la gestión de su inventario.
             </p>
         </div>
 
         <div class="footer">
-            © {{ date('Y') }} Inventar.io. Todos los derechos reservados.
+            © {{ date('Y') }} Inventar.io. Todos los derechos reservados. <br>
+            <a href="{{ route('inventario.index', ['id'=>1]) }}">www.inventar.io</a> | 
+            Gestión inteligente de inventarios
         </div>
     </div>
 </body>
