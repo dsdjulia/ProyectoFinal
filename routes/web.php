@@ -16,6 +16,7 @@ use App\Http\Controllers\Web\SendEmaillController;
 use App\Http\Controllers\Web\ProveedoresController;
 use App\Http\Controllers\Web\DetallesVentaController;
 use App\Http\Controllers\Web\DetallesCompraController;
+use App\Http\Controllers\Web\FacturaController;
 
 // EDIT PROFILE
 Route::middleware('auth')->group(function () {
@@ -94,6 +95,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/ventas', [DetallesVentaController::class ,'store'])->name('ventas.store');
     Route::delete('/ventas', [DetallesVentaController::class ,'destroy'])->name('ventas.destroy');
+    Route::get('/factura/{id}', [FacturaController::class, 'generar'])->name('factura.generar');
 });
 
 //CRUD DE PROVEEDORES
