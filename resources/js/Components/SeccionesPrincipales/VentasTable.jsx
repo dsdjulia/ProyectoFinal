@@ -70,9 +70,9 @@ export default function VentasTable({ props }) {
 
                 {arrayProductos.length > 0 ? (
                     <div className="divide-y divide-gray-200 ">
-                        {arrayProductos.map((venta, index) => (
+                        {arrayProductos.map((venta) => (
                             <div
-                                key={index}
+                                key={venta.id_detalle}
                                 className="grid grid-cols-8 py-3 px-6 text-sm text-gray-700 hover:bg-gray-50 "
                             >
                                 <div>{venta.producto_id}</div>
