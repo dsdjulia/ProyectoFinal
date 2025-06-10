@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
             AlmacenSeeder::class,
             GastoSeeder::class,
             CompraSeeder::class,
-            VentaSeeder::class,
+            // VentaSeeder::class,
             DetalleCompraSeeder::class,
             DetalleVentaSeeder::class,
             InventarioSeeder::class,
