@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePage , router } from "@inertiajs/inertia-react";
 
 
@@ -6,10 +6,34 @@ import { usePage , router } from "@inertiajs/inertia-react";
 export default function VentasTable({ props }) {
     const [searchTerm, setSearchTerm] = useState("");
     const ventas = props.detalles_ventas;
+    const [pagActual, setpagActual] = useState(1);
+    const [cantPag, setcantPag] = useState(1); // Se ajusta dinámicamente
+    const [productosFiltrados, setProductosFiltrados] = useState([]);
 
-    const filteredVentas = ventas.filter((venta) =>
-        venta.nombre.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    useEffect(() => {
+        const filteredVentas = ventas.filter((venta) =>
+            venta.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
+        setProductosFiltrados(filteredVentas);
+        setcantPag(Math.ceil(filteredVentas.length / 10)); // Calculamos la nueva cantidad de páginas
+        setpagActual(1); // Vuelvo a la primera pagina cuando cambio el filtro
+    }, [searchTerm, ventas, props.detalles_ventas]);
+
+    // Paginamos el array de productos ya filtrados
+    const arrayProductos = productosFiltrados.slice((pagActual - 1) * 10, pagActual * 10);
+
+    const pageUp = () => {
+        if (pagActual < cantPag) {
+            setpagActual(pagActual + 1);
+        }
+    };
+
+    const pageDown = () => {
+        if (pagActual > 1) {
+            setpagActual(pagActual - 1);
+        }
+    };
 
     const imprimirFactura = (id) => {
         console.log("ID recibido:", id);
@@ -44,9 +68,9 @@ export default function VentasTable({ props }) {
                     <div className="text-center"></div>
                 </div>
 
-                {filteredVentas.length > 0 ? (
+                {arrayProductos.length > 0 ? (
                     <div className="divide-y divide-gray-200 ">
-                        {filteredVentas.map((venta, index) => (
+                        {arrayProductos.map((venta, index) => (
                             <div
                                 key={index}
                                 className="grid grid-cols-8 py-3 px-6 text-sm text-gray-700 hover:bg-gray-50 "
@@ -78,7 +102,8 @@ export default function VentasTable({ props }) {
                         {/* paginacion */}
                         <div className="flex justify-center items-center mt-6 gap-4 pt-12">
                             <button
-                                onClick={""}
+                                onClick={pageDown}
+                                disabled={pagActual === 1}
                                 className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
                             >
                                 <span className="material-icons text-gray-700">
@@ -87,11 +112,12 @@ export default function VentasTable({ props }) {
                             </button>
 
                             <span className="text-sm text-gray-600">
-                                Página {"1"} de {"5"}
+                                Página {pagActual} de {cantPag}
                             </span>
 
                             <button
-                                onClick={""}
+                                onClick={pageUp}
+                                disabled={pagActual === cantPag || cantPag === 0}
                                 className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
                             >
                                 <span className="material-icons text-gray-700">
