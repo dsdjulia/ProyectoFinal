@@ -29,12 +29,13 @@ export default function OrdenesCompra({ props }) {
     useEffect(() => {
         const filtrados = compras.filter((product) =>
             product.nombre.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        setProductosFiltrados(filtrados);
-        setcantPag(Math.ceil(filtrados.length / 10) || 1);
-        setpagActual(1);
+        ); // Filtramos los productos por las coincidencias en el nombre
+        setProductosFiltrados(filtrados); // Modificamos el array total con los elementos filtrados
+        setcantPag(Math.ceil(filtrados.length / 10) || 1); // Recalculamos el total de paginas
+        setpagActual(1); // Volvemos a la primera página
     }, [searchTerm, compras]);
 
+    // Paginamos el array de productos ya filtrados
     const arrayProductos = productosFiltrados.slice(
         (pagActual - 1) * 10,
         pagActual * 10

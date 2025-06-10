@@ -127,18 +127,6 @@ export default function CarruselAlmacenes({ arrayAlmacenes, selected, setSelecte
         );
     };
 
-    const filtrarAlmacenes = () => {
-        router.post(route(''), {
-            data: { id: selected },
-            onSuccess: () => {
-                console.log('Almacenes filtrados');
-            },
-            onError: (errors) => {
-                showModificableAlert('Error al filtrar los almacenes', `${JSON.stringify(errors)}`, 'error');
-            }
-        });
-    };
-
     const handleAddAlmacen = () => {};
     const handleDeleteAlmacen = () => {};
 

@@ -32,15 +32,16 @@ export default function InventarioTabla({ props }) {
     useEffect(() => {
         const filtrados = props.all_productos.filter(
             (product) =>
-                product.nombre.toLowerCase().includes(searchTerm.toLowerCase()) &&
-                (selected.length === 0 || selected.includes(product.id_almacen))
+                product.nombre.toLowerCase().includes(searchTerm.toLowerCase()) && // Filtramos los productos por nombre
+                (selected.length === 0 || selected.includes(product.id_almacen)) // Filtramos por almacén si procede
         );
 
         setProductosFiltrados(filtrados);
-        setcantPag(Math.ceil(filtrados.length / 10));
+        setcantPag(Math.ceil(filtrados.length / 10)); // Calculamos la nueva cantidad de páginas
         setpagActual(1); // Vuelvo a la primera pagina cuando cambio el filtro
     }, [searchTerm, selected, props.all_productos]);
 
+    // Paginamos el array de productos ya filtrados
     const arrayProductos = productosFiltrados.slice((pagActual - 1) * 10, pagActual * 10);
 
     const pageUp = () => {
