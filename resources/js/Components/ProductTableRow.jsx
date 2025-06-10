@@ -5,6 +5,7 @@ import Chip from "@/Components/Chip";
 import EditProductModal from "@/Components/Modales/EditProductModal";
 import DeleteProductModal from "@/Components/Modales/DeleteProductModal";
 import { router } from "@inertiajs/react";
+import { showModificableAlert } from "@/utils/alerts";
 
 export default function ProductTableRow({
     product, /* este product le llega de InventarioTabla o de OrdenesCompra */
@@ -127,7 +128,25 @@ export default function ProductTableRow({
                         <span className="material-icons">delete</span>
                     </div>
                     )}
-                    {/* Vender o Recibir */}
+                {/* Vender o Recibir */}
+                {product.cantidad_actual === 0 ? (
+                    // Acción alternativa si no hay stock
+                    <div
+                        className="flex items-center justify-center w-8 h-8 rounded-full text-gray-400 cursor-pointer hover:text-red-400"
+                        title="Sin stock disponible"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            showModificableAlert(
+                                "Sin stock disponible",
+                                `No hay stock del producto "${product.nombre}".`,
+                                "error"
+                            );
+                        }}
+                    >
+                        <span className="material-icons">block</span>
+                    </div>
+                ) : (
+                    // Acción normal (Vender o Recibir)
                     <div
                         className={`flex items-center justify-center w-8 h-8 rounded-full cursor-pointer ${
                             context === "orders"
@@ -138,9 +157,7 @@ export default function ProductTableRow({
                             e.stopPropagation();
                             if (onCantidadClick) {
                                 onCantidadClick(
-                                    context === "orders"
-                                        ? "recepcion"
-                                        : "venta",
+                                    context === "orders" ? "recepcion" : "venta",
                                     product
                                 );
                             }
@@ -155,6 +172,8 @@ export default function ProductTableRow({
                             {context === "orders" ? "inventory_2" : "sell"}
                         </span>
                     </div>
+                )}
+
                 </div>
             </div>
 
