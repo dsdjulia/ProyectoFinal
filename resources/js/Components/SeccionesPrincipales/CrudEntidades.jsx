@@ -299,7 +299,7 @@ export default function CrudEntidades({ props }) {
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
+            <main className="flex-1 p-4 sm:p-6 overflow-y-auto min-h-full">
                 <h1 className="text-xl sm:text-2xl font-bold mb-6">
                     {tipoEntidad}
                 </h1>
