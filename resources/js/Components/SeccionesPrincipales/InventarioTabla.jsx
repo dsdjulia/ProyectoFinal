@@ -186,27 +186,36 @@ export default function InventarioTabla({ props }) {
                 </div>
             </div>
 
-            {/* Filtros */}
-            <div className="mt-6 mb-4 flex flex-col gap-2">
-                <input
-                    type="text"
-                    placeholder="Buscar"
-                    className="border border-gray-300 rounded-lg py-2 px-4 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-slate-500"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <div className="flex gap-2">
-                    <button className="bg-slate-600 text-slate-50 px-4 py-1 rounded-md text-sm hover:bg-slate-700">
-                        Buscar
-                    </button>
-                    <button
-                        onClick={limpiarFiltros}
-                        className="bg-red-100 text-red-600 px-4 py-1 rounded-md text-sm hover:bg-red-400 hover:text-white"
-                    >
-                        Limpiar Filtros
-                    </button>
+            {/* Buscar */}
+                <div className="flex flex-col justify-start items-left gap-2 mb-5">
+                    <input
+                        type="text"
+                        placeholder="Buscar"
+                        className="border border-gray-300 rounded-lg py-2 px-4 w-64 focus:outline-none focus:ring-2 focus:ring-slate-500 mb-3"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    <div>
+                        <button className="mr-2 bg-slate-600 text-slate-50 px-4 py-1 rounded-md text-sm hover:bg-slate-700 hover:text-white">
+                            Buscar
+                        </button>
+                        <button
+                            className="mr-2 bg-red-100 text-red-600 px-4 py-1 rounded-md text-sm hover:bg-red-400 hover:text-white transition"
+                            onClick={limpiarFiltros}
+                        >
+                            Limpiar Filtros
+                        </button>
+                    </div>
                 </div>
-            </div>
+
+                {/* Carrusel y botón Añadir Almacén */}
+                <div className="sm:flex justify-between items-center mb-4 hidden ">
+                    <CarruselAlmacenes
+                        arrayAlmacenes={almacenes}
+                        selected={selected}
+                        setSelected={setSelected}
+                    />
+                </div>
 
             {/* Carrusel en escritorio / tabla en móvil */}
             <div className="mb-4">
