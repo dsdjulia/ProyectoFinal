@@ -182,10 +182,12 @@ export default function OrdenesCompra({ props }) {
                 {/* Cards for small and medium screens */}
                 <div className="grid gap-6 px-2 sm:grid-cols-1 md:grid-cols-2 lg:hidden text-xs md:text-md">
                     {arrayProductos.map((compra, index) => (
+
                         <div
                             key={index}
                             className="bg-gray-100 rounded-lg shadow p-4 flex flex-col gap-2 w-full mx-auto"
                         >
+                            {console.log(compra)}
                             <div className="text-sm md:text-md font-semibold text-center">
                                 {compra.nombre}
                             </div>
@@ -193,14 +195,18 @@ export default function OrdenesCompra({ props }) {
                                 <b>Código Producto:</b> {compra.codigo}
                             </div>
                             <div className="text-gray-600 text-center">
-                                <b>Precio:</b> {compra.precio}
+                                <b>Precio:</b> {compra.precio_unitario}
                             </div>
                             <div className="text-gray-600 text-center">
                                 <b>Cantidad: </b>
-                                {compra.cantidad}
+                                {compra.cantidad_actual}
                             </div>
                             <div className="text-gray-600 text-center">
-                                <b>Estado:</b> {compra.estado}
+                                <b>Fecha: </b>
+                                {compra.fecha_compra}
+                            </div>
+                            <div className="text-gray-600 text-center">
+                                <b>Estado:</b> {compra.estado?"Recibido":"Pendiente"}
                             </div>
 
                             <div className="flex justify-center gap-2 mt-6 md:mt-0">
