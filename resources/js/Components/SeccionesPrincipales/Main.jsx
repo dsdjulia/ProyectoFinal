@@ -133,84 +133,84 @@ export default function Main({ props }) {
     };
 
     return (
-        <div className="flex flex-col w-full px-8 py-6 gap-8 min-h-screen h-full">
-            {/* Tarjetas de métricas */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
-                {[
-                    { label: "Almacenes", value: datos.total_almacenes},
-                    { label: "Total Productos", value: datos.total_productos,},
-                    { label: "Total Ventas", value: datos.total_ventas,},
-                    { label: "Total Pedidos", value: datos.total_compras,},
-                    { label: "Total Gastos", value: datos.total_gastos,},
-                    { label: "Beneficio Mensual", value: datos.beneficio_mensual,},
-
-                ].map((item, index) => (
-                    <div key={index} className="bg-transparent p-5 border-r-2 border-slate-300">
-                        <div className="text-sm text-slate-500 mb-1">{item.label}</div>
-                        <div className="text-xl font-semibold text-slate-800">{item.value}</div>
-
-                    </div>
-                ))}
+       <div className="flex flex-col gap-6 px-4 py-6 min-h-screen">
+    {/* Tarjetas de métricas */}
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        {[
+            { label: "Almacenes", value: datos.total_almacenes },
+            { label: "Total Productos", value: datos.total_productos },
+            { label: "Total Ventas", value: datos.total_ventas },
+            { label: "Total Pedidos", value: datos.total_compras },
+            { label: "Total Gastos", value: datos.total_gastos },
+            { label: "Beneficio Mensual", value: datos.beneficio_mensual },
+        ].map((item, index) => (
+            <div
+                key={index}
+                className="bg-white shadow-sm rounded-xl p-4 text-center md:bg-transparent md:shadow-none md:border-r-2 md:rounded-none"
+            >
+                <div className="text-sm text-slate-500">{item.label}</div>
+                <div className="text-lg font-semibold text-slate-800">{item.value}</div>
             </div>
-
-            <hr />
-
-           {/* Contenedor principal en formato apaisado */}
-<div className="flex flex-row gap-6 p-6 rounded-2xl ">
-
-    {/* Sección Producto Estrella */}
-    <div className="w-1/3 bg-slate-50 rounded-xl p-4 flex flex-col justify-between">
-        <h2 className="text-lg font-semibold text-slate-700 mb-2">Producto Estrella</h2>
-        {producto_estrella && producto_estrella.nombre ? (
-            <div className="flex flex-col gap-3 text-slate-700 h-full">
-                <img
-                    src={producto_estrella.imagen || "https://via.placeholder.com/300x300?text=Sin+imagen"}
-                    alt={producto_estrella.nombre}
-                    className="w-full h-52 object-contain rounded-xl mt-14"
-                />
-                <h3 className="text-md font-bold text-center">{producto_estrella.nombre}</h3>
-                <p className="text-sm text-slate-500 text-center">
-                    {producto_estrella.descripcion || "Producto más vendido del mes."}
-                </p>
-                <p className="text-emerald-500 text-sm font-medium mt-auto">
-                    Total vendido: {producto_estrella.total_vendido ?? 0} unidades
-                </p>
-            </div>
-        ) : (
-            <div className="flex items-center justify-center text-slate-400 italic h-full">
-                No hay producto estrella disponible para este mes.
-            </div>
-        )}
+        ))}
     </div>
 
-    {/* Sección Gráficas */}
-    <div className="w-2/3 grid grid-cols-2 gap-4">
-        {/* Gráfica 1 */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
-            <h2 className="text-sm font-semibold text-slate-700 mb-2">Ventas Última Semana</h2>
-            <div className="flex-grow h-40">
-                <Bar data={ventasData} options={chartOptions} />
-            </div>
+    {/* Diseño para móviles y pantallas grandes */}
+    <div className="flex flex-col sm:flex-row sm:gap-6 mt-4">
+        {/* Producto estrella */}
+        <div className="w-full sm:w-1/3 bg-slate-50 shadow-sm rounded-xl p-4 flex flex-col justify-between mb-6 sm:mb-0">
+            <h2 className="text-lg font-semibold text-slate-700 mb-2 text-center sm:text-left">
+                Producto Estrella
+            </h2>
+            {producto_estrella && producto_estrella.nombre ? (
+                <div className="flex flex-col gap-3 text-slate-700">
+                    <img
+                        src={producto_estrella.imagen || "https://via.placeholder.com/300x300?text=Sin+imagen"}
+                        alt={producto_estrella.nombre}
+                        className="w-full h-52 object-contain rounded-xl"
+                    />
+                    <h3 className="text-md font-bold text-center">{producto_estrella.nombre}</h3>
+                    <p className="text-sm text-slate-500 text-center">
+                        {producto_estrella.descripcion || "Producto más vendido del mes."}
+                    </p>
+                    <p className="text-emerald-500 text-sm font-medium mt-auto text-center">
+                        Total vendido: {producto_estrella.total_vendido ?? 0} unidades
+                    </p>
+                </div>
+            ) : (
+                <div className="flex items-center justify-center text-slate-400 italic h-full">
+                    No hay producto estrella disponible para este mes.
+                </div>
+            )}
         </div>
 
-        {/* Gráfica 2 */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
-            <h2 className="text-sm font-semibold text-slate-700 mb-2">Gastos Mensuales</h2>
-            <div className="flex-grow h-40">
-                <Line data={gastosData} options={chartOptions} />
+        {/* Gráficas */}
+        <div className="w-full sm:w-2/3 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
+            {/* Gráfica: Ventas Última Semana */}
+            <div className="bg-white p-4 rounded-xl border shadow-sm">
+                <h2 className="text-sm font-semibold text-slate-700 mb-2">Ventas Última Semana</h2>
+                <div className="relative w-full h-48 sm:h-40">
+                    <Bar data={ventasData} options={chartOptions} />
+                </div>
             </div>
-        </div>
 
-        {/* Gráfica 3 - Distribución */}
-        <div className="col-span-2 bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
-            <h2 className="text-sm font-semibold text-slate-700 mb-2">Distribución de Ventas</h2>
-            <div className="flex-grow h-52">
-                <Doughnut data={distribucionVentas} options={chartOptions} />
+            {/* Gráfica: Gastos Mensuales */}
+            <div className="bg-white p-4 rounded-xl border shadow-sm">
+                <h2 className="text-sm font-semibold text-slate-700 mb-2">Gastos Mensuales</h2>
+                <div className="relative w-full h-48 sm:h-40">
+                    <Line data={gastosData} options={chartOptions} />
+                </div>
+            </div>
+
+            {/* Gráfica: Distribución de Ventas */}
+            <div className="bg-white p-4 rounded-xl border shadow-sm">
+                <h2 className="text-sm font-semibold text-slate-700 mb-2">Distribución de Ventas</h2>
+                <div className="relative w-full h-52 sm:h-40">
+                    <Doughnut data={distribucionVentas} options={chartOptions} />
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-        </div>
     );
 }

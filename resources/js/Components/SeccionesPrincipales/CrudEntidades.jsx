@@ -41,7 +41,9 @@ export default function CrudEntidades({ props }) {
     };
 
     // Estado para saber qué tipo de entidad está seleccionada
-    const [selectedType, setSelectedType] = useState(props.selectedType ?? "almacenes");
+    const [selectedType, setSelectedType] = useState(
+        props.selectedType ?? "almacenes"
+    );
 
     // Estado con los datos de todas las entidades (se puede actualizar al agregar o eliminar)
     const [data, setData] = useState(entidades);
@@ -61,12 +63,13 @@ export default function CrudEntidades({ props }) {
 
     // Función para eliminar una entidad del listado (solo visualmente)
     const handleDelete = (idEntidad) => {
-
         const updated = {
             ...data,
             [selectedType]: {
                 ...data[selectedType],
-                data: data[selectedType].data.filter((item) => item.id !== idEntidad),
+                data: data[selectedType].data.filter(
+                    (item) => item.id !== idEntidad
+                ),
             },
         };
         setData(updated);
@@ -74,54 +77,83 @@ export default function CrudEntidades({ props }) {
 
         switch (selectedType) {
             case "almacenes":
-                router.delete(route('entidad.almacen.delete'), {
-                    data: { id: idEntidad},
+                router.delete(route("entidad.almacen.delete"), {
+                    data: { id: idEntidad },
                     onSuccess: () => {
-                        showModificableAlert('Almacén eliminado', `Almacén eliminado del inventario.`, 'success');
+                        showModificableAlert(
+                            "Almacén eliminado",
+                            `Almacén eliminado del inventario.`,
+                            "success"
+                        );
                         // router.visit(route('entidades.index'), { preserveScroll: true });
                     },
                     onError: (errors) => {
-                        showModificableAlert('Error al eliminar el almacén', `${JSON.stringify(errors)}`, 'error');
-                    }
+                        showModificableAlert(
+                            "Error al eliminar el almacén",
+                            `${JSON.stringify(errors)}`,
+                            "error"
+                        );
+                    },
                 });
 
-                break
+                break;
             case "categorias":
-                router.delete(route('entidad.categoria.delete'), {
-                    data: { id_categoria: idEntidad, redireccion: false},
+                router.delete(route("entidad.categoria.delete"), {
+                    data: { id_categoria: idEntidad, redireccion: false },
                     onSuccess: () => {
-                        showModificableAlert('Categoría eliminada', `Categoría eliminada del sistema.`, 'success');
+                        showModificableAlert(
+                            "Categoría eliminada",
+                            `Categoría eliminada del sistema.`,
+                            "success"
+                        );
                     },
                     onError: (errors) => {
-                        const msg = errors.message || "Error al eliminar la categoría";
-                        showModificableAlert('Error', msg, 'error');
-                    }
+                        const msg =
+                            errors.message || "Error al eliminar la categoría";
+                        showModificableAlert("Error", msg, "error");
+                    },
                 });
                 break;
             case "clientes":
-                router.delete(route('XXXXXXXXXXXXXXXXXXXXXXX'), {
-                    data: { id_cliente: idEntidad, redireccion: false},
+                router.delete(route("XXXXXXXXXXXXXXXXXXXXXXX"), {
+                    data: { id_cliente: idEntidad, redireccion: false },
                     onSuccess: () => {
-                        showModificableAlert('Cliente eliminado', `Cliente eliminado del sistema.`, 'success');
+                        showModificableAlert(
+                            "Cliente eliminado",
+                            `Cliente eliminado del sistema.`,
+                            "success"
+                        );
                         // router.visit(route('entidades.index'), { preserveScroll: true });
                     },
                     onError: (errors) => {
-                        showModificableAlert('Error al eliminar el cliente', `${JSON.stringify(errors)}`, 'error');
-                    }
+                        showModificableAlert(
+                            "Error al eliminar el cliente",
+                            `${JSON.stringify(errors)}`,
+                            "error"
+                        );
+                    },
                 });
-                break
+                break;
             case "proveedores":
-                router.delete(route('proveedor.destroy'), {
-                    data: { id_proveedor: idEntidad, redireccion: false},
+                router.delete(route("proveedor.destroy"), {
+                    data: { id_proveedor: idEntidad, redireccion: false },
                     onSuccess: () => {
-                        showModificableAlert('Proveedor eliminado', `Proveedor eliminado del sistema.`, 'success');
+                        showModificableAlert(
+                            "Proveedor eliminado",
+                            `Proveedor eliminado del sistema.`,
+                            "success"
+                        );
                         // router.visit(route('entidades.index'), { preserveScroll: true });
                     },
                     onError: (errors) => {
-                        showModificableAlert('Error al eliminar el proveedor', `${JSON.stringify(errors)}`, 'error');
-                    }
+                        showModificableAlert(
+                            "Error al eliminar el proveedor",
+                            `${JSON.stringify(errors)}`,
+                            "error"
+                        );
+                    },
                 });
-                break
+                break;
             default:
                 return null;
         }
@@ -133,13 +165,33 @@ export default function CrudEntidades({ props }) {
 
         switch (selectedType) {
             case "almacenes":
-                return <EditAlmacenModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
+                return (
+                    <EditAlmacenModal
+                        entity={itemToEdit}
+                        onClose={() => setItemToEdit(null)}
+                    />
+                );
             case "categorias":
-                return <EditCategoriaModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
+                return (
+                    <EditCategoriaModal
+                        entity={itemToEdit}
+                        onClose={() => setItemToEdit(null)}
+                    />
+                );
             case "clientes":
-                return <EditClienteModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
+                return (
+                    <EditClienteModal
+                        entity={itemToEdit}
+                        onClose={() => setItemToEdit(null)}
+                    />
+                );
             case "proveedores":
-                return <EditProveedorModal entity={itemToEdit} onClose={() => setItemToEdit(null)} />;
+                return (
+                    <EditProveedorModal
+                        entity={itemToEdit}
+                        onClose={() => setItemToEdit(null)}
+                    />
+                );
             default:
                 return null;
         }
@@ -162,36 +214,83 @@ export default function CrudEntidades({ props }) {
 
         switch (selectedType) {
             case "almacenes":
-                return <AddAlmacenModal isOpen={true} onClose={() => setItemToAdd(false)} onAdd={(item) => closeAndAdd("almacenes", item)} />;
+                return (
+                    <AddAlmacenModal
+                        isOpen={true}
+                        onClose={() => setItemToAdd(false)}
+                        onAdd={(item) => closeAndAdd("almacenes", item)}
+                    />
+                );
             case "categorias":
-                return <AddCategoriaModal isOpen={true} onClose={() => setItemToAdd(false)} onAdd={(item) => closeAndAdd("categorias", item)} />;
+                return (
+                    <AddCategoriaModal
+                        isOpen={true}
+                        onClose={() => setItemToAdd(false)}
+                        onAdd={(item) => closeAndAdd("categorias", item)}
+                    />
+                );
             case "clientes":
-                return <AddClienteModal isOpen={true} onClose={() => setItemToAdd(false)} onAdd={(item) => closeAndAdd("clientes", item)} />;
+                return (
+                    <AddClienteModal
+                        isOpen={true}
+                        onClose={() => setItemToAdd(false)}
+                        onAdd={(item) => closeAndAdd("clientes", item)}
+                    />
+                );
             case "proveedores":
-                return <AddProveedorModal isOpen={true} onClose={() => setItemToAdd(false)} onAdd={(item) => closeAndAdd("proveedores", item)} />;
+                return (
+                    <AddProveedorModal
+                        isOpen={true}
+                        onClose={() => setItemToAdd(false)}
+                        onAdd={(item) => closeAndAdd("proveedores", item)}
+                    />
+                );
             default:
                 return null;
         }
     };
 
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
     return (
-        <div className="flex h-full relative">
-            {/* Menú lateral para seleccionar tipo de entidad */}
-            <aside className="w-1/5 bg-white p-4">
+        <div className="flex flex-col md:flex-row h-full relative ">
+            {/* Botón de menú (solo en móvil) */}
+            <div className="md:hidden p-4 flex justify-between items-center bg-white shadow sticky top-0 z-20 ">
+                <h2 className="text-base font-semibold text-slate-600">
+                    {tipoEntidad}
+                </h2>
+                <button
+                    onClick={() => setSidebarOpen(!sidebarOpen)}
+                    className="text-slate-600 text-2xl focus:outline-none"
+                >
+                    <span class="material-icons text-gray-500">
+                        arrow_drop_down
+                    </span>
+                </button>
+            </div>
+
+            <aside
+                className={`
+    bg-white p-4 w-full md:w-1/5 md:block
+    ${sidebarOpen ? "block" : "hidden"}
+    md:relative fixed top-0 left-0 z-30 shadow md:shadow-none
+  `}
+            >
                 <h2 className="pt-2 text-sm font-semibold mb-4 text-slate-600">
                     Elige el catálogo que quieres modificar
                 </h2>
-                <hr />
-                <br />
-                {/* Botones por cada tipo de entidad */}
+                <hr className="mb-4" />
                 {Object.entries(data).map(([key, val]) => (
                     <button
                         key={key}
-                        onClick={() => setSelectedType(key)}
+                        onClick={() => {
+                            setSelectedType(key);
+                            setSidebarOpen(false); // Oculta el menú al seleccionar en móvil
+                        }}
                         className={`block text-left p-2 mb-2 w-full rounded-lg text-sm ${
                             selectedType === key
-                                ? "bg-slate-300 font-bold "
-                                : "hover:bg-slate-100 font-medium text-slate-600 "
+                                ? "bg-slate-300 font-bold"
+                                : "hover:bg-slate-100 font-medium text-slate-600"
                         }`}
                     >
                         {val.label}
@@ -199,26 +298,13 @@ export default function CrudEntidades({ props }) {
                 ))}
             </aside>
 
-            {/* Panel principal */}
-            <main className="flex-1 p-6 overflow-y-auto">
-                <h1 className="text-2xl font-bold mb-6">{tipoEntidad}</h1>
+            {/* Main Content */}
+            <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
+                <h1 className="text-xl sm:text-2xl font-bold mb-6">
+                    {tipoEntidad}
+                </h1>
 
-                {/* Grid de tarjetas */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {/* Tarjeta para crear nueva entidad */}
-                   {/*  <div
-                        onClick={() => setItemToAdd(true)}
-                        className="flex flex-col items-center justify-center p-6 bg-slate-100 border-2 border-dashed rounded-lg cursor-pointer hover:bg-slate-200"
-                    >
-                        <div className="w-16 h-16 bg-slate-300 rounded-full flex items-center justify-center text-3xl font-bold">
-                            +
-                        </div>
-                        <p className="mt-4 text-sm font-medium text-slate-600">
-                            Crear nuevo
-                        </p>
-                    </div> */}
-
-                    {/* Tarjetas de entidades existentes */}
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {currentItems.map((item) => (
                         <div
                             key={item.id}
@@ -226,12 +312,9 @@ export default function CrudEntidades({ props }) {
                             onClick={() => handleEdit(item)}
                         >
                             <div>
-                                {/* Icono grande representativo */}
-                                <div className="w-full h-32 bg-slate-200 rounded mb-4 flex items-center justify-center text-7xl text-slate-500">
+                                <div className="w-full h-24 sm:h-32 bg-slate-200 rounded mb-4 flex items-center justify-center text-5xl sm:text-7xl text-slate-500">
                                     {iconoEntidad}
                                 </div>
-
-                                {/* Título y descripción */}
                                 <h2 className="text-sm font-bold mb-1">
                                     {item.nombre || item.email || "Elemento"}
                                 </h2>
@@ -243,63 +326,10 @@ export default function CrudEntidades({ props }) {
                                         ""}
                                 </p>
                             </div>
-
-                            {/* Botones para editar y eliminar */}
-                         {/*    <div className="flex justify-end gap-3 mt-4">
-                                <button
-                                    onClick={() => handleEdit(item)}
-                                    className="text-slate-600 hover:text-slate-800"
-                                    title="Editar"
-                                >
-                                    <span className="material-icons">edit</span>
-                                </button>
-                                <button
-                                    onClick={() => setItemToDelete(item)}
-                                    className="text-red-600 hover:text-red-800"
-                                    title="Eliminar"
-                                >
-                                    <span className="material-icons">delete</span>
-                                </button>
-                            </div> */}
                         </div>
                     ))}
                 </div>
             </main>
-
-            {/* Modal para editar entidad */}
-            {renderEditModal()}
-
-            {/* Modal para crear nueva entidad */}
-            {renderAddModal()}
-
-            {/* Modal de confirmación para eliminar entidad */}
-            {itemToDelete && (
-                <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
-                        <h2 className="text-lg font-bold mb-4">
-                            ¿Eliminar {tipoEntidad.slice(0, -2)}?
-                        </h2>
-                        <p className="text-sm mb-6 text-slate-600">
-                            ¿Estás seguro que quieres eliminar{" "}
-                            <strong>{itemToDelete.nombre}</strong>?
-                        </p>
-                        <div className="flex justify-center gap-4">
-                            <button
-                                onClick={() => setItemToDelete(null)}
-                                className="px-4 py-2 bg-slate-200 rounded-lg hover:bg-slate-300 text-sm"
-                            >
-                                Cancelar
-                            </button>
-                            <button
-                                onClick={() => handleDelete(itemToDelete.id)}
-                                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm"
-                            >
-                                Eliminar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }

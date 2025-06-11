@@ -38,13 +38,13 @@ export default function Index() {
     const [timeRange, setTimeRange] = useState("este-mes");
 
     return (
-        <div className="flex flex-col w-full">
-           <div className="flex w-full bg-slate-100 h-screen overflow-y-auto">
-                <div className="sticky top-0 left-0 h-screen">
+        <div className="flex flex-col w-full ">
+           <div className="flex w-full bg-slate-100 h-screen overflow-y-auto ">
+                <div className="sticky top-0 left-0 h-screen ">
                     <Sidebar active={"dashboard"} />
                 </div>
                 <AuthenticatedLayout>
-                    <div className=" overflow-y-auto bg-slate-100  min-h-screen">
+                    <div className=" overflow-y-auto bg-slate-100  min-h-screen ">
                         <Main props={props} />
                     </div>
                     <Footer />

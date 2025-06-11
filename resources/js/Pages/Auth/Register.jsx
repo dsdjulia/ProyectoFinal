@@ -4,7 +4,8 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
-import logoGoogle from '../../../images/logoGoogle.png'
+import logoGoogle from '../../../images/logoGoogle.png';
+import ApplicationLogo from "@/Components/ApplicationLogo";
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -16,7 +17,6 @@ export default function Register() {
 
     const submit = (e) => {
         e.preventDefault();
-
         post(route("register"), {
             onFinish: () => reset("password", "password_confirmation"),
         });
@@ -26,25 +26,28 @@ export default function Register() {
         <GuestLayout>
             <Head title="Registro" />
 
-            <form onSubmit={submit}>
-                <div className="mt-6 flex justify-center pb-12">
+            <form onSubmit={submit} className="w-full max-w-md mx-auto px-4 sm:px-6">
+
+                {/* Logo solo visible en móvil/tablet */}
+                <div className="flex justify-center mb-4 md:hidden h-12  overflow-hidden">
+                    <ApplicationLogo className="w-32 h-auto object-cover text-slate-500" />
+                </div>
+
+                {/* Botón de registro con Google */}
+                <div className="mt-4 flex justify-center pb-6">
                     <button
                         type="button"
                         onClick={() => window.location.href = route("google.redirect")}
-                        className="w-full border flex items-center gap-3 rounded-lg bg-white px-5 py-2 text-sm font-medium text-gray-700 shadow-md transition hover:shadow-sm"
+                        className="w-full flex items-center justify-center gap-3 rounded-lg bg-white px-4 py-2 text-sm font-medium text-gray-700 border shadow-sm hover:shadow-md transition"
                     >
-                        <img
-                            src={logoGoogle}
-                            alt="Google"
-                            className="h-5 w-5"
-                        />
+                        <img src={logoGoogle} alt="Google" className="h-5 w-5" />
                         Registrarse con Google
                     </button>
                 </div>
 
+                {/* Nombre */}
                 <div>
                     <InputLabel htmlFor="name" value="Nombre" />
-
                     <TextInput
                         id="name"
                         name="name"
@@ -55,13 +58,12 @@ export default function Register() {
                         onChange={(e) => setData("name", e.target.value)}
                         required
                     />
-
                     <InputError message={errors.name} className="mt-2" />
                 </div>
 
+                {/* Email */}
                 <div className="mt-4">
                     <InputLabel htmlFor="email" value="Correo electrónico" />
-
                     <TextInput
                         id="email"
                         type="email"
@@ -72,13 +74,12 @@ export default function Register() {
                         onChange={(e) => setData("email", e.target.value)}
                         required
                     />
-
                     <InputError message={errors.email} className="mt-2" />
                 </div>
 
+                {/* Contraseña */}
                 <div className="mt-4">
                     <InputLabel htmlFor="password" value="Contraseña" />
-
                     <TextInput
                         id="password"
                         type="password"
@@ -89,16 +90,12 @@ export default function Register() {
                         onChange={(e) => setData("password", e.target.value)}
                         required
                     />
-
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
+                {/* Confirmar contraseña */}
                 <div className="mt-4">
-                    <InputLabel
-                        htmlFor="password_confirmation"
-                        value="Confirmar contraseña"
-                    />
-
+                    <InputLabel htmlFor="password_confirmation" value="Confirmar contraseña" />
                     <TextInput
                         id="password_confirmation"
                         type="password"
@@ -106,27 +103,22 @@ export default function Register() {
                         value={data.password_confirmation}
                         className="mt-1 block w-full"
                         autoComplete="new-password"
-                        onChange={(e) =>
-                            setData("password_confirmation", e.target.value)
-                        }
+                        onChange={(e) => setData("password_confirmation", e.target.value)}
                         required
                     />
-
-                    <InputError
-                        message={errors.password_confirmation}
-                        className="mt-2"
-                    />
+                    <InputError message={errors.password_confirmation} className="mt-2" />
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
+                {/* Acciones */}
+                <div className="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <Link
                         href={route("login")}
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        className="text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
                         ¿Ya estás registrado?
                     </Link>
 
-                    <PrimaryButton className="ms-4" disabled={processing}>
+                    <PrimaryButton className="w-full sm:w-auto" disabled={processing}>
                         Registrarse
                     </PrimaryButton>
                 </div>

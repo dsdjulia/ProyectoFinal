@@ -32,7 +32,9 @@ export default function InventarioTabla({ props }) {
     useEffect(() => {
         const filtrados = props.all_productos.filter(
             (product) =>
-                product.nombre.toLowerCase().includes(searchTerm.toLowerCase()) && // Filtramos los productos por nombre
+                product.nombre
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()) && // Filtramos los productos por nombre
                 (selected.length === 0 || selected.includes(product.id_almacen)) // Filtramos por almacén si procede
         );
 
@@ -42,7 +44,10 @@ export default function InventarioTabla({ props }) {
     }, [searchTerm, selected, props.all_productos]);
 
     // Paginamos el array de productos ya filtrados
-    const arrayProductos = productosFiltrados.slice((pagActual - 1) * 10, pagActual * 10);
+    const arrayProductos = productosFiltrados.slice(
+        (pagActual - 1) * 10,
+        pagActual * 10
+    );
 
     const pageUp = () => {
         if (pagActual < cantPag) {
@@ -123,10 +128,10 @@ export default function InventarioTabla({ props }) {
     }
 
     return (
-        <div className="flex flex-col p-12 pt-12 pb-34 align-middle justify-start h-full ">
-            {/* Top Summary */}
-            <div className="flex justify-start mb-12 w-full">
-                <div className="flex items-center border-r justify-start align-middle w-1/3">
+        <div className="flex flex-col p-4 sm:p-12 pt-12 pb-34 h-full">
+            {/* Summary + Doughnut Chart (Responsive) */}
+            <div className="flex flex-col sm:flex-row justify-start sm:mb-12 gap-6 sm:gap-0 w-full">
+                <div className="flex items-center border-r sm:border-r justify-start w-full sm:w-1/3">
                     <div className="flex items-center">
                         <div className="flex items-center justify-center w-14 h-14 bg-blue-100 rounded-full">
                             <span className="material-icons text-blue-500 text-2xl">
@@ -143,92 +148,99 @@ export default function InventarioTabla({ props }) {
                         </div>
                     </div>
                 </div>
-
-                <div className="flex">
-                    <div className="pl-12">
-                        <DoughnutChart
-                            inStock={props.disponible}
-                            lowStock={props.lowStock}
-                            outOfStock={props.agotado}
-                        />
-                    </div>
-                    <div className="flex flex-col pl-6 justify-center relative">
+                <div className="hidden flex-col sm:flex-row items-center gap-6 sm:flex">
+                    <DoughnutChart
+                        inStock={props.disponible}
+                        lowStock={props.lowStock}
+                        outOfStock={props.agotado}
+                    />
+                    <div className="flex flex-col justify-center">
                         <p className="text-lg font-semibold text-gray-800">
                             {props.total_productos} producto
                             {props.total_productos !== 1 ? "s" : ""}
                         </p>
-                        <div className="flex items-center mt-2 space-x-4">
-                            <div className="flex items-center">
-                                <span className="w-3 h-3 rounded-full bg-teal-500 mr-2"></span>
-                                <p className="text-sm text-gray-500">
-                                    Disponible:{" "}
-                                    <span className="text-gray-800 font-medium">
-                                        {props.disponible}
-                                    </span>
-                                </p>
-                            </div>
-                            <div className="flex items-center">
-                                <span className="w-3 h-3 rounded-full bg-orange-500 mr-2"></span>
-                                <p className="text-sm text-gray-500">
-                                    Stock bajo:{" "}
-                                    <span className="text-gray-800 font-medium">
-                                        {props.lowStock}
-                                    </span>
-                                </p>
-                            </div>
-                            <div className="flex items-center">
-                                <span className="w-3 h-3 rounded-full bg-red-500 mr-2"></span>
-                                <p className="text-sm text-gray-500">
-                                    Agotado:{" "}
-                                    <span className="text-gray-800 font-medium">
-                                        {props.agotado}
-                                    </span>
-                                </p>
-                            </div>
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center mt-2 space-y-1 sm:space-y-0 sm:space-x-4">
+                            <span className="text-sm text-gray-500">
+                                <span className="w-3 h-3 inline-block rounded-full bg-teal-500 mr-2"></span>
+                                Disponible:{" "}
+                                <span className="font-medium">
+                                    {props.disponible}
+                                </span>
+                            </span>
+                            <span className="text-sm text-gray-500">
+                                <span className="w-3 h-3 inline-block rounded-full bg-orange-500 mr-2"></span>
+                                Stock bajo:{" "}
+                                <span className="font-medium">
+                                    {props.lowStock}
+                                </span>
+                            </span>
+                            <span className="text-sm text-gray-500">
+                                <span className="w-3 h-3 inline-block rounded-full bg-red-500 mr-2"></span>
+                                Agotado:{" "}
+                                <span className="font-medium">
+                                    {props.agotado}
+                                </span>
+                            </span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Inventario Table Section */}
-            <div className="bg-white rounded-lg overflow-hidden shadow-lg mt-4 p-4">
+            {/* Filtros */}
+            <div className="mt-6 mb-4 flex flex-col gap-2">
+                <input
+                    type="text"
+                    placeholder="Buscar"
+                    className="border border-gray-300 rounded-lg py-2 px-4 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-slate-500"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <div className="flex gap-2">
+                    <button className="bg-slate-600 text-slate-50 px-4 py-1 rounded-md text-sm hover:bg-slate-700">
+                        Buscar
+                    </button>
+                    <button
+                        onClick={limpiarFiltros}
+                        className="bg-red-100 text-red-600 px-4 py-1 rounded-md text-sm hover:bg-red-400 hover:text-white"
+                    >
+                        Limpiar Filtros
+                    </button>
+                </div>
+            </div>
+
+            {/* Carrusel en escritorio / tabla en móvil */}
+            <div className="mb-4">
+                <div className="block sm:hidden mb-4">
+                    <label className="block mb-2 text-sm font-medium text-gray-700">
+                        Filtrar por almacenes:
+                    </label>
+                    <select
+                        multiple
+                        value={selected}
+                        onChange={(e) => {
+                            const selectedOptions = Array.from(
+                                e.target.selectedOptions
+                            ).map((option) => parseInt(option.value));
+                            setSelected(selectedOptions);
+                        }}
+                        className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 h-40"
+                    >
+                        {almacenes.map((almacen) => (
+                            <option key={almacen.id} value={almacen.id}>
+                                {almacen.nombre}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+
+            {/* Productos - Tabla (desktop) o Tarjetas (móvil) */}
+            <div className="bg-white rounded-lg shadow-lg p-4">
                 <h2 className="text-xl font-semibold text-gray-700 mb-4">
                     Inventario
                 </h2>
 
-                {/* Buscar */}
-                <div className="flex flex-col justify-start items-left gap-2 mb-5">
-                    <input
-                        type="text"
-                        placeholder="Buscar"
-                        className="border border-gray-300 rounded-lg py-2 px-4 w-64 focus:outline-none focus:ring-2 focus:ring-slate-500 mb-3"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    <div>
-                        <button className="mr-2 bg-slate-600 text-slate-50 px-4 py-1 rounded-md text-sm hover:bg-slate-700 hover:text-white">
-                            Buscar
-                        </button>
-                        <button
-                            className="mr-2 bg-red-100 text-red-600 px-4 py-1 rounded-md text-sm hover:bg-red-400 hover:text-white transition"
-                            onClick={limpiarFiltros}
-                        >
-                            Limpiar Filtros
-                        </button>
-                    </div>
-                </div>
-
-                {/* Carrusel y botón Añadir Almacén */}
-                <div className="flex justify-between items-center mb-4">
-                    <CarruselAlmacenes
-                        arrayAlmacenes={almacenes}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                </div>
-
-                {/* Cabecera tabla */}
-                <div className="grid grid-cols-8 items-center bg-slate-100 font-semibold text-gray-700 py-2 px-8 gap-2 mt-8 mb-4">
+                <div className="hidden sm:grid grid-cols-8 items-center bg-slate-100 font-semibold text-gray-700 py-2 px-8 gap-2 mt-8 mb-4">
                     <div className="text-start">Código Producto</div>
                     <div className="text-start pl-4 col-span-2">Artículo</div>
                     <div className="text-center">Precio</div>
@@ -238,86 +250,153 @@ export default function InventarioTabla({ props }) {
                     <div className="text-center">Acciones</div>
                 </div>
 
-                {/* Filas */}
-                <div className="grid grid-cols-1 px-4 pb-4">
-                    {arrayProductos.map((product, index) => (
-                        <ProductTableRow
-                            key={index}
-                            product={product}
-                            context="stock"
-                            props={props}
-                            almacenes={almacenes}
-                            categorias={categorias}
-                            proveedores={proveedores}
-                            clickable={true}
-                            onDelete={() => handleDeleteProduct(product)}
-                            onCantidadClick={(tipo) => {
-                                setSelectedProduct(product);
-                                setTipoOperacion(tipo);
-                                setCantidadModalOpen(true);
-                            }}
-                        />
-                    ))}
+                <div className="grid grid-cols-1 gap-4 sm:gap-0 px-2 sm:px-4">
+                    {products.map((product, index) => (
+                        <div key={index} className="sm:contents">
+                            {/* Tarjeta para móvil */}
 
-                {/* paginacion */}
+                            {console.log(product)}
+                            <div className="block sm:hidden border rounded-lg p-4 shadow-sm">
+                                <p className="text-sm text-gray-600">
+                                    <strong>Artículo:</strong> {product.nombre}
+                                </p>
+                                <p className="text-sm text-gray-600">
+                                    <strong>Precio:</strong> {product.precio_unitario}€
+                                </p>
+                                <p className="text-sm text-gray-600">
+                                    <strong>Cantidad:</strong>{" "}
+                                    {product.cantidad_actual}
+                                </p>
+                                <p className="text-sm text-gray-600">
+                                    <strong>Almacén:</strong>{" "}
+                                    {product.almacen_nombre}
+                                </p>
+
+                                <div className="flex justify-around flex-wrap gap-2 mt-4">
+
+                                    <button
+                                        onClick={() => {
+                                            setIsModalOpen(true);
+                                            setSelectedProduct(product);
+                                        }}
+                                        className="flex items-center gap-1 text-md text-slate-700 px-3 py-1 rounded"
+                                    >
+                                        <span className="material-icons text-md">
+                                            edit
+                                        </span>{" "}
+
+                                    </button>
+
+                                    <button
+                                        onClick={() =>
+                                            handleDeleteProduct(product)
+                                        }
+                                        className="flex items-center gap-1 text-md text-red-400 px-3 py-1 rounded"
+                                    >
+                                        <span className="material-icons text-md">
+                                            delete
+                                        </span>{" "}
+
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setSelectedProduct(product);
+                                            setTipoOperacion("vender");
+                                            setCantidadModalOpen(true);
+                                        }}
+                                        className="flex items-center gap-1 text-md text-green-400 px-3 py-1 rounded"
+                                    >
+                                        <span className="material-icons text-md">
+                                            sell
+                                        </span>{" "}
+
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Fila completa para escritorio */}
+                            <div className="hidden sm:block">
+                                <ProductTableRow
+                                    product={product}
+                                    context="stock"
+                                    props={props}
+                                    almacenes={almacenes}
+                                    categorias={categorias}
+                                    proveedores={proveedores}
+                                    clickable={true}
+                                    onDelete={() =>
+                                        handleDeleteProduct(product)
+                                    }
+                                    onCantidadClick={(tipo) => {
+                                        setSelectedProduct(product);
+                                        setTipoOperacion(tipo);
+                                        setCantidadModalOpen(true);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Paginación */}
                 <div className="flex justify-center items-center mt-6 gap-4">
                     <button
                         onClick={pageDown}
                         disabled={pagActual === 1}
                         className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
                     >
-                        <span className="material-icons text-gray-700">chevron_left</span>
+                        <span className="material-icons text-gray-700">
+                            chevron_left
+                        </span>
                     </button>
-
                     <span className="text-sm text-gray-600">
                         Página {pagActual} de {cantPag}
                     </span>
-
                     <button
                         onClick={pageUp}
                         disabled={pagActual === cantPag || cantPag === 0}
                         className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
                     >
-                        <span className="material-icons text-gray-700">chevron_right</span>
+                        <span className="material-icons text-gray-700">
+                            chevron_right
+                        </span>
                     </button>
                 </div>
-
-                </div>
-
-                {/* Modals */}
-                <AddModal
-                    isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
-                    onAdd={handleAddProduct}
-                    context="stock"
-                    almacenes={almacenes}
-                    categorias={categorias}
-                    proveedores={proveedores}
-                />
-
-                {isDeleteModalOpen && selectedProduct && (
-                    <DeleteProductModal
-                        product={selectedProduct}
-                        totalAmount={selectedProduct.existencias}
-                        onClose={() => setIsDeleteModalOpen(false)}
-                    />
-                )}
-
-                <CantidadModal
-                    isOpen={isCantidadModalOpen}
-                    onClose={() => setCantidadModalOpen(false)}
-                    onConfirm={handleCantidadConfirm}
-                    producto={selectedProduct}
-                    clientes={props.all_clientes}
-                    tipo={tipoOperacion}
-                />
-
-                <AddAlmacenModal
-                    isOpen={isAlmacenModalOpen}
-                    onClose={() => setIsAlmacenModalOpen(false)}
-                    onAdd={handleAddAlmacen}
-                />
             </div>
+
+            {/* Modales */}
+            <AddModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onAdd={handleAddProduct}
+                context="stock"
+                almacenes={almacenes}
+                categorias={categorias}
+                proveedores={proveedores}
+            />
+
+            {isDeleteModalOpen && selectedProduct && (
+                <DeleteProductModal
+                    product={selectedProduct}
+                    totalAmount={selectedProduct.existencias}
+                    onClose={() => setIsDeleteModalOpen(false)}
+                />
+            )}
+
+            <CantidadModal
+                isOpen={isCantidadModalOpen}
+                onClose={() => setCantidadModalOpen(false)}
+                onConfirm={handleCantidadConfirm}
+                producto={selectedProduct}
+                clientes={props.all_clientes}
+                tipo={tipoOperacion}
+            />
+
+            <AddAlmacenModal
+                isOpen={isAlmacenModalOpen}
+                onClose={() => setIsAlmacenModalOpen(false)}
+                onAdd={handleAddAlmacen}
+            />
         </div>
     );
 }

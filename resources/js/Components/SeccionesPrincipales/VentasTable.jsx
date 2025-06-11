@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import { usePage , router } from "@inertiajs/inertia-react";
-
-
+import { usePage, router } from "@inertiajs/inertia-react";
 
 export default function VentasTable({ props }) {
     const [searchTerm, setSearchTerm] = useState("");
@@ -21,7 +19,10 @@ export default function VentasTable({ props }) {
     }, [searchTerm, ventas, props.detalles_ventas]);
 
     // Paginamos el array de productos ya filtrados
-    const arrayProductos = productosFiltrados.slice((pagActual - 1) * 10, pagActual * 10);
+    const arrayProductos = productosFiltrados.slice(
+        (pagActual - 1) * 10,
+        pagActual * 10
+    );
 
     const pageUp = () => {
         if (pagActual < cantPag) {
@@ -37,12 +38,12 @@ export default function VentasTable({ props }) {
 
     const imprimirFactura = (id) => {
         console.log("ID recibido:", id);
-        const url = route('factura.generar', { id });
-        window.open(url, '_blank');
+        const url = route("factura.generar", { id });
+        window.open(url, "_blank");
     };
 
     return (
-        <div className="w-full flex flex-col align-middle justify-start p-12 pt-0npm r pb-34 h-full">
+        <div className="w-full flex flex-col align-middle justify-start p-6 md:p-12 pt-0npm r pb-34 h-full">
             <div className="bg-white rounded-lg overflow-hidden shadow-lg mt-4 p-10">
                 <h2 className="text-xl font-semibold text-gray-700 mb-4">
                     Ventas Realizadas
@@ -58,7 +59,7 @@ export default function VentasTable({ props }) {
                     />
                 </div>
 
-                <div className="grid grid-cols-8 font-semibold text-gray-700 bg-slate-100 py-2 px-6 rounded-t-md">
+                <div className="hidden md:grid grid-cols-8 font-semibold text-gray-700 bg-slate-100 py-2 px-6 rounded-t-md">
                     <div className="text-start">ID Producto</div>
                     <div className="col-span-2 text-start">Nombre</div>
                     <div className="text-center">Precio Unitario</div>
@@ -69,37 +70,98 @@ export default function VentasTable({ props }) {
                 </div>
 
                 {arrayProductos.length > 0 ? (
-                    <div className="divide-y divide-gray-200 ">
+                    <div className="space-y-4 md:space-y-0  md:divide-y md:divide-gray-200">
                         {arrayProductos.map((venta) => (
                             <div
                                 key={venta.id_detalle}
-                                className="grid grid-cols-8 py-3 px-6 text-sm text-gray-700 hover:bg-gray-50 "
+                                className="md:grid md:grid-cols-8 flex flex-col p-4 bg-white rounded-lg shadow-sm border border-gray-200 md:rounded-sm"
                             >
-                                <div>{venta.producto_id}</div>
-                                <div className="col-span-2">{venta.nombre}</div>
-                                <div className="text-center">
+                                {/* Vista móvil - Tarjeta */}
+                                <div className="md:hidden space-y-1">
+                                    <div>
+                                        <span className="font-semibold">
+                                            ID Producto:
+                                        </span>{" "}
+                                        {venta.producto_id}
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold">
+                                            Nombre:
+                                        </span>{" "}
+                                        {venta.nombre}
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold">
+                                            Precio Unitario:
+                                        </span>{" "}
+                                        {venta.precio_unitario}
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold">
+                                            Cantidad:
+                                        </span>{" "}
+                                        {venta.cantidad}
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold">
+                                            Fecha Venta:
+                                        </span>{" "}
+                                        {venta.fecha_venta}
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold">
+                                            Cliente:
+                                        </span>{" "}
+                                        {venta.cliente || "N/A"}
+                                    </div>
+                                    <button
+                                        onClick={() =>
+                                            imprimirFactura(venta.id_detalle)
+                                        }
+                                        className="mt-4 w-full py-2 text-sm font-medium bg-slate-300 text-gray-700 rounded hover:bg-slate-400 transition-colors"
+                                    >
+                                        <span className="material-icons align-middle mr-1">
+                                            print
+                                        </span>
+                                        Imprimir Factura
+                                    </button>
+                                </div>
+
+                                {/* Vista escritorio - Tabla */}
+                                <div className="hidden md:block">
+                                    {venta.producto_id}
+                                </div>
+                                <div className="hidden md:block col-span-2">
+                                    {venta.nombre}
+                                </div>
+                                <div className="hidden md:block text-center">
                                     {venta.precio_unitario}
                                 </div>
-                                <div className="text-center">
+                                <div className="hidden md:block text-center">
                                     {venta.cantidad}
                                 </div>
-                                <div className="text-center">
+                                <div className="hidden md:block text-center">
                                     {venta.fecha_venta}
                                 </div>
-                                <div className="text-center">
+                                <div className="hidden md:block text-center">
                                     {venta.cliente || "N/A"}
                                 </div>
-                                <button
-                                    onClick={() => imprimirFactura(venta.id_detalle)}
-                                    className="text-center flex items-center justify-center w-full hover:text-slate-600"
-                                    title="Imprimir factura"
-                                >
-                                    <span className="material-icons">print</span>
-                                </button>
+                                <div className="hidden md:flex justify-center items-center">
+                                    <button
+                                        onClick={() =>
+                                            imprimirFactura(venta.id_detalle)
+                                        }
+                                        className="px-3 py-1 bg-slate-300 text-sm rounded hover:bg-slate-400 transition-colors"
+                                    >
+                                        <span className="material-icons text-gray-700">
+                                            print
+                                        </span>
+                                    </button>
+                                </div>
                             </div>
                         ))}
 
-                        {/* paginacion */}
+                        {/* Paginación */}
                         <div className="flex justify-center items-center mt-6 gap-4 pt-12">
                             <button
                                 onClick={pageDown}
@@ -117,7 +179,9 @@ export default function VentasTable({ props }) {
 
                             <button
                                 onClick={pageUp}
-                                disabled={pagActual === cantPag || cantPag === 0}
+                                disabled={
+                                    pagActual === cantPag || cantPag === 0
+                                }
                                 className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
                             >
                                 <span className="material-icons text-gray-700">

@@ -5,7 +5,8 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
-import logoGoogle from '../../../images/logoGoogle.png';
+import logoGoogle from "../../../images/logoGoogle.png";
+import ApplicationLogo from "@/Components/ApplicationLogo";
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -16,7 +17,6 @@ export default function Login({ status, canResetPassword }) {
 
     const submit = (e) => {
         e.preventDefault();
-
         post(route("login"), {
             onSuccess: (response) => console.log(response),
             onFinish: () => reset("password"),
@@ -28,25 +28,41 @@ export default function Login({ status, canResetPassword }) {
             <Head title="Log in" />
 
             {status && (
-                <div className=" mb-4 text-sm font-medium text-green-600">
+                <div className="mb-4 text-sm font-medium text-green-600">
                     {status}
                 </div>
             )}
 
-            <form onSubmit={submit}>
-                <div>
-                    <div className="mt-6 flex justify-center pb-12">
-                <button
-                    type="button"
-                    onClick={() => window.location.href = route("google.redirect")}
-                    className="w-full border flex items-center gap-3 rounded-lg bg-white px-5 py-2 text-sm font-medium text-gray-700 shadow-md transition hover:shadow-sm"
-                >
-                    <img src={logoGoogle} alt="Google" className="h-5 w-5" />
-                    Iniciar sesión con Google
-                </button>
+            <form
+                onSubmit={submit}
+                className="w-full max-w-md mx-auto px-4 sm:px-6"
+            >
+                {/* Logo - solo visible en móviles y tablets */}
+                <div className="flex justify-center mb-4 md:hidden h-12  overflow-hidden">
+                    <ApplicationLogo className="w-32 h-auto object-cover text-slate-500" />
                 </div>
-                    <InputLabel htmlFor="email" value="Email" />
+                
+                {/* Google Login */}
+                <div className="mt-6 flex justify-center pb-6">
+                    <button
+                        type="button"
+                        onClick={() =>
+                            (window.location.href = route("google.redirect"))
+                        }
+                        className="w-full flex items-center justify-center gap-3 rounded-lg bg-white px-4 py-2 text-sm font-medium text-gray-700 border shadow-sm hover:shadow-md transition"
+                    >
+                        <img
+                            src={logoGoogle}
+                            alt="Google"
+                            className="h-5 w-5"
+                        />
+                        Iniciar sesión con Google
+                    </button>
+                </div>
 
+                {/* Email Field */}
+                <div>
+                    <InputLabel htmlFor="email" value="Email" />
                     <TextInput
                         id="email"
                         type="email"
@@ -57,13 +73,12 @@ export default function Login({ status, canResetPassword }) {
                         isFocused={true}
                         onChange={(e) => setData("email", e.target.value)}
                     />
-
                     <InputError message={errors.email} className="mt-2" />
                 </div>
 
-                <div className="mt-4 ">
+                {/* Password Field */}
+                <div className="mt-4">
                     <InputLabel htmlFor="password" value="Contraseña" />
-
                     <TextInput
                         id="password"
                         type="password"
@@ -73,48 +88,48 @@ export default function Login({ status, canResetPassword }) {
                         autoComplete="current-password"
                         onChange={(e) => setData("password", e.target.value)}
                     />
-
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
-                <div className="mt-4 block">
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) =>
-                                setData("remember", e.target.checked)
-                            }
-                        />
-                        <span className="ms-2 text-sm text-gray-600">
-                            Recuérdame
-                        </span>
-                    </label>
+                {/* Remember Me */}
+                <div className="mt-4 flex items-center">
+                    <Checkbox
+                        name="remember"
+                        checked={data.remember}
+                        onChange={(e) => setData("remember", e.target.checked)}
+                    />
+                    <span className="ml-2 text-sm text-gray-600">
+                        Recuérdame
+                    </span>
                 </div>
 
-                <div className="mt-4 flex items-center justify-end ">
+                {/* Actions */}
+                <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     {canResetPassword && (
                         <Link
                             href={route("password.request")}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            className="text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         >
                             ¿Has olvidado tu contraseña?
                         </Link>
                     )}
 
-                    <PrimaryButton className="ms-4" disabled={processing}>
+                    <PrimaryButton
+                        className="w-full sm:w-auto"
+                        disabled={processing}
+                    >
                         Log in
                     </PrimaryButton>
                 </div>
-
-
             </form>
-            <div className="mt-4 flex items-center justify-end ">
+
+            {/* Register Link */}
+            <div className="mt-6 text-center">
                 <Link
                     href={route("register")}
-                    className="rounded-md text-xs text-slate-400 underline hover:text-slate-600 mt-10 "
+                    className="text-xs text-slate-400 underline hover:text-slate-600"
                 >
-                    ¿No estas registrado aún?
+                    ¿No estás registrado aún?
                 </Link>
             </div>
         </GuestLayout>

@@ -17,6 +17,7 @@ function NavItem({ icon, label, routePath, isExpanded, isActive, onClick }) {
 
 export function Sidebar({ active }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
     { id: "dashboard", icon: "dashboard", label: "Dashboard", path: "dashboard.index" },
@@ -25,38 +26,47 @@ export function Sidebar({ active }) {
     { id: "ventas", icon: "point_of_sale", label: "Ventas", path: "ventas.index" },
     { id: "detalleProducto", icon: "info", label: "Detalle de Producto", path: "producto.default" },
     { id: "contactoProveedores", icon: "contacts", label: "Contacto proveedores", path: "proveedores.index" },
-    { id: "entidades", icon: "category", label: "Administración", path: "entidades.index" }, // Nuevo botón
+    { id: "entidades", icon: "category", label: "Administración", path: "entidades.index" },
   ];
 
   const handleNavigation = (path) => {
+    setIsOpen(false); // Cierra el sidebar en móviles al navegar
     if (window.location.pathname !== path) {
       router.visit(route(path));
     }
   };
 
   return (
-    <div className="flex items-center justify-center bg-transparent h-screen relative">
+    <>
+
+      {/* Sidebar Container */}
       <div
-        className={`flex flex-col bg-slate-800 transition-all duration-300 pb-3 pt-6 px-6 h-full
-          ${isExpanded ? "w-60 items-start" : "w-24 items-center"} `}
+        className={`
+          fixed z-50 bg-slate-800 transition-all duration-300 h-full
+          ${isOpen ? "left-0" : "-left-64"}
+          sm:static sm:left-0
+          ${isExpanded || isOpen ? "w-60" : "w-24"}
+          px-4 py-6 flex flex-col justify-between sm:hover:w-60
+          lg:transition-all lg:duration-300
+        `}
         onMouseEnter={() => setIsExpanded(true)}
         onMouseLeave={() => setIsExpanded(false)}
       >
-        <div className="flex flex-col flex-1 w-full gap-2 justify-start ">
+        <div className="flex flex-col flex-1 w-full gap-2">
           {navItems.map((item) => (
             <NavItem
               key={item.id}
               icon={item.icon}
               label={item.label}
               routePath={item.path}
-              isExpanded={isExpanded}
+              isExpanded={isExpanded || isOpen}
               isActive={active === item.id}
               onClick={() => handleNavigation(item.path)}
             />
           ))}
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

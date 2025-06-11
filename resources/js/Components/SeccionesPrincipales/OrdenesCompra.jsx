@@ -119,7 +119,7 @@ export default function OrdenesCompra({ props }) {
     }
 
     return (
-        <div className="w-full flex flex-col align-middle justify-start p-12 pt-0 pb-34">
+        <div className="w-full flex flex-col align-middle justify-start p-6 sm:p-12 pt-0 pb-34 ">
             <div className="bg-white rounded-lg overflow-hidden shadow-lg mt-4 pb-4">
                 <div className="flex justify-between items-center mb-4 p-6">
                     <h2 className="text-xl font-semibold text-gray-700">
@@ -143,61 +143,132 @@ export default function OrdenesCompra({ props }) {
                     />
                 </div>
 
-                <div className="grid grid-cols-8 items-center bg-slate-100 font-semibold text-gray-700 py-2 px-8 gap-2 mb-6 mt-4 ">
-                    <div className="text-start">Código Producto</div>
-                    <div className="text-start pl-4 col-span-2">Artículo</div>
-                    <div className="text-center">Precio</div>
-                    <div className="text-center">Cantidad</div>
-                    <div className="text-center">Estado</div>
-                    <div className="text-center">Fecha Recepción</div>
-                    <div className="text-center">Acciones</div>
+                {/* Responsive layout */}
+                <div className="hidden lg:block">
+                    {/* Table for large screens */}
+                    <div className="grid grid-cols-8 items-center bg-slate-100 font-semibold text-gray-700 py-2 px-8 gap-2 mb-6 mt-4">
+                        <div className="text-start">Código Producto</div>
+                        <div className="text-start pl-4 col-span-2">
+                            Artículo
+                        </div>
+                        <div className="text-center">Precio</div>
+                        <div className="text-center">Cantidad</div>
+                        <div className="text-center">Estado</div>
+                        <div className="text-center">Fecha Recepción</div>
+                        <div className="text-center">Acciones</div>
+                    </div>
+
+                    <div className="grid grid-cols-1 px-4 pb-4">
+                        {arrayProductos.map((compra, index) => (
+                            <ProductTableRow
+                                key={index}
+                                product={compra}
+                                categorias={categorias}
+                                context="orders"
+                                almacenes={almacenes}
+                                proveedores={proveedores}
+                                clickable={false}
+                                onDelete={() => handleDeleteProduct(compra)}
+                                onCantidadClick={(tipo) => {
+                                    setselectedPedido(compra);
+                                    setTipoOperacion(tipo);
+                                    setCantidadModalOpen(true);
+                                }}
+                            />
+                        ))}
+                    </div>
                 </div>
 
-                <div className="grid grid-cols-1 px-4 pb-4">
+                {/* Cards for small and medium screens */}
+                <div className="grid gap-6 px-2 sm:grid-cols-1 md:grid-cols-2 lg:hidden text-xs md:text-md">
                     {arrayProductos.map((compra, index) => (
-                        <ProductTableRow
+                        <div
                             key={index}
-                            product={compra}
-                            categorias={categorias}
-                            context="orders"
-                            almacenes={almacenes}
-                            proveedores={proveedores}
-                            clickable={false}
-                            onDelete={() => handleDeleteProduct(compra)}
-                            onCantidadClick={(tipo) => {
-                                setselectedPedido(compra);
-                                setTipoOperacion(tipo);
-                                setCantidadModalOpen(true);
-                            }}
-                        />
+                            className="bg-gray-100 rounded-lg shadow p-4 flex flex-col gap-2 w-full mx-auto"
+                        >
+                            <div className="text-sm md:text-md font-semibold text-center">
+                                {compra.nombre}
+                            </div>
+                            <div className="text-gray-600 text-center">
+                                <b>Código Producto:</b> {compra.codigo}
+                            </div>
+                            <div className="text-gray-600 text-center">
+                                <b>Precio:</b> {compra.precio}
+                            </div>
+                            <div className="text-gray-600 text-center">
+                                <b>Cantidad: </b>
+                                {compra.cantidad}
+                            </div>
+                            <div className="text-gray-600 text-center">
+                                <b>Estado:</b> {compra.estado}
+                            </div>
+
+                            <div className="flex justify-center gap-2 mt-6 md:mt-0">
+                                <button
+                                    className="flex items-center bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600"
+                                    onClick={() => handleDeleteProduct(compra)}
+                                >
+                                    <span className="material-icons text-sm mr-1">
+                                        delete
+                                    </span>
+
+                                </button>
+                                <button
+                                    className="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600"
+                                    onClick={() => {
+                                        setselectedPedido(compra);
+                                        setTipoOperacion("modificar");
+                                        setCantidadModalOpen(true);
+                                    }}
+                                >
+                                    <span className="material-icons text-sm mr-1">
+                                        edit
+                                    </span>
+
+                                </button>
+                                <button
+                                    className="flex items-center bg-slate-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-slate-600"
+                                    onClick={() => {
+                                        setselectedPedido(compra);
+                                        setTipoOperacion("vender");
+                                        setCantidadModalOpen(true);
+                                    }}
+                                >
+                                    <span className="material-icons text-sm mr-1">
+                                        inventory_2
+                                    </span>
+
+                                </button>
+                            </div>
+                        </div>
                     ))}
+                </div>
 
-                    {/* Paginación */}
-                    <div className="flex justify-center items-center mt-6 gap-4">
-                        <button
-                            onClick={pageDown}
-                            disabled={pagActual === 1}
-                            className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
-                        >
-                            <span className="material-icons text-gray-700">
-                                chevron_left
-                            </span>
-                        </button>
-
-                        <span className="text-sm text-gray-600">
-                            Página {pagActual} de {cantPag}
+                {/* Pagination */}
+                <div className="flex justify-center items-center mt-6 gap-4">
+                    <button
+                        onClick={pageDown}
+                        disabled={pagActual === 1}
+                        className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                    >
+                        <span className="material-icons text-gray-700">
+                            chevron_left
                         </span>
+                    </button>
 
-                        <button
-                            onClick={pageUp}
-                            disabled={pagActual === cantPag}
-                            className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
-                        >
-                            <span className="material-icons text-gray-700">
-                                chevron_right
-                            </span>
-                        </button>
-                    </div>
+                    <span className="text-sm text-gray-600">
+                        Página {pagActual} de {cantPag}
+                    </span>
+
+                    <button
+                        onClick={pageUp}
+                        disabled={pagActual === cantPag}
+                        className="px-4 py-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                    >
+                        <span className="material-icons text-gray-700">
+                            chevron_right
+                        </span>
+                    </button>
                 </div>
 
                 <AddModal
@@ -221,15 +292,9 @@ export default function OrdenesCompra({ props }) {
                 <CantidadModal
                     isOpen={isCantidadModalOpen}
                     onClose={() => setCantidadModalOpen(false)}
-                    onConfirm={handleConfirm}
+                    onConfirm={(cantidad) => handleConfirm(cantidad)}
                     producto={selectedPedido}
                     tipo={tipoOperacion}
-                />
-
-                <AddAlmacenModal
-                    isOpen={isAlmacenModalOpen}
-                    onClose={() => setIsAlmacenModalOpen(false)}
-                    onAdd={handleAddAlmacen}
                 />
             </div>
         </div>

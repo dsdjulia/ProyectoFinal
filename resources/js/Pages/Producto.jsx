@@ -36,7 +36,7 @@ export default function Index() {
                             <div className="w-full flex justify-start h-[24px]">
                                 <form
                                     onSubmit={handleBuscar}
-                                    className="w-full max-w-sm flex gap-2 items-center h-full"
+                                    className="w-full max-w-sm flex gap-2 items-center h-full "
                                 >
                                     <input
                                         type="text"
