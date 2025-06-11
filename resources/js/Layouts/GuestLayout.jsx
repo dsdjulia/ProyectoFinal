@@ -7,7 +7,7 @@ export default function GuestLayout({ children }) {
             {/* izquierda - Logo, visible solo en md o superior */}
             <div className="hidden md:flex w-3/5 justify-center items-center bg-slate-200">
                 <Link href="/">
-                    <ApplicationLogo className="w-72 h-auto fill-current text-slate-500" />
+                    <ApplicationLogo className="w-120 h-auto fill-current text-slate-500" />
                 </Link>
             </div>
 
