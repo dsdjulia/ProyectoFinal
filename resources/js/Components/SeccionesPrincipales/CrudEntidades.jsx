@@ -330,6 +330,8 @@ export default function CrudEntidades({ props }) {
                     ))}
                 </div>
             </main>
+            {renderEditModal()}
+            {renderAddModal()}
         </div>
     );
 }
